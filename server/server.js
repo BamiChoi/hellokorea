@@ -1,12 +1,13 @@
 import express from "express";
-import test from "./routers/test";
-
-const PORT = 4000;
+import morgan from "morgan";
+import userRouter from "./routers/userRouter";
+import postRouter from "./routers/postRouter";
 
 const app = express();
+const logger = morgan("dev");
 
-app.use("/api", test);
+app.use(logger);
+app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
 
-const handleListening = () =>
-  console.log(`Server listening on port http://localhost:${PORT} 🚀`);
-app.listen(PORT, handleListening);
+export default app;
