@@ -1,4 +1,9 @@
+import regeneratorRuntime from "regenerator-runtime";
 import "./db";
+import "./models/User";
+import "./models/Post";
+import "./models/Comment";
+import "./models/Recomment";
 import app from "./server";
 
 const PORT = 4000;
