@@ -3,6 +3,6 @@ import { postJoin } from "../controllers/authController";
 
 const userRouter = express.Router();
 
-userRouter.post(postJoin);
+userRouter.post("/join", postJoin);
 
 export default userRouter;

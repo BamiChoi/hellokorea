@@ -7,6 +7,8 @@ const app = express();
 const logger = morgan("dev");
 
 app.use(logger);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 
