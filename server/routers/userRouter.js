@@ -1,8 +1,9 @@
 import express from "express";
-import { postJoin } from "../controllers/authController";
+import { profile, editProfile, signup } from "../controllers/userController";
 
 const userRouter = express.Router();
 
-userRouter.post("/join", postJoin);
+userRouter.route("/").post(signup);
+userRouter.route("/:id").get(profile).post(editProfile);
 
 export default userRouter;

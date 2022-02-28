@@ -1,8 +1,7 @@
-import { FieldErrors, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import Wrapper from "Components/Wrapper";
 import axios from "axios";
-
-axios.defaults.url = "http://127.0.0.1:4000/api";
 
 interface IJoin {
   email: string;
@@ -12,41 +11,45 @@ interface IJoin {
   nickname: string;
   password: string;
   password2: string;
+  serverError?: string;
 }
 
 function Join() {
+  const navigate = useNavigate();
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<IJoin>();
+    setError,
+  } = useForm<IJoin>({ mode: "onBlur" });
+  const password = watch().password;
   const isValid = async (data: IJoin) => {
-    const response = await axios
-      .post("api/user/join", {
+    await axios
+      .post("/api/user", {
         email: data.email,
         nickname: data.nickname,
         firstname: data.firstname,
         lastname: data.lastname,
         birthdate: data.birthdate,
-        pasword: data.password,
+        password: data.password,
         password2: data.password2,
       })
       .then(function (response) {
-        console.log(response);
+        navigate("/login");
       })
       .catch(function (error) {
-        console.log(error);
+        const field = error.response.data.field;
+        const message = error.response.data.message;
+        setError(field, { message });
       });
-  };
-  const isInvalid = (errors: FieldErrors) => {
-    console.log(errors);
   };
   return (
     <Wrapper>
       <div className="w-full h-full flex flex-col justify-center items-center pt-8">
-        <h1 className="text-main mb-5 text-3xl">Join</h1>
+        <h1 className="text-main mb-5 text-3xl">Sign up</h1>
         <form
-          onSubmit={handleSubmit(isValid, isInvalid)}
+          onSubmit={handleSubmit(isValid)}
           className="flex flex-col justify-center px-5 pt-10 pb-8  rounded-md space-y-3 border-2 border-main w-96"
         >
           <div className="w-full">
@@ -131,7 +134,7 @@ function Join() {
               Password
             </label>
             <input
-              {...register("password", { required: "Password is required" })} // TO DO: Password pattern validation
+              {...register("password", { required: "Password is required" })}
               type="password"
               id="password"
               className="border-2 border-main px-2 py-1 w-full"
@@ -147,6 +150,8 @@ function Join() {
             <input
               {...register("password2", {
                 required: "Fill this blank for confirming password",
+                validate: (value) =>
+                  value === password || "Password is not matched",
               })}
               type="password"
               id="password2"
@@ -158,8 +163,11 @@ function Join() {
           </div>
           <div className="w-full">
             <button className="bg-main text-white hover:bg-powermain h-12 mt-4 w-full rounded-md">
-              Join
+              Create Account
             </button>
+            <span className="text-warning font-semibold">
+              {errors.serverError?.message}
+            </span>
           </div>
         </form>
       </div>

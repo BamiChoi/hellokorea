@@ -11,7 +11,7 @@ function Header() {
           to="/join"
           className="bg-white rounded-md px-2 py-1 w-20 hover:text-main cursor-pointer  text-center "
         >
-          <span>Join</span>
+          <span>Sign up</span>
         </Link>
         <Link
           to="/login"

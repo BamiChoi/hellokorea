@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Header from "Components/Header";
 import Home from "Routes/Root/Home";
-import Join from "Routes/Root/Join";
+import Signup from "Routes/Root/Signup";
 import Login from "Routes/Root/Login";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/join" element={<Join />} />
+        <Route path="/join" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </>
