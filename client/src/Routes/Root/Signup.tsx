@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import Wrapper from "Components/Wrapper";
 import axios from "axios";
+import Title from "Components/Title";
+import Wrapper from "Components/Wrapper";
 
 interface IJoin {
   email: string;
@@ -46,8 +47,8 @@ function Join() {
   };
   return (
     <Wrapper>
-      <div className="w-full h-full flex flex-col justify-center items-center pt-8">
-        <h1 className="text-main mb-5 text-3xl">Sign up</h1>
+      <div className="w-full h-full flex flex-col justify-center items-center">
+        <Title text="Sign up" />
         <form
           onSubmit={handleSubmit(isValid)}
           className="flex flex-col justify-center px-5 pt-10 pb-8  rounded-md space-y-3 border-2 border-main w-96"

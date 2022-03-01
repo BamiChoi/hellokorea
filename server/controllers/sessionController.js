@@ -5,7 +5,6 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    console.log("usererror");
     return res
       .status(400)
       .send({ field: "email", message: "This email does not exist" });

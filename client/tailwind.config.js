@@ -9,6 +9,7 @@ module.exports = {
       point: "#F0BB62",
       sub: "#F5EDA9",
       warning: "#FF5959",
+      cream: "#F4EEA9",
     },
   },
   plugins: [],

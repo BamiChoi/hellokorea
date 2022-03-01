@@ -4,7 +4,7 @@ interface LayoutProps {
 
 function Wrapper({ children }: LayoutProps) {
   return (
-    <div className="w-full flex justify-center items-center pb-20 pt-20">
+    <div className="w-full flex justify-center items-center pb-20 pt-28">
       {children}
     </div>
   );
