@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { login } from "features/userAuth";
 import Wrapper from "Components/Wrapper";
 import axios from "axios";
 
@@ -9,6 +11,7 @@ interface ILogin {
 }
 
 function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     register,
@@ -23,14 +26,26 @@ function Login() {
         password: data.password,
       })
       .then((response) => {
+        const id = response.data.id;
+        const nickname = response.data.nickname;
+        const email = response.data.email;
+        const loggedIn = response.data.loggedIn;
+        const verified = response.data.verified;
         navigate("/");
+        dispatch(
+          login({
+            id,
+            nickname,
+            email,
+            loggedIn,
+            verified,
+          })
+        );
       })
       .catch((error) => {
         const field = error.response.data.field;
         const message = error.response.data.message;
-        console.log(field, message);
         setError(field, { message });
-        console.log(errors);
       });
   };
   return (
