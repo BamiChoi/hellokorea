@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { login } from "features/userAuth";
+import { login } from "reducers/auth";
 import Wrapper from "Components/Wrapper";
 import axios from "axios";
 

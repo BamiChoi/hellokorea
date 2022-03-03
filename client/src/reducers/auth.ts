@@ -8,11 +8,13 @@ interface IUser {
   verified: boolean;
 }
 interface IUserState {
-  user: IUser;
+  auth: {
+    user: IUser;
+  };
 }
 
-const userAuth = createSlice({
-  name: "userAuthReducer",
+const auth = createSlice({
+  name: "authReducer",
   initialState: {
     user: null,
   },
@@ -26,7 +28,9 @@ const userAuth = createSlice({
   },
 });
 
-export const { login, logout } = userAuth.actions;
-export const loggedInUser = (state: IUserState) => state.user;
+export const { login, logout } = auth.actions;
+export const loggedInUser = (state: IUserState) => {
+  return state.auth.user;
+};
 
-export default userAuth;
+export default auth;

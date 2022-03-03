@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { loggedInUser, logout } from "features/userAuth";
+import { loggedInUser, logout } from "reducers/auth";
 import axios from "axios";
 import Usermenu from "./Usermenu";
 
@@ -35,7 +35,7 @@ function Header() {
           </>
         ) : (
           <>
-            <Usermenu url="/signup" text="Sign up"></Usermenu>
+            <Usermenu url="/join" text="Sign up"></Usermenu>
             <Usermenu url="/login" text="Login"></Usermenu>
           </>
         )}
