@@ -6,6 +6,7 @@ interface IUser {
   email: string;
   loggedIn: boolean;
   verified: boolean;
+  satusMessasge: string;
 }
 interface IUserState {
   auth: {

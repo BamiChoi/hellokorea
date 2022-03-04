@@ -12,10 +12,12 @@ function Header() {
     await axios
       .get("/api/session")
       .then((response) => {
-        dispatch(logout());
         navigate("/");
+        dispatch(logout());
       })
-      .catch((error) => {});
+      .catch((error) => {
+        // ToDo: redirect to Error page
+      });
   };
   return (
     <div className="bg-main border-point border-b-8 h-24 flex justify-between items-center px-5 fixed w-full">

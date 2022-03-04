@@ -19,7 +19,6 @@ export const login = async (req, res) => {
 
   session.loggedIn = true;
   session.user = user;
-  console.log(session);
   return res.status(200).send({
     id: session.user._id,
     nickname: session.user.nickname,
@@ -29,7 +28,7 @@ export const login = async (req, res) => {
   });
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
   req.session.destroy();
   return res.send({ state: "success" });
 };

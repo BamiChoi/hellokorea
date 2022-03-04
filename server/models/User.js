@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   joinedAt: { type: Date, required: true, default: Date.now },
   verified: { type: Boolean, required: true, default: false },
   avatar: String,
+  statusMessage: { type: String, default: "" },
   meta: {
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],

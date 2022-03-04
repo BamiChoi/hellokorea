@@ -10,6 +10,7 @@ module.exports = {
       sub: "#F5EDA9",
       warning: "#FF5959",
       cream: "#F4EEA9",
+      gray: "#EEEEEE",
     },
   },
   plugins: [],
