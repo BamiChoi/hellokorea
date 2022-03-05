@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
+import Button from "Components/Button";
 
 interface IJoin {
   email: string;
@@ -163,9 +164,7 @@ function Join() {
             </span>
           </div>
           <div className="w-full">
-            <button className="bg-main text-white hover:bg-powermain h-12 mt-4 w-full rounded-md">
-              Create Account
-            </button>
+            <Button text="Create Account" />
             <span className="text-warning font-semibold">
               {errors.serverError?.message}
             </span>

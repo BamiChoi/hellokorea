@@ -4,6 +4,7 @@ import Home from "Routes/Root/Home";
 import Signup from "Routes/Root/Signup";
 import Login from "Routes/Root/Login";
 import Profile from "Routes/User/Profile";
+import Useredit from "Routes/User/Edit";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/join" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user" element={<Profile />} />
+        <Route path="/user/edit" element={<Useredit />} />
       </Routes>
     </>
   );

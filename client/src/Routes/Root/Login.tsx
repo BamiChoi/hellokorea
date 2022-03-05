@@ -26,21 +26,34 @@ function Login() {
         password: data.password,
       })
       .then((response) => {
-        const id = response.data.id;
-        const nickname = response.data.nickname;
-        const email = response.data.email;
-        const loggedIn = response.data.loggedIn;
-        const verified = response.data.verified;
-        navigate("/");
+        const {
+          id,
+          nickname,
+          email,
+          firstname,
+          lastname,
+          birthdate,
+          avatar,
+          loggedIn,
+          statusMessage,
+          verified,
+        } = response.data;
         dispatch(
           login({
             id,
             nickname,
             email,
+            firstname,
+            lastname,
+            birthdate,
+            avatar,
             loggedIn,
+            statusMessage,
             verified,
           })
         );
+        console.log(response.data);
+        navigate("/");
       })
       .catch((error) => {
         const field = error.response.data.field;

@@ -1,12 +1,13 @@
 import { useSelector } from "react-redux";
 import { loggedInUser } from "reducers/auth";
+import { Link } from "react-router-dom";
 import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 
 function Profile() {
   const user = useSelector(loggedInUser);
-  const nickname = user.nickname;
-  const statusMessage = user.satusMessasge;
+  const nickname = user?.nickname;
+  const statusMessage = user?.statusMessage;
   return (
     <Wrapper>
       <div className="w-full flex flex-col items-center justify-center px-10">
@@ -21,9 +22,9 @@ function Profile() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg>
               300 follwers
@@ -65,6 +66,25 @@ function Profile() {
               </svg>
               bookmark
             </div>
+            <Link to="/user/edit">
+              <div className="bg-main rounded-full w-24 h-24 flex flex-col justify-center items-center text-white cursor-pointer hover:bg-powermain">
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
+                  ></path>
+                </svg>
+                Eidt porfile
+              </div>
+            </Link>
             <div className="bg-main rounded-full w-24 h-24 flex flex-col justify-center items-center text-white cursor-pointer hover:bg-powermain">
               <svg
                 className="w-6 h-6"
@@ -74,26 +94,9 @@ function Profile() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
-                ></path>
-              </svg>
-              Eidt porfile
-            </div>
-            <div className="bg-main rounded-full w-24 h-24 flex flex-col justify-center items-center text-white cursor-pointer hover:bg-powermain">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>

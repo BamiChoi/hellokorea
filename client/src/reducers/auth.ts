@@ -3,10 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 interface IUser {
   id: string;
   nickname: string;
+  firstname: string;
+  lastname: string;
+  birthdate: string;
   email: string;
   loggedIn: boolean;
   verified: boolean;
-  satusMessasge: string;
+  statusMessage: string;
 }
 interface IUserState {
   auth: {

@@ -12,8 +12,8 @@ function Header() {
     await axios
       .get("/api/session")
       .then((response) => {
-        navigate("/");
         dispatch(logout());
+        navigate("/");
       })
       .catch((error) => {
         // ToDo: redirect to Error page

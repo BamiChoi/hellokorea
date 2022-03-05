@@ -23,6 +23,10 @@ export const login = async (req, res) => {
     id: session.user._id,
     nickname: session.user.nickname,
     email: session.user.email,
+    firstname: session.user.firstname,
+    lastname: session.user.lastname,
+    birthdate: session.user.birthdate,
+    avatar: session.user.avatar,
     loggedIn: session.loggedIn,
     verified: session.user.verified,
   });
