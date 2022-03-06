@@ -29,10 +29,13 @@ const auth = createSlice({
     logout: (state) => {
       state.user = null;
     },
+    editUser: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+    },
   },
 });
 
-export const { login, logout } = auth.actions;
+export const { login, logout, editUser } = auth.actions;
 export const loggedInUser = (state: IUserState) => {
   return state.auth.user;
 };

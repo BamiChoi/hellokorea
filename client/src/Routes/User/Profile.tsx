@@ -34,7 +34,7 @@ function Profile() {
             <div className="bg-white w-32 h-32 rounded-full mb-4"></div>
             <div className="flex flex-col ml-14 space-y-4">
               <span>{nickname}</span>
-              <span>{statusMessage} 상태메세지</span>
+              <span>{statusMessage}</span>
             </div>
           </div>
         </div>

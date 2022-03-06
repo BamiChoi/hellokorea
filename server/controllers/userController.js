@@ -52,22 +52,12 @@ export const signup = async (req, res) => {
   return res.status(200).send({ state: "success" });
 };
 
-export const profile = (req, res) => {
-  return res.send({ state: "success" });
-};
-
 export const editProfile = async (req, res) => {
   const {
     session: {
       user: { _id },
     },
-    body: {
-      newNickname: nickname,
-      newStatusMessage: statusMessage,
-      newFirstname: firstname,
-      newLastname: lastname,
-      newBirthdate: birthdate,
-    },
+    body: { nickname, statusMessage, firstname, lastname, birthdate },
   } = req;
   try {
     await User.findByIdAndUpdate(_id, {
@@ -88,7 +78,17 @@ export const editProfile = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .send({ field: "serverError", message: "Email already exists" });
+      .send({ field: "serverError", message: "Failed to update profile" });
   }
-  return res.status(200).send({ state: "success" });
+  return res.status(200).send({
+    nickname,
+    statusMessage,
+    firstname,
+    lastname,
+    birthdate,
+  });
+};
+
+export const profile = (req, res) => {
+  return res.send({ state: "success" });
 };

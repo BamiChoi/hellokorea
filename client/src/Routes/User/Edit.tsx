@@ -1,7 +1,8 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser } from "reducers/auth";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { editUser } from "reducers/auth";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
@@ -18,7 +19,9 @@ interface IProfile {
 
 function Edit() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector(loggedInUser);
+  const { id } = user;
   const { nickname, statusMessage, firstname, lastname, birthdate } =
     user || {};
   const {
@@ -36,23 +39,10 @@ function Edit() {
     mode: "onBlur",
   });
   const isValid = async (data: IProfile) => {
-    const {
-      nickname: newNickname,
-      statusMessage: newStatusMessage,
-      firstname: newFirstname,
-      lastname: newLastname,
-      birthdate: newBirthdate,
-    } = data;
     await axios
-      .post(`/api/user/{id}`, {
-        newNickname,
-        newStatusMessage,
-        newFirstname,
-        newLastname,
-        newBirthdate,
-      })
+      .post(`/api/user/${id}`, data)
       .then(function (response) {
-        console.log("ok");
+        dispatch(editUser({ ...response.data }));
         navigate("/user");
       })
       .catch(function (error) {
@@ -85,8 +75,15 @@ function Edit() {
                 </span>
               </div>
               <div className="flex flex-col">
-                <label htmlFor="statisMessage">Status Message</label>
-                <input type="text" id="statisMessage" className="px-2 py-1" />
+                <label htmlFor="statusMessage">Status Message</label>
+                <input
+                  {...register("statusMessage", {
+                    required: "Nickname is required",
+                  })}
+                  type="text"
+                  id="stausMessage"
+                  className="px-2 py-1"
+                />
               </div>
             </div>
           </div>

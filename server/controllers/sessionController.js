@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  const session = req.session;
   const user = await User.findOne({ email });
   if (!user) {
     return res
@@ -17,18 +16,32 @@ export const login = async (req, res) => {
       .send({ field: "password", message: "Password is not correct" });
   }
 
-  session.loggedIn = true;
-  session.user = user;
+  req.session.loggedIn = true;
+  req.session.user = user;
+  const {
+    loggedIn,
+    user: {
+      _id: id,
+      nickname,
+      email: userEmail,
+      firstname,
+      lastname,
+      birthdate,
+      avatar,
+      verified,
+    },
+  } = req.session;
+
   return res.status(200).send({
-    id: session.user._id,
-    nickname: session.user.nickname,
-    email: session.user.email,
-    firstname: session.user.firstname,
-    lastname: session.user.lastname,
-    birthdate: session.user.birthdate,
-    avatar: session.user.avatar,
-    loggedIn: session.loggedIn,
-    verified: session.user.verified,
+    id,
+    nickname,
+    email: userEmail,
+    firstname,
+    lastname,
+    birthdate,
+    avatar,
+    loggedIn,
+    verified,
   });
 };
 
