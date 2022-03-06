@@ -56,6 +56,39 @@ export const profile = (req, res) => {
   return res.send({ state: "success" });
 };
 
-export const editProfile = (req, res) => {
-  return res.send({ state: "success" });
+export const editProfile = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: {
+      newNickname: nickname,
+      newStatusMessage: statusMessage,
+      newFirstname: firstname,
+      newLastname: lastname,
+      newBirthdate: birthdate,
+    },
+  } = req;
+  try {
+    await User.findByIdAndUpdate(_id, {
+      nickname,
+      statusMessage,
+      firstname,
+      lastname,
+      birthdate,
+    });
+    req.session.user = {
+      ...req.session.user,
+      nickname,
+      statusMessage,
+      firstname,
+      lastname,
+      birthdate,
+    };
+  } catch (error) {
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Email already exists" });
+  }
+  return res.status(200).send({ state: "success" });
 };

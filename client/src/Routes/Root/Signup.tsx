@@ -27,15 +27,24 @@ function Join() {
   } = useForm<IJoin>({ mode: "onBlur" });
   const password = watch().password;
   const isValid = async (data: IJoin) => {
+    const {
+      email,
+      nickname,
+      firstname,
+      lastname,
+      birthdate,
+      password,
+      password2,
+    } = data;
     await axios
       .post("/api/user", {
-        email: data.email,
-        nickname: data.nickname,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        birthdate: data.birthdate,
-        password: data.password,
-        password2: data.password2,
+        email,
+        nickname,
+        firstname,
+        lastname,
+        birthdate,
+        password,
+        password2,
       })
       .then(function (response) {
         navigate("/login");

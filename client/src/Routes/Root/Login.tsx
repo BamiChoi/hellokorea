@@ -52,7 +52,6 @@ function Login() {
             verified,
           })
         );
-        console.log(response.data);
         navigate("/");
       })
       .catch((error) => {
