@@ -11,6 +11,7 @@ import axios from "axios";
 interface IProfile {
   nickname: string;
   statusMessage: string;
+  avatar: string;
   firstname: string;
   lastname: string;
   birthdate: string;
@@ -22,7 +23,7 @@ function Edit() {
   const dispatch = useDispatch();
   const user = useSelector(loggedInUser);
   const { id } = user;
-  const { nickname, statusMessage, firstname, lastname, birthdate } =
+  const { nickname, statusMessage, avatar, firstname, lastname, birthdate } =
     user || {};
   const {
     register,
@@ -31,6 +32,7 @@ function Edit() {
   } = useForm<IProfile>({
     defaultValues: {
       nickname,
+      avatar,
       statusMessage,
       firstname,
       lastname,
@@ -39,9 +41,20 @@ function Edit() {
     mode: "onBlur",
   });
   const isValid = async (data: IProfile) => {
+    let formData = new FormData();
+    formData.append("avatar", data.avatar[0]);
+    formData.append("nickname", data.nickname);
+    formData.append("firstname", data.firstname);
+    formData.append("lastname", data.lastname);
+    formData.append("birthdate", data.birthdate);
+    formData.append("statusMessage", data.statusMessage);
+    /*  data.avatar = data.avatar[0];
+    console.log(data.avatar);
+    console.log(data); */
     await axios
-      .post(`/api/user/${id}`, data)
+      .post(`/api/user/${id}`, formData)
       .then(function (response) {
+        console.log(response.data);
         dispatch(editUser({ ...response.data }));
         navigate("/user");
       })
@@ -49,12 +62,14 @@ function Edit() {
         console.log(error);
       });
   };
+
   return (
     <Wrapper>
       <div className="w-full flex flex-col items-center justify-center px-10">
         <Title text="Edit my info" />
         <form
           onSubmit={handleSubmit(isValid)}
+          encType="multipart/form-data"
           className="h-full px-10 mx-10 rounded-xl w-full bg-cream flex flex-col justify-start items-center py-11"
         >
           <div className="flex justify-start items-center w-full ">
@@ -84,6 +99,20 @@ function Edit() {
                   id="stausMessage"
                   className="px-2 py-1"
                 />
+              </div>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="avatar"
+                  className="cursor-pointer  bg-point text-center rounded-md py-1 hover:text-white"
+                >
+                  Change profile photo
+                </label>
+                <input
+                  {...register("avatar")}
+                  id="avatar"
+                  type="file"
+                  className="hidden"
+                ></input>
               </div>
             </div>
           </div>

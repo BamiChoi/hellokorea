@@ -22,6 +22,7 @@ app.use(
     }),
   })
 );
+app.use("/uploads", express.static("uploads"));
 app.use("/api/session", sessionRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);

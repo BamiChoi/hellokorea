@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface IUser {
   id: string;
   nickname: string;
+  avatar: string;
   firstname: string;
   lastname: string;
   birthdate: string;
@@ -30,7 +31,7 @@ const auth = createSlice({
       state.user = null;
     },
     editUser: (state, action) => {
-      state.user = { ...state.user, ...action.payload };
+      state.user = { ...((state.user as null) || {}), ...action.payload };
     },
   },
 });

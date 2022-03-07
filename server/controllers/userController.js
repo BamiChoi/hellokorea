@@ -55,13 +55,16 @@ export const signup = async (req, res) => {
 export const editProfile = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatar },
     },
     body: { nickname, statusMessage, firstname, lastname, birthdate },
+    file,
   } = req;
+  console.log(file);
   try {
     await User.findByIdAndUpdate(_id, {
       nickname,
+      avatar: file ? file.path : avatar,
       statusMessage,
       firstname,
       lastname,
@@ -70,18 +73,21 @@ export const editProfile = async (req, res) => {
     req.session.user = {
       ...req.session.user,
       nickname,
+      avatar: file ? file.path : avatar,
       statusMessage,
       firstname,
       lastname,
       birthdate,
     };
   } catch (error) {
+    console.log(error);
     return res
       .status(400)
       .send({ field: "serverError", message: "Failed to update profile" });
   }
   return res.status(200).send({
     nickname,
+    avatar: file ? file.path : avatar,
     statusMessage,
     firstname,
     lastname,

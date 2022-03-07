@@ -6,6 +6,7 @@ import Title from "Components/Title";
 
 function Profile() {
   const user = useSelector(loggedInUser);
+  console.log(user);
   const nickname = user?.nickname;
   const statusMessage = user?.statusMessage;
   return (
@@ -31,7 +32,11 @@ function Profile() {
             </div>
           </div>
           <div className="flex justify-start items-center w-full ml-20">
-            <div className="bg-white w-32 h-32 rounded-full mb-4"></div>
+            <img
+              alt="avatar"
+              src={"/" + user.avatar}
+              className="bg-white w-32 h-32 rounded-full mb-4"
+            />
             <div className="flex flex-col ml-14 space-y-4">
               <span>{nickname}</span>
               <span>{statusMessage}</span>
