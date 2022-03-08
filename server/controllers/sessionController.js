@@ -18,6 +18,7 @@ export const login = async (req, res) => {
 
   req.session.loggedIn = true;
   req.session.user = user;
+  console.log(req.session.user);
   const {
     loggedIn,
     user: {

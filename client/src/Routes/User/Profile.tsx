@@ -6,7 +6,6 @@ import Title from "Components/Title";
 
 function Profile() {
   const user = useSelector(loggedInUser);
-  console.log(user);
   const nickname = user?.nickname;
   const statusMessage = user?.statusMessage;
   return (

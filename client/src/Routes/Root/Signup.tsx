@@ -25,7 +25,7 @@ function Join() {
     formState: { errors },
     setError,
   } = useForm<IJoin>({ mode: "onBlur" });
-  const password = watch().password;
+  const password = watch("password");
   const isValid = async (data: IJoin) => {
     const {
       email,
