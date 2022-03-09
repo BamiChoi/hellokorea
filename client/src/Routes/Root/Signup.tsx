@@ -50,8 +50,7 @@ function Join() {
         navigate("/login");
       })
       .catch(function (error) {
-        const field = error.response.data.field;
-        const message = error.response.data.message;
+        const { field, message } = error.response.data;
         setError(field, { message });
       });
   };

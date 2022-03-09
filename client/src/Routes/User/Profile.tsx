@@ -6,8 +6,7 @@ import Title from "Components/Title";
 
 function Profile() {
   const user = useSelector(loggedInUser);
-  const nickname = user?.nickname;
-  const statusMessage = user?.statusMessage;
+  const { nickname, statusMessage, avatar } = user || {};
   return (
     <Wrapper>
       <div className="w-full flex flex-col items-center justify-center px-10">
@@ -33,7 +32,7 @@ function Profile() {
           <div className="flex justify-start items-center w-full ml-20">
             <img
               alt="avatar"
-              src={"/" + user.avatar}
+              src={"/" + avatar}
               className="bg-white w-32 h-32 rounded-full mb-4"
             />
             <div className="flex flex-col ml-14 space-y-4">

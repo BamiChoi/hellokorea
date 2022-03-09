@@ -1,4 +1,5 @@
 import User from "../models/User";
+import bcrypt from "bcrypt";
 
 export const signup = async (req, res) => {
   const {
@@ -81,9 +82,6 @@ export const editProfile = async (req, res) => {
     };
   } catch (error) {
     console.log(error);
-    return res
-      .status(400)
-      .send({ field: "serverError", message: "Failed to update profile" });
   }
   return res.status(200).send({
     nickname,
@@ -92,6 +90,43 @@ export const editProfile = async (req, res) => {
     firstname,
     lastname,
     birthdate,
+  });
+};
+
+export const changePassword = async (req, res) => {
+  console.log(req.session);
+  const {
+    session: {
+      user: { _id, password },
+    },
+    body: { currentPassword, newPassword, newPassword2 },
+  } = req;
+  console.log(password, currentPassword);
+  const passwordValidation = await bcrypt.compare(currentPassword, password);
+  if (!passwordValidation) {
+    return res
+      .status(400)
+      .send({ field: "currentPassword", message: "Current password is wrong" });
+  }
+  if (newPassword !== newPassword2) {
+    return res
+      .status(400)
+      .send({ field: "newPassword2", message: "New Password is not matched" });
+  }
+  console.log(password);
+  const user = await User.findById(_id);
+  user.password = newPassword;
+  user.save();
+  /* try {
+    await User.findByIdAndUpdate(_id, {
+      password: newPassword,
+    });
+  } catch (error) {
+    console.log(error);
+  } */
+  console.log(user.password);
+  return res.status(200).send({
+    state: "success",
   });
 };
 

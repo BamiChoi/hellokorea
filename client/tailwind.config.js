@@ -11,6 +11,7 @@ module.exports = {
       warning: "#FF5959",
       cream: "#F4EEA9",
       gray: "#EEEEEE",
+      brightgreen: "#98B4AA",
     },
   },
   plugins: [],

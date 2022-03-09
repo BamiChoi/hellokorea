@@ -18,13 +18,13 @@ export const login = async (req, res) => {
 
   req.session.loggedIn = true;
   req.session.user = user;
-  console.log(req.session.user);
   const {
     loggedIn,
     user: {
       _id: id,
       nickname,
       email: userEmail,
+      statusMessage,
       firstname,
       lastname,
       birthdate,
@@ -37,6 +37,7 @@ export const login = async (req, res) => {
     id,
     nickname,
     email: userEmail,
+    statusMessage,
     firstname,
     lastname,
     birthdate,

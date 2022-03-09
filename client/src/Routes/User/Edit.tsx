@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser } from "reducers/auth";
-import { useNavigate } from "react-router-dom";
-import { useForm, useWatch } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { editUser } from "reducers/auth";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
@@ -23,13 +23,20 @@ function Edit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(loggedInUser);
-  const { id } = user;
-  const { nickname, statusMessage, avatar, firstname, lastname, birthdate } =
-    user || {};
-  const [newAvatar, setnewAvatar] = useState("");
+  const {
+    id,
+    nickname,
+    statusMessage,
+    avatar,
+    firstname,
+    lastname,
+    birthdate,
+  } = user || {};
+  const [newAvatar, setNewAvatar] = useState("");
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<IProfile>({
     defaultValues: {
@@ -45,10 +52,8 @@ function Edit() {
   const onChangeAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
     reader.onload = () => {
-      if (reader.readyState === 2) {
-        const fileUri = reader.result;
-        setnewAvatar(`${fileUri!}`);
-      }
+      const fileUri = reader.result;
+      setNewAvatar(`${fileUri!}`);
     };
     reader.readAsDataURL(event.target.files![0]);
   };
@@ -69,7 +74,8 @@ function Edit() {
         navigate("/user");
       })
       .catch(function (error) {
-        console.log(error);
+        const { field, message } = error.response.data;
+        setError(field, { message });
       });
   };
 
@@ -97,7 +103,7 @@ function Edit() {
                   })}
                   type="text"
                   id="nickname"
-                  className="px-2 py-1"
+                  className="px-2 py-1 rounded-md"
                 />
                 <span className="text-warning font-semibold">
                   {errors?.nickname?.message}
@@ -111,25 +117,54 @@ function Edit() {
                   })}
                   type="text"
                   id="stausMessage"
-                  className="px-2 py-1"
+                  className="px-2 py-1 rounded-md"
                 />
               </div>
               <div className="flex flex-col">
                 <label
                   htmlFor="avatar"
-                  className="cursor-pointer  bg-point text-center rounded-md py-1 hover:text-white"
+                  className="cursor-pointer  bg-point text-center rounded-md py-1 hover:text-white flex justify-center"
                 >
-                  Change profile photo
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  Change profile image
                 </label>
                 <input
                   {...register("avatar", {
-                    onChange: (e) => onChangeAvatar(e),
+                    onChange: (event) => onChangeAvatar(event),
                   })}
                   id="avatar"
                   type="file"
                   className="hidden"
                 ></input>
               </div>
+              <Link to="/user/edit/password">
+                <div className="flex bg-brightgreen text-black rounded-md py-1 cursor-pointer justify-center hover:text-white">
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Change password</span>
+                </div>
+              </Link>
             </div>
           </div>
           <div className="w-full pt-10 space-y-4 mb-10">
@@ -141,7 +176,7 @@ function Edit() {
                 })}
                 type="text"
                 id="firstname"
-                className="px-2 py-1"
+                className="px-2 py-1 rounded-md"
               />
               <span className="text-warning font-semibold">
                 {errors?.firstname?.message}
@@ -153,7 +188,7 @@ function Edit() {
                 {...register("lastname", { required: "Lastname is required" })}
                 type="text"
                 id="lastname"
-                className="px-2 py-1"
+                className="px-2 py-1 rounded-md"
               />
               <span className="text-warning font-semibold">
                 {errors?.lastname?.message}
@@ -165,7 +200,7 @@ function Edit() {
                 {...register("birthdate", { required: "Birtdate is required" })}
                 type="date"
                 id="birthdate"
-                className="px-2 py-1"
+                className="px-2 py-1 rounded-md"
               />
               <span className="text-warning font-semibold">
                 {errors?.birthdate?.message}
