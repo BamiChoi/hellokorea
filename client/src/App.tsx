@@ -6,6 +6,8 @@ import Login from "Routes/Root/Login";
 import Profile from "Routes/User/Profile";
 import Useredit from "Routes/User/Edit";
 import Password from "Routes/User/Password";
+import LogoutOnly from "Routes/LogoutOnly";
+import LoggedInOnly from "Routes/LoggedInOnly";
 
 function App() {
   return (
@@ -13,9 +15,23 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/join" element={<Signup />} />
+        <Route
+          path="/join"
+          element={
+            <LogoutOnly>
+              <Signup />
+            </LogoutOnly>
+          }
+        />
         <Route path="/login" element={<Login />} />
-        <Route path="/user" element={<Profile />} />
+        <Route
+          path="/user"
+          element={
+            <LoggedInOnly>
+              <Profile />
+            </LoggedInOnly>
+          }
+        />
         <Route path="/user/edit" element={<Useredit />} />
         <Route path="/user/edit/password/" element={<Password />} />
       </Routes>
