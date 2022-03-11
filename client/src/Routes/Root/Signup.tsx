@@ -171,12 +171,7 @@ function Join() {
               {errors?.password2?.message}
             </span>
           </div>
-          <div className="w-full">
-            <Button text="Create Account" />
-            <span className="text-warning font-semibold">
-              {errors.serverError?.message}
-            </span>
-          </div>
+          <Button text="Create Account" errors={errors.serverError?.message} />
         </form>
       </div>
     </Wrapper>

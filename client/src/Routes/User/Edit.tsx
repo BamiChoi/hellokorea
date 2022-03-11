@@ -3,11 +3,12 @@ import { loggedInUser } from "reducers/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { editUser } from "reducers/auth";
+import axios from "axios";
+import React, { useState } from "react";
+import Input from "Components/Input";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
-import axios from "axios";
-import React, { useState } from "react";
 
 interface IProfile {
   nickname: string;
@@ -74,6 +75,7 @@ function Edit() {
         navigate("/user");
       })
       .catch(function (error) {
+        console.log(error);
         const { field, message } = error.response.data;
         setError(field, { message });
       });
@@ -95,32 +97,26 @@ function Edit() {
               className="bg-white w-32 h-32 rounded-full mb-4"
             />
             <div className="flex flex-col ml-5 space-y-2">
+              <Input
+                label="Nickname"
+                id="nickname"
+                type="text"
+                errors={errors?.nickname?.message}
+                required
+                register={register("nickname", {
+                  required: "Nickname is required",
+                })}
+              />
+              <Input
+                label="Status Message"
+                id="statusMessage"
+                type="text"
+                errors={errors?.statusMessage?.message}
+                required={false}
+                register={register("statusMessage")}
+              />
+
               <div className="flex flex-col w-full">
-                <label htmlFor="nickname">Nickname</label>
-                <input
-                  {...register("nickname", {
-                    required: "Nickname is required",
-                  })}
-                  type="text"
-                  id="nickname"
-                  className="px-2 py-1 rounded-md"
-                />
-                <span className="text-warning font-semibold">
-                  {errors?.nickname?.message}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="statusMessage">Status Message</label>
-                <input
-                  {...register("statusMessage", {
-                    required: "Nickname is required",
-                  })}
-                  type="text"
-                  id="stausMessage"
-                  className="px-2 py-1 rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
                 <label
                   htmlFor="avatar"
                   className="cursor-pointer  bg-point text-center rounded-md py-1 hover:text-white flex justify-center"
@@ -146,7 +142,7 @@ function Edit() {
                   id="avatar"
                   type="file"
                   className="hidden"
-                ></input>
+                />
               </div>
               <Link to="/user/edit/password">
                 <div className="flex bg-brightgreen text-black rounded-md py-1 cursor-pointer justify-center hover:text-white">
@@ -168,51 +164,38 @@ function Edit() {
             </div>
           </div>
           <div className="w-full pt-10 space-y-4 mb-10">
-            <div className="flex flex-col">
-              <label htmlFor="firstname">First name</label>
-              <input
-                {...register("firstname", {
-                  required: "First name is required",
-                })}
-                type="text"
-                id="firstname"
-                className="px-2 py-1 rounded-md"
-              />
-              <span className="text-warning font-semibold">
-                {errors?.firstname?.message}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="lastname">Last name</label>
-              <input
-                {...register("lastname", { required: "Lastname is required" })}
-                type="text"
-                id="lastname"
-                className="px-2 py-1 rounded-md"
-              />
-              <span className="text-warning font-semibold">
-                {errors?.lastname?.message}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="birthdate">Birthdate</label>
-              <input
-                {...register("birthdate", { required: "Birtdate is required" })}
-                type="date"
-                id="birthdate"
-                className="px-2 py-1 rounded-md"
-              />
-              <span className="text-warning font-semibold">
-                {errors?.birthdate?.message}
-              </span>
-            </div>
+            <Input
+              label="First name"
+              id="firstname"
+              type="text"
+              errors={errors?.firstname?.message}
+              required
+              register={register("firstname", {
+                required: "First name is required",
+              })}
+            />
+            <Input
+              label="Last name"
+              id="lastname"
+              type="text"
+              errors={errors?.lastname?.message}
+              required
+              register={register("lastname", {
+                required: "Last name is required",
+              })}
+            />
+            <Input
+              label="Birthdate"
+              id="birthdate"
+              type="birthdate"
+              errors={errors?.birthdate?.message}
+              required
+              register={register("birthdate", {
+                required: "Birtdate is required",
+              })}
+            />
           </div>
-          <div className="w-full">
-            <Button text="Save Changes"></Button>
-            <span className="text-warning font-semibold">
-              {errors.serverError?.message}
-            </span>
-          </div>
+          <Button text="Save Changes" errors={errors.serverError?.message} />
         </form>
       </div>
     </Wrapper>

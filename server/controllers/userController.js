@@ -61,7 +61,7 @@ export const editProfile = async (req, res) => {
     body: { nickname, statusMessage, firstname, lastname, birthdate },
     file,
   } = req;
-  console.log(req.file);
+  console.log(req.body);
   try {
     await User.findByIdAndUpdate(_id, {
       nickname,

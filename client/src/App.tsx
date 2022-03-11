@@ -23,7 +23,14 @@ function App() {
             </LogoutOnly>
           }
         />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <LogoutOnly>
+              <Login />
+            </LogoutOnly>
+          }
+        />
         <Route
           path="/user"
           element={
@@ -32,8 +39,22 @@ function App() {
             </LoggedInOnly>
           }
         />
-        <Route path="/user/edit" element={<Useredit />} />
-        <Route path="/user/edit/password/" element={<Password />} />
+        <Route
+          path="/user/edit"
+          element={
+            <LoggedInOnly>
+              <Useredit />
+            </LoggedInOnly>
+          }
+        />
+        <Route
+          path="/user/edit/password/"
+          element={
+            <LoggedInOnly>
+              <Password />{" "}
+            </LoggedInOnly>
+          }
+        />
       </Routes>
     </>
   );

@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser, logout } from "reducers/auth";
+import axios from "axios";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
-import axios from "axios";
+import Input from "Components/Input";
 
 interface IPassword {
   currentPassword: string;
@@ -68,56 +69,40 @@ function Password() {
               clipRule="evenodd"
             ></path>
           </svg>
-          <div className="flex flex-col w-full">
-            <label htmlFor="currentPassword">Current Password</label>
-            <input
-              {...register("currentPassword", {
-                required: "Current password is required",
-              })}
-              type="password"
-              id="currentPassword"
-              className="px-2 py-1 rounded-md"
-            ></input>
-            <span className="text-warning font-semibold">
-              {errors?.currentPassword?.message}
-            </span>
-          </div>
-          <div className="flex flex-col w-full">
-            <label htmlFor="newPssword">New Password</label>
-            <input
-              {...register("newPassword", {
-                required: "Current password is required",
-              })}
-              type="password"
-              id="newPassword"
-              className="px-2 py-1 rounded-md"
-            ></input>
-            <span className="text-warning font-semibold">
-              {errors?.newPassword?.message}
-            </span>
-          </div>
-          <div className="flex flex-col w-full">
-            <label htmlFor="newPassword2">Confirm New Password</label>
-            <input
-              {...register("newPassword2", {
-                required: "Fill this blank for confirming password",
-                validate: (value) =>
-                  value === newPassword || "New Password is not matched",
-              })}
-              type="password"
-              id="newPassword2"
-              className="px-2 py-1 rounded-md"
-            ></input>
-            <span className="text-warning font-semibold">
-              {errors?.newPassword2?.message}
-            </span>
-          </div>
-          <div className="w-full">
-            <Button text="Change Password"></Button>
-            <span className="text-warning font-semibold">
-              {errors.serverError?.message}
-            </span>
-          </div>
+          <Input
+            label="Current Password"
+            id="currentPassword"
+            type="password"
+            errors={errors?.currentPassword?.message}
+            required
+            register={register("currentPassword", {
+              required: "Current password is required",
+            })}
+          />
+          <Input
+            label="New Password"
+            id="newPassword"
+            type="password"
+            errors={errors?.newPassword?.message}
+            required
+            register={register("newPassword", {
+              required: "New password is required",
+            })}
+          />
+          <Input
+            label="Confirm New Password"
+            id="newPassword2"
+            type="password"
+            errors={errors?.newPassword2?.message}
+            required
+            register={register("newPassword2", {
+              required: "Fill this blank for confirming password",
+              validate: (value) =>
+                value === newPassword || "New Password is not matched",
+            })}
+          />
+
+          <Button text="Change Password" errors={errors.serverError?.message} />
         </form>
       </div>
     </Wrapper>

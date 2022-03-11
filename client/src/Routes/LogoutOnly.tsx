@@ -7,9 +7,10 @@ export interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-function LoggedInOnly({ children }: ProtectedRouteProps) {
+function LogoutOnly({ children }: ProtectedRouteProps) {
   const user = useSelector(loggedInUser);
+  console.log(user);
   return !user ? <>{children}</> : <Navigate to="/login" />;
 }
 
-export default LoggedInOnly;
+export default LogoutOnly;

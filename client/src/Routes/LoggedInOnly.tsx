@@ -9,7 +9,6 @@ export interface IProtectedRoute {
 
 function LoggedInOnly({ children }: IProtectedRoute) {
   const user = useSelector(loggedInUser);
-  console.log(user);
   return user ? <>{children}</> : <Navigate to="/login" />;
 }
 

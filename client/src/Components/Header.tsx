@@ -16,7 +16,7 @@ function Header() {
         navigate("/");
       })
       .catch((error) => {
-        // ToDo: redirect to Error page
+        console.log(error); // ToDo: redirect to Error page
       });
   };
   return (
