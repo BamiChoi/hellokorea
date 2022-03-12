@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { login } from "reducers/auth";
 import Wrapper from "Components/Wrapper";
 import axios from "axios";
+import Input from "Components/Input";
+import Button from "Components/Button";
 
 interface ILogin {
   email: string;
@@ -38,6 +40,7 @@ function Login() {
           statusMessage,
           verified,
         } = response.data;
+        navigate("/"); // maximum depth error 때문에 dispatch 보다 위에 올림. 바람직하지 않음.
         dispatch(
           login({
             id,
@@ -52,7 +55,6 @@ function Login() {
             verified,
           })
         );
-        navigate("/");
       })
       .catch((error) => {
         const field = error.response.data.field;
@@ -67,41 +69,35 @@ function Login() {
           onSubmit={handleSubmit(isValid)}
           className="flex flex-col h-72 bg-main justify-center p-10 rounded-xl mt-24 w-96 space-y-4"
         >
-          <div className="w-full flex flex-col">
-            <label htmlFor="email">Email</label>
-            <input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value:
-                    /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
-                  message: "It is not valid email address",
-                },
-              })}
-              className="rounded-md h-8 px-2 py-1"
-              type="email"
-              id="email"
-            />
-            <span className="text-warning font-semibold">
-              {errors?.email?.message}
-            </span>
-          </div>
-          <div className="w-full flex flex-col">
-            <label htmlFor="password">Password</label>
-            <input
-              {...register("password", { required: "Password is required" })}
-              className="rounded-md h-8 px-2 py-1"
-              type="password"
-              id="password"
-            />
-            <span className="text-warning font-semibold">
-              {errors?.password?.message}
-            </span>
-          </div>
-
-          <button className="bg-point rounded-xl h-10 mt-4  cursor-pointer">
-            Login
-          </button>
+          <Input
+            label="Email"
+            id="email"
+            type="email"
+            required
+            errors={errors?.email?.message}
+            register={register("email", {
+              required: "Email is required",
+              pattern: {
+                value:
+                  /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
+                message: "It is not valid email address",
+              },
+            })}
+          />
+          <Input
+            label="Password"
+            id="password"
+            type="password"
+            required
+            errors={errors?.password?.message}
+            register={register("password", {
+              required: "Password is required",
+            })}
+          />
+          <Button
+            text="Login"
+            customCls="bg-point text-black h-10 mt-4 w-full rounded-md"
+          />
         </form>
       </div>
     </Wrapper>

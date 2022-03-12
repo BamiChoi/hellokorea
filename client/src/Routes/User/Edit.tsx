@@ -187,7 +187,7 @@ function Edit() {
             <Input
               label="Birthdate"
               id="birthdate"
-              type="birthdate"
+              type="date"
               errors={errors?.birthdate?.message}
               required
               register={register("birthdate", {
