@@ -6,7 +6,7 @@ import Wrapper from "Components/Wrapper";
 import Input from "Components/Input";
 import Button from "Components/Button";
 
-interface IJoin {
+interface IJoinForm {
   email: string;
   firstname: string;
   lastname: string;
@@ -25,9 +25,9 @@ function Join() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<IJoin>({ mode: "onBlur" });
+  } = useForm<IJoinForm>({ mode: "onBlur" });
   const password = watch("password");
-  const isValid = async (data: IJoin) => {
+  const isValid = async (data: IJoinForm) => {
     const {
       email,
       nickname,

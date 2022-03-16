@@ -6,6 +6,8 @@ import Login from "Routes/Root/Login";
 import Profile from "Routes/User/Profile";
 import Useredit from "Routes/User/Edit";
 import Password from "Routes/User/Password";
+import Board from "Routes/Post/Board";
+import Write from "Routes/Post/Write";
 import LogoutOnly from "Routes/LogoutOnly";
 import LoggedInOnly from "Routes/LoggedInOnly";
 
@@ -55,6 +57,8 @@ function App() {
             </LoggedInOnly>
           }
         />
+        <Route path="/board/:theme" element={<Board></Board>}></Route>
+        <Route path="/board/:theme/write" element={<Write></Write>}></Route>
       </Routes>
     </>
   );

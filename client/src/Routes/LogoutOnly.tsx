@@ -9,7 +9,6 @@ export interface ProtectedRouteProps {
 
 function LogoutOnly({ children }: ProtectedRouteProps) {
   const user = useSelector(loggedInUser);
-  console.log(user);
   return !user ? <>{children}</> : <Navigate to="/login" />;
 }
 
