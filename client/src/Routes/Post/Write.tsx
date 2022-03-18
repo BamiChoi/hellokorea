@@ -8,14 +8,17 @@ import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Input from "Components/Input";
+import axios from "axios";
 
 interface IWritePostForm {
   title: string;
+  contents: string;
+  serverError?: string;
 }
 function Write() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const rawContentState = convertToRaw(editorState.getCurrentContent());
-  const editorToHtml = draftToHtml(rawContentState);
+  console.log(draftToHtml(rawContentState));
   const {
     register,
     handleSubmit,
@@ -24,18 +27,30 @@ function Write() {
   } = useForm<IWritePostForm>({
     mode: "onBlur",
   });
+  const isValid = async (data: IWritePostForm) => {
+    await axios
+      .post("/api/post", data)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        const { field, message } = error.response.data;
+        setError(field, { message });
+      });
+  };
   return (
     <Wrapper>
       <div className="w-full h-full flex flex-col justify-center items-center">
         <Title text="Write a post"></Title>
-        <form className="h-full px-10 h-">
+        <form onSubmit={handleSubmit(isValid)} className="h-full px-10 h-">
           <Input
             label="Title"
             id="title"
             type="text"
             errors={errors?.title?.message}
             required
-            customCls="border-2 border-main px-2 py-1 w-full"
+            customCls="border-[1px] border-[gray] px-2 py-1 w-full"
             register={register("title", {
               required: "Title is required",
             })}
@@ -73,6 +88,7 @@ function Write() {
             placeholder="Write a some text.."
           />
           <textarea
+            {...register("contents")}
             className="disabled:opacity-0"
             disabled
             value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
