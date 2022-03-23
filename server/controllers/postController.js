@@ -8,6 +8,7 @@ export const createPost = (req, res) => {
     },
     body: { title, contents },
   } = req;
+  console.log(title, contents);
   try {
     const newPost = await Post.create({
       title,

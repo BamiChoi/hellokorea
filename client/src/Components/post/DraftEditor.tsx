@@ -1,29 +1,81 @@
 import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import { Controller } from "react-hook-form";
 
-function DraftEditor() {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const rawContentState = convertToRaw(editorState.getCurrentContent());
-  const editorToHtml = draftToHtml(rawContentState);
-  console.log(editorToHtml);
+function TextEditor(props: { control: any }) {
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const defaultValue = "";
+  const getEditorState = (contents: string) => {
+    const { contentBlocks, entityMap } = htmlToDraft(contents || defaultValue);
+    const contentState = ContentState.createFromBlockArray(
+      contentBlocks,
+      entityMap
+    );
+    return EditorState.createWithContent(contentState);
+  };
+  // const rawContentState = convertToRaw(editorState.getCurrentContent());
+  // console.log(rawContentState);
+  // const editorToHtml = draftToHtml(rawContentState);
+  // console.log(editorToHtml);
   return (
     <div>
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={setEditorState}
-        toolbarClassName="toolbarClassName"
-        wrapperClassName="wrapperClassName"
-        editorClassName="editorClassName"
-      ></Editor>
-      <textarea
-        disabled
-        value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
+      <Controller
+        name="contents"
+        control={props.control}
+        defaultValue={defaultValue}
+        render={({ field: { onChange, value } }) => {
+          let defaultEditorState;
+          if (defaultValue || value) {
+            defaultEditorState = getEditorState(defaultValue || value);
+          }
+          const onInternalChange = (currentContentState: any) => {
+            const html = draftToHtml(currentContentState);
+            onChange(html);
+          };
+          return (
+            <Editor
+              onChange={onInternalChange}
+              // editorState={editorState}
+              defaultEditorState={defaultEditorState}
+              // onEditorStateChange={setEditorState}
+              toolbarClassName="toolbarClassName"
+              wrapperClassName="wrapperClassName"
+              editorClassName="h-80 mx-10 w-full"
+              toolbar={{
+                options: [
+                  "inline",
+                  "blockType",
+                  "fontSize",
+                  "fontFamily",
+                  "list",
+                  "textAlign",
+                  "colorPicker",
+                  "link",
+                  "remove",
+                  "history",
+                ],
+                inline: {
+                  options: ["bold", "italic", "underline", "strikethrough"],
+                },
+                blockType: {
+                  options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
+                },
+                list: { inDropdown: true },
+                textAlign: { inDropdown: true },
+                link: { inDropdown: true },
+                history: { inDropdown: false },
+              }}
+              placeholder="Write a some text.."
+            />
+          );
+        }}
       />
     </div>
   );
 }
 
-export default DraftEditor;
+export default TextEditor;

@@ -1,33 +1,29 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Input from "Components/Input";
 import axios from "axios";
+import TextEditor from "Components/post/DraftEditor";
 
-interface IWritePostForm {
+export interface IWritePostForm {
   title: string;
   contents: string;
   serverError?: string;
 }
 function Write() {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const rawContentState = convertToRaw(editorState.getCurrentContent());
-  console.log(draftToHtml(rawContentState));
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
+    control,
   } = useForm<IWritePostForm>({
     mode: "onBlur",
   });
   const isValid = async (data: IWritePostForm) => {
+    console.log(data);
     await axios
       .post("/api/post", data)
       .then(function (response) {
@@ -55,44 +51,7 @@ function Write() {
               required: "Title is required",
             })}
           />
-          <Editor
-            editorState={editorState}
-            onEditorStateChange={setEditorState}
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="h-80 mx-10 w-full"
-            toolbar={{
-              options: [
-                "inline",
-                "blockType",
-                "fontSize",
-                "fontFamily",
-                "list",
-                "textAlign",
-                "colorPicker",
-                "link",
-                "remove",
-                "history",
-              ],
-              inline: {
-                options: ["bold", "italic", "underline", "strikethrough"],
-              },
-              blockType: {
-                options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
-              },
-              list: { inDropdown: true },
-              textAlign: { inDropdown: true },
-              link: { inDropdown: true },
-              history: { inDropdown: false },
-            }}
-            placeholder="Write a some text.."
-          />
-          <textarea
-            {...register("contents")}
-            className="disabled:opacity-0"
-            disabled
-            value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-          />
+          <TextEditor control={control}></TextEditor>
           <Button text="submit"></Button>
         </form>
       </div>
