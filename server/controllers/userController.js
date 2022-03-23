@@ -54,6 +54,7 @@ export const signup = async (req, res) => {
 };
 
 export const editProfile = async (req, res) => {
+  console.log(req.body);
   const {
     session: {
       user: { _id, avatar },
@@ -94,7 +95,6 @@ export const editProfile = async (req, res) => {
 };
 
 export const changePassword = async (req, res) => {
-  console.log(req.session);
   const {
     session: {
       user: { _id, password },

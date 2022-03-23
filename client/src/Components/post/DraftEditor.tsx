@@ -1,13 +1,11 @@
-import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { EditorState, ContentState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { Controller } from "react-hook-form";
 
 function TextEditor(props: { control: any }) {
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const defaultValue = "";
   const getEditorState = (contents: string) => {
     const { contentBlocks, entityMap } = htmlToDraft(contents || defaultValue);
@@ -17,10 +15,6 @@ function TextEditor(props: { control: any }) {
     );
     return EditorState.createWithContent(contentState);
   };
-  // const rawContentState = convertToRaw(editorState.getCurrentContent());
-  // console.log(rawContentState);
-  // const editorToHtml = draftToHtml(rawContentState);
-  // console.log(editorToHtml);
   return (
     <div>
       <Controller
@@ -39,9 +33,7 @@ function TextEditor(props: { control: any }) {
           return (
             <Editor
               onChange={onInternalChange}
-              // editorState={editorState}
               defaultEditorState={defaultEditorState}
-              // onEditorStateChange={setEditorState}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
               editorClassName="h-80 mx-10 w-full"

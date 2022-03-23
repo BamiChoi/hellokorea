@@ -1,7 +1,7 @@
 import Post from "../models/Post";
 import User from "../models/User";
 
-export const createPost = (req, res) => {
+export const createPost = async (req, res) => {
   const {
     session: {
       user: { _id },

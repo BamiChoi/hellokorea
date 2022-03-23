@@ -59,7 +59,6 @@ function Edit() {
     reader.readAsDataURL(event.target.files![0]);
   };
   const isValid = async (data: IProfile) => {
-    console.log(data);
     let formData = new FormData();
     formData.append("avatar", data.avatar[0]);
     formData.append("nickname", data.nickname);

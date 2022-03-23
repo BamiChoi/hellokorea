@@ -31,7 +31,7 @@ const auth = createSlice({
       state.user = null;
     },
     editUser: (state, action) => {
-      state.user = { ...((state.user as null) || {}), ...action.payload };
+      state.user = { ...(state.user || {}), ...action.payload };
     },
   },
 });
