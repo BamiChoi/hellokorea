@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function () {
   if (this.isModified("password")) {
     this.password = await bcyrpt.hash(this.password, 5);
+    console.log("hasded", this.password);
   }
 });
 

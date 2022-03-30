@@ -10,7 +10,7 @@ import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
 
-interface IProfile {
+interface IProfileForm {
   nickname: string;
   statusMessage: string;
   avatar: string;
@@ -39,7 +39,7 @@ function Edit() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<IProfile>({
+  } = useForm<IProfileForm>({
     defaultValues: {
       nickname,
       avatar,
@@ -58,7 +58,7 @@ function Edit() {
     };
     reader.readAsDataURL(event.target.files![0]);
   };
-  const isValid = async (data: IProfile) => {
+  const isValid = async (data: IProfileForm) => {
     let formData = new FormData();
     formData.append("avatar", data.avatar[0]);
     formData.append("nickname", data.nickname);
@@ -67,13 +67,13 @@ function Edit() {
     formData.append("birthdate", data.birthdate);
     formData.append("statusMessage", data.statusMessage);
     await axios
-      .post(`/api/user/${id}`, formData)
-      .then(function (response) {
+      .post(`/api/users/${id}`, formData)
+      .then((response) => {
         console.log(response.data);
         dispatch(editUser({ ...response.data }));
         navigate("/user");
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
         const { field, message } = error.response.data;
         setError(field, { message });

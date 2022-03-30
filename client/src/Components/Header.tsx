@@ -37,7 +37,7 @@ function Header() {
           </>
         ) : (
           <>
-            <Usermenu url="/join" text="Sign up"></Usermenu>
+            <Usermenu url="/signup" text="Sign up"></Usermenu>
             <Usermenu url="/login" text="Login"></Usermenu>
           </>
         )}

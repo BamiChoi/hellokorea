@@ -6,11 +6,12 @@ export const createPost = async (req, res) => {
     session: {
       user: { _id },
     },
-    body: { title, contents },
+    body: { category, title, contents },
   } = req;
-  console.log(title, contents);
+  console.log(title, contents, category);
   try {
     const newPost = await Post.create({
+      category,
       title,
       contents,
       owner: _id,
@@ -22,6 +23,19 @@ export const createPost = async (req, res) => {
     console.log(error);
     return res
       .status(400)
-      .sed({ field: "serverError", message: "Fail to write a post" });
+      .send({ field: "serverError", message: "Fail to write a post" });
   }
+};
+
+export const getPost = async (req, res) => {
+  const { postId: id } = req.params;
+  const post = await Post.findById(id).populate("owner").populate("comments");
+  console.log(post);
+  if (!post) {
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Fail to load the post" });
+  }
+
+  return res.status(200).send({ state: "success", post });
 };

@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 const postShcema = new mongoose.Schema({
+  category: { type: String, required: true },
   title: { type: String, required: true },
-  content: { type: String, required: true },
+  contents: { type: String, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
   modifiedAt: { type: Date, required: true, default: Date.now },
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },

@@ -54,7 +54,7 @@ export const signup = async (req, res) => {
 };
 
 export const editProfile = async (req, res) => {
-  console.log(req.body);
+  console.log(req.session);
   const {
     session: {
       user: { _id, avatar },
@@ -62,7 +62,6 @@ export const editProfile = async (req, res) => {
     body: { nickname, statusMessage, firstname, lastname, birthdate },
     file,
   } = req;
-  console.log(req.body);
   try {
     await User.findByIdAndUpdate(_id, {
       nickname,
@@ -113,18 +112,16 @@ export const changePassword = async (req, res) => {
       .status(400)
       .send({ field: "newPassword2", message: "New Password is not matched" });
   }
-  console.log(password);
-  const user = await User.findById(_id);
-  user.password = newPassword;
-  user.save();
-  /* try {
-    await User.findByIdAndUpdate(_id, {
-      password: newPassword,
-    });
+  try {
+    const user = await User.findById(_id);
+    user.password = newPassword;
+    user.save();
   } catch (error) {
     console.log(error);
-  } */
-  console.log(user.password);
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Failed to change password" });
+  }
   return res.status(200).send({
     state: "success",
   });

@@ -6,30 +6,36 @@ import Button from "Components/Button";
 import Input from "Components/Input";
 import axios from "axios";
 import TextEditor from "Components/post/DraftEditor";
+import { useNavigate, useParams } from "react-router-dom";
 
 export interface IWritePostForm {
+  category: string;
   title: string;
   contents: string;
   serverError?: string;
 }
 function Write() {
+  const { category } = useParams();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
     control,
+    setValue,
   } = useForm<IWritePostForm>({
     mode: "onBlur",
   });
+  setValue("category", category!);
   const isValid = async (data: IWritePostForm) => {
-    console.log(data);
     await axios
-      .post("/api/post", data)
-      .then(function (response) {
-        console.log(response.data);
+      .post("/api/posts", data)
+      .then((response) => {
+        const postId = response.data.postId;
+        navigate(`/board/${category}/${postId}`);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
         const { field, message } = error.response.data;
         setError(field, { message });

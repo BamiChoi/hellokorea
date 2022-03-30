@@ -10,55 +10,70 @@ import Board from "Routes/Post/Board";
 import Write from "Routes/Post/Write";
 import LogoutOnly from "Routes/LogoutOnly";
 import LoggedInOnly from "Routes/LoggedInOnly";
+import Post from "Routes/Post/Post";
 
 function App() {
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/join"
-          element={
-            <LogoutOnly>
-              <Signup />
-            </LogoutOnly>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <LogoutOnly>
-              <Login />
-            </LogoutOnly>
-          }
-        />
-        <Route
-          path="/user"
-          element={
-            <LoggedInOnly>
-              <Profile />
-            </LoggedInOnly>
-          }
-        />
-        <Route
-          path="/user/edit"
-          element={
-            <LoggedInOnly>
-              <Useredit />
-            </LoggedInOnly>
-          }
-        />
-        <Route
-          path="/user/edit/password/"
-          element={
-            <LoggedInOnly>
-              <Password />{" "}
-            </LoggedInOnly>
-          }
-        />
-        <Route path="/board/:theme" element={<Board></Board>}></Route>
-        <Route path="/board/:theme/write" element={<Write></Write>}></Route>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route
+            path="signup"
+            element={
+              <LogoutOnly>
+                <Signup />
+              </LogoutOnly>
+            }
+          />
+          <Route
+            path="login"
+            element={
+              <LogoutOnly>
+                <Login />
+              </LogoutOnly>
+            }
+          />
+        </Route>
+        <Route path="user">
+          <Route
+            index
+            element={
+              <LoggedInOnly>
+                <Profile />
+              </LoggedInOnly>
+            }
+          />
+          <Route
+            path="edit"
+            element={
+              <LoggedInOnly>
+                <Useredit />
+              </LoggedInOnly>
+            }
+          />
+          <Route
+            path="edit/password/"
+            element={
+              <LoggedInOnly>
+                <Password />
+              </LoggedInOnly>
+            }
+          />
+        </Route>
+        <Route path="board">
+          <Route path=":category" element={<Board />} />
+          <Route path=":category/:postId" element={<Post />} />
+          <Route
+            path=":category/write"
+            element={
+              <LoggedInOnly>
+                <Write />
+              </LoggedInOnly>
+            }
+          ></Route>
+        </Route>
       </Routes>
     </>
   );

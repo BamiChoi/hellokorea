@@ -1,5 +1,11 @@
+import Wrapper from "Components/Wrapper";
+
 function Board() {
-  return null;
+  return (
+    <Wrapper>
+      <div>board</div>
+    </Wrapper>
+  );
 }
 
 export default Board;

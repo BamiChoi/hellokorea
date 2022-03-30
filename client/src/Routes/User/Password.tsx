@@ -8,7 +8,7 @@ import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
 import Input from "Components/Input";
 
-interface IPassword {
+interface IPasswordChangeForm {
   currentPassword: string;
   newPassword: string;
   newPassword2: string;
@@ -26,12 +26,12 @@ function Password() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<IPassword>({ mode: "onBlur" });
+  } = useForm<IPasswordChangeForm>({ mode: "onBlur" });
   const newPassword = watch("newPassword");
 
-  const isValid = async (data: IPassword) => {
+  const isValid = async (data: IPasswordChangeForm) => {
     await axios
-      .post(`/api/user/${id}/password`, data)
+      .post(`/api/users/${id}/password`, data)
       .then(async (response) => {
         window.alert("Password Change is Done. Please login again");
         await axios

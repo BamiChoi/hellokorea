@@ -7,7 +7,7 @@ import axios from "axios";
 import Input from "Components/Input";
 import Button from "Components/Button";
 
-interface ILogin {
+interface ILoginForm {
   email: string;
   password: string;
 }
@@ -20,8 +20,8 @@ function Login() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<ILogin>({ mode: "onBlur" });
-  const isValid = async (data: ILogin) => {
+  } = useForm<ILoginForm>({ mode: "onBlur" });
+  const isValid = async (data: ILoginForm) => {
     await axios
       .post("api/session", {
         email: data.email,

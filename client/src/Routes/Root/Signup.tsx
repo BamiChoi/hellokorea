@@ -6,7 +6,7 @@ import Wrapper from "Components/Wrapper";
 import Input from "Components/Input";
 import Button from "Components/Button";
 
-interface IJoinForm {
+interface ISignupForm {
   email: string;
   firstname: string;
   lastname: string;
@@ -17,7 +17,7 @@ interface IJoinForm {
   serverError?: string;
 }
 
-function Join() {
+function Signup() {
   const navigate = useNavigate();
   const {
     register,
@@ -25,9 +25,9 @@ function Join() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<IJoinForm>({ mode: "onBlur" });
+  } = useForm<ISignupForm>({ mode: "onBlur" });
   const password = watch("password");
-  const isValid = async (data: IJoinForm) => {
+  const isValid = async (data: ISignupForm) => {
     const {
       email,
       nickname,
@@ -38,7 +38,7 @@ function Join() {
       password2,
     } = data;
     await axios
-      .post("/api/user", {
+      .post("/api/users", {
         email,
         nickname,
         firstname,
@@ -47,10 +47,10 @@ function Join() {
         password,
         password2,
       })
-      .then(function (response) {
+      .then((response) => {
         navigate("/login");
       })
-      .catch(function (error) {
+      .catch((error) => {
         const { field, message } = error.response.data;
         setError(field, { message });
       });
@@ -154,4 +154,4 @@ function Join() {
   );
 }
 
-export default Join;
+export default Signup;
