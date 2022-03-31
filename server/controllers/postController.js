@@ -23,7 +23,7 @@ export const createPost = async (req, res) => {
     console.log(error);
     return res
       .status(400)
-      .send({ state: "serverError", message: "Fail to write a post" });
+      .send({ field: "serverError", message: "Fail to write a post" });
   }
 };
 
@@ -36,14 +36,10 @@ export const getPost = async (req, res) => {
     if (post) {
       return res.status(200).send({ state: "success", post });
     } else {
-      return res
-        .status(400)
-        .send({ state: "serverError", message: "The post not found" });
+      return res.status(400).send({ state: "notFound" });
     }
   } catch (error) {
-    return res
-      .status(400)
-      .send({ state: "serverError", message: "Fail to load a post" });
+    return res.status(400).send({ state: "serverError" });
   }
 };
 
@@ -57,7 +53,6 @@ export const getPosts = async (req, res) => {
   } catch {
     return res.satus(400).send({
       state: "serverError",
-      message: "Fail to load posts",
     });
   }
 };

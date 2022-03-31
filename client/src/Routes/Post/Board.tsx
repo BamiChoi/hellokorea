@@ -1,7 +1,7 @@
-import axios from "axios";
+import { getPosts } from "api";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { IPost } from "./Post";
 
@@ -11,29 +11,24 @@ interface IPostsResponse {
 }
 
 function Board() {
-  const [data, setData] = useState<IPostsResponse>();
   const { category } = useParams();
-  useEffect(() => {
-    const getPosts = async (category: string) => {
-      return await axios
-        .get(`/api/posts`, { params: { category } })
-        .then((response) => {
-          setData(response.data);
-        })
-        .catch((error) => {
-          setData(error.response.data);
-        });
-    };
-    getPosts(category!);
-  }, [category]);
-  console.log(data);
+  const { isLoading, data, isError, error } = useQuery<IPostsResponse>(
+    [category, "getPosts"],
+    () => getPosts(category!),
+    {
+      retry: false,
+    }
+  );
+  if (isError) {
+    if (error instanceof Error) console.log(error.message);
+  }
   return (
     <Wrapper>
       <div>
         <Title text={category!}></Title>
         <ul>
           {data?.posts.map((post) => (
-            <li>{post.title}</li>
+            <li key={post._id}>{post.title}</li>
           ))}
         </ul>
       </div>

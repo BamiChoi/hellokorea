@@ -1,9 +1,9 @@
 import Wrapper from "Components/Wrapper";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
+import { useQuery } from "react-query";
+import { getPost } from "api";
 import Title from "Components/Title";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 interface IComment {
   text: string;
@@ -19,6 +19,7 @@ interface IOwner {
 }
 
 export interface IPost {
+  _id: string;
   category: string;
   title: string;
   contents: string;
@@ -36,20 +37,16 @@ interface IPostResponse {
 
 function Post() {
   const { postId, category } = useParams();
-  const [data, setData] = useState<IPostResponse>();
-  useEffect(() => {
-    const getPost = async (id: string) => {
-      return await axios
-        .get(`/api/posts/${id}`)
-        .then((response) => {
-          setData(response.data);
-        })
-        .catch((error) => {
-          setData(error.response.data);
-        });
-    };
-    getPost(postId!);
-  }, [postId]);
+  const { isLoading, data, isError, error } = useQuery<IPostResponse>(
+    [postId, "getPost"],
+    () => getPost(postId!),
+    {
+      retry: false,
+    }
+  );
+  if (isError) {
+    if (error instanceof Error) console.log(error.message);
+  }
   return (
     <Wrapper>
       <div className="w-full px-10">
