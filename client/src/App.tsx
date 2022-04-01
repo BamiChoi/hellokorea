@@ -4,13 +4,14 @@ import Home from "Routes/Root/Home";
 import Signup from "Routes/Root/Signup";
 import Login from "Routes/Root/Login";
 import Profile from "Routes/User/Profile";
-import Useredit from "Routes/User/Edit";
 import Password from "Routes/User/Password";
 import Board from "Routes/Post/Board";
 import Write from "Routes/Post/Write";
 import LogoutOnly from "Routes/LogoutOnly";
 import LoggedInOnly from "Routes/LoggedInOnly";
 import Post from "Routes/Post/Post";
+import ProfileEdit from "Routes/User/Edit";
+import PostEdit from "Routes/Post/Edit";
 
 function App() {
   return (
@@ -49,7 +50,7 @@ function App() {
             path="edit"
             element={
               <LoggedInOnly>
-                <Useredit />
+                <ProfileEdit />
               </LoggedInOnly>
             }
           />
@@ -62,14 +63,22 @@ function App() {
             }
           />
         </Route>
-        <Route path="board">
-          <Route path=":category" element={<Board />} />
-          <Route path=":category/:postId" element={<Post />} />
+        <Route path=":category">
+          <Route index element={<Board />} />
+          <Route path=":postId" element={<Post />} />
           <Route
-            path=":category/write"
+            path="write"
             element={
               <LoggedInOnly>
                 <Write />
+              </LoggedInOnly>
+            }
+          ></Route>
+          <Route
+            path=":postId/edit"
+            element={
+              <LoggedInOnly>
+                <PostEdit />
               </LoggedInOnly>
             }
           ></Route>

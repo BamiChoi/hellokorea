@@ -33,7 +33,7 @@ function Write() {
       .post("/api/posts", data)
       .then((response) => {
         const postId = response.data.postId;
-        navigate(`/board/${category}/${postId}`);
+        navigate(`/${category}/${postId}`);
       })
       .catch((error) => {
         console.log(error);

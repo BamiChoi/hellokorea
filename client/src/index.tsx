@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { store, persistor } from "store";
 import App from "./App";
 import "Index.css";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ ReactDOM.render(
           <Router>
             <App />
           </Router>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </PersistGate>
     </Provider>
