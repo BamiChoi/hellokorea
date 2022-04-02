@@ -5,7 +5,7 @@ import Title from "Components/Title";
 import Button from "Components/Button";
 import Input from "Components/Input";
 import axios from "axios";
-import TextEditor from "Components/post/DraftEditor";
+import TextEditor from "Components/post/TextEditor";
 import { useNavigate, useParams } from "react-router-dom";
 
 export interface IWritePostForm {

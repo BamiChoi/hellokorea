@@ -5,13 +5,12 @@ import Title from "Components/Title";
 import Button from "Components/Button";
 import Input from "Components/Input";
 import axios from "axios";
-import TextEditor from "Components/post/DraftEditor";
+import TextEditor from "Components/post/TextEditor";
 import { useNavigate, useParams } from "react-router-dom";
 import { IWritePostForm } from "./Write";
 import { useQuery } from "react-query";
 import { IPostResponse } from "./Post";
 import { getPost } from "api";
-import { useEffect } from "react";
 
 function Edit() {
   const { postId, category } = useParams();

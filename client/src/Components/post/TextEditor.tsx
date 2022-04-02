@@ -20,13 +20,12 @@ function TextEditor({ control, setDefaultContents }: ITextEditorProps) {
     );
     return EditorState.createWithContent(contentState);
   };
-  if (setDefaultContents) setDefaultContents();
   return (
     <div>
       <Controller
         name="contents"
         control={control}
-        defaultValue={defaultValue}
+        defaultValue={setDefaultContents ? setDefaultContents : defaultValue}
         render={({ field: { onChange, value } }) => {
           let defaultEditorState;
           if (defaultValue || value) {
@@ -67,7 +66,6 @@ function TextEditor({ control, setDefaultContents }: ITextEditorProps) {
                 link: { inDropdown: true },
                 history: { inDropdown: false },
               }}
-              placeholder="Write a some text.."
             />
           );
         }}
