@@ -20,7 +20,6 @@ function Edit() {
     () => getPost(postId!),
     {}
   );
-  console.log(data);
   const navigate = useNavigate();
   const {
     register,
@@ -32,23 +31,24 @@ function Edit() {
   } = useForm<IWritePostForm>({
     mode: "onBlur",
   });
-
-  setValue("category", category!);
-  setValue("title", data?.post.title!);
-  setValue("contents", data?.post.contents!);
-
   const isValid = async (data: IWritePostForm) => {
+    console.log(data);
     await axios
-      .post("/api/posts", data)
+      .post(`/api/posts/${postId}`, data)
       .then((response) => {
-        const postId = response.data.postId;
+        console.log(response.data);
         navigate(`/${category}/${postId}`);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
         const { field, message } = error.response.data;
         setError(field, { message });
       });
+  };
+  setValue("category", data?.post.category!);
+  setValue("title", data?.post.title!);
+  const setDefaultContents = () => {
+    setValue("contents", data?.post.contents!);
   };
   return (
     <Wrapper>
@@ -66,7 +66,10 @@ function Edit() {
               required: "Title is required",
             })}
           />
-          <TextEditor control={control}></TextEditor>
+          <TextEditor
+            control={control}
+            setDefaultContents={setDefaultContents}
+          ></TextEditor>
           <Button text="submit"></Button>
         </form>
       </div>

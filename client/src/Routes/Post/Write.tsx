@@ -57,7 +57,7 @@ function Write() {
               required: "Title is required",
             })}
           />
-          <TextEditor control={control}></TextEditor>
+          <TextEditor control={control} setDefaultContents={null}></TextEditor>
           <Button text="submit"></Button>
         </form>
       </div>

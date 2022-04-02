@@ -56,3 +56,30 @@ export const getPosts = async (req, res) => {
     });
   }
 };
+
+export const editPost = async (req, res) => {
+  const {
+    params: { postId },
+    body: { title, contents },
+  } = req;
+  console.log(req.body);
+  console.log(postId, title, contents);
+  // authorization
+  try {
+    const post = await Post.findByIdAndUpdate(postId, {
+      title,
+      contents,
+    });
+    console.log(post);
+    if (post) {
+      return res.status(200).send({ state: "success" });
+    } else {
+      return res.status(400).send({ state: "notFound" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .send({ field: "serverError", message: "Fail to edit this post" });
+  }
+};

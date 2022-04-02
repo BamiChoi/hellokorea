@@ -5,7 +5,12 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { Controller } from "react-hook-form";
 
-function TextEditor(props: { control: any }) {
+interface ITextEditorProps {
+  control: any;
+  setDefaultContents: Function | null;
+}
+
+function TextEditor({ control, setDefaultContents }: ITextEditorProps) {
   const defaultValue = "";
   const getEditorState = (contents: string) => {
     const { contentBlocks, entityMap } = htmlToDraft(contents || defaultValue);
@@ -15,11 +20,12 @@ function TextEditor(props: { control: any }) {
     );
     return EditorState.createWithContent(contentState);
   };
+  if (setDefaultContents) setDefaultContents();
   return (
     <div>
       <Controller
         name="contents"
-        control={props.control}
+        control={control}
         defaultValue={defaultValue}
         render={({ field: { onChange, value } }) => {
           let defaultEditorState;
