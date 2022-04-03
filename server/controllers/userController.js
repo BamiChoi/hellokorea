@@ -63,23 +63,19 @@ export const editProfile = async (req, res) => {
     file,
   } = req;
   try {
-    await User.findByIdAndUpdate(_id, {
-      nickname,
-      avatar: file ? file.path : avatar,
-      statusMessage,
-      firstname,
-      lastname,
-      birthdate,
-    });
-    req.session.user = {
-      ...req.session.user,
-      nickname,
-      avatar: file ? file.path : avatar,
-      statusMessage,
-      firstname,
-      lastname,
-      birthdate,
-    };
+    const user = await User.findByIdAndUpdate(
+      _id,
+      {
+        nickname,
+        avatar: file ? file.path : avatar,
+        statusMessage,
+        firstname,
+        lastname,
+        birthdate,
+      },
+      { new: true }
+    );
+    req.session.user = user;
   } catch (error) {
     console.log(error);
   }

@@ -1,5 +1,5 @@
 import Wrapper from "Components/Wrapper";
-import { Link, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { useQuery } from "react-query";
 import { getPost } from "api";
@@ -93,18 +93,21 @@ function Post() {
               {parse(data.post?.contents)}
             </div>
             <div className="flex space-x-4 w-full justify-end">
-              <Link to={`edit`}>
+              <Link to={"edit"}>
                 <button className="w-20 bg-main px-3 py-2 text-white rounded-md">
                   Edit
                 </button>
               </Link>
-              <button className="w-20 bg-main px-3 py-2 text-white rounded-md ">
-                Delete
-              </button>
+              <Link to={"delete"}>
+                <button className="w-20 bg-main px-3 py-2 text-white rounded-md ">
+                  Delete
+                </button>
+              </Link>
             </div>
           </>
         ) : null}
       </div>
+      <Outlet />
     </Wrapper>
   );
 }

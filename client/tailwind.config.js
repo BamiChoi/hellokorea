@@ -12,6 +12,7 @@ module.exports = {
       cream: "#F4EEA9",
       gray: "#EEEEEE",
       brightgreen: "#98B4AA",
+      black: "#190B0B",
     },
   },
   plugins: [],

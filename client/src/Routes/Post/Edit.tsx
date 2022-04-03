@@ -11,6 +11,7 @@ import { IWritePostForm } from "./Write";
 import { useQuery } from "react-query";
 import { IPostResponse } from "./Post";
 import { getPost } from "api";
+import { useEffect } from "react";
 
 function Edit() {
   const { postId, category } = useParams();
@@ -44,8 +45,10 @@ function Edit() {
         setError(field, { message });
       });
   };
-  setValue("category", data?.post.category!);
-  setValue("title", data?.post.title!);
+  useEffect(() => {
+    setValue("category", data?.post.category!);
+    setValue("title", data?.post.title!);
+  }, [setValue, data?.post.category, data?.post.title]);
   const setDefaultContents = () => {
     setValue("contents", data?.post.contents!);
   };

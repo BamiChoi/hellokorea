@@ -12,6 +12,7 @@ import LoggedInOnly from "Routes/LoggedInOnly";
 import Post from "Routes/Post/Post";
 import ProfileEdit from "Routes/User/Edit";
 import PostEdit from "Routes/Post/Edit";
+import Delete from "Routes/Post/Delete";
 
 function App() {
   return (
@@ -65,7 +66,6 @@ function App() {
         </Route>
         <Route path=":category">
           <Route index element={<Board />} />
-          <Route path=":postId" element={<Post />} />
           <Route
             path="write"
             element={
@@ -74,6 +74,16 @@ function App() {
               </LoggedInOnly>
             }
           ></Route>
+          <Route path=":postId" element={<Post />}>
+            <Route
+              path="delete"
+              element={
+                <LoggedInOnly>
+                  <Delete />
+                </LoggedInOnly>
+              }
+            ></Route>
+          </Route>
           <Route
             path=":postId/edit"
             element={

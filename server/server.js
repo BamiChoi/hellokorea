@@ -5,7 +5,7 @@ import morgan from "morgan";
 import userRouter from "./routers/userRouter";
 import postRouter from "./routers/postRouter";
 import sessionRouter from "./routers/sessionRouter";
-import { localMiddleWare } from "./middlewares";
+
 const app = express();
 const logger = morgan("dev");
 
@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
+    name: "hellokorea",
     secret: "Hello",
     resave: false,
     saveUninitialized: false,

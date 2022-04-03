@@ -15,7 +15,6 @@ export const login = async (req, res) => {
       .status(400)
       .send({ field: "password", message: "Password is not correct" });
   }
-
   req.session.loggedIn = true;
   req.session.user = user;
   const {
@@ -49,5 +48,6 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   req.session.destroy();
+  console.log(req.session);
   return res.send({ state: "success" });
 };
