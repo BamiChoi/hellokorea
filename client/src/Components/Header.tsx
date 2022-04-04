@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { loggedInUser, logout } from "reducers/auth";
 import axios from "axios";
 import Usermenu from "./Usermenu";
+import { useEffect } from "react";
 
 function Header() {
   const user = useSelector(loggedInUser);
@@ -19,6 +20,21 @@ function Header() {
         console.log(error); // ToDo: redirect to Error page
       });
   };
+
+  useEffect(() => {
+    console.log("check");
+    const checkAuth = async () => {
+      await axios
+        .get("api/session/check-auth")
+        .then((response) => {
+          console.log("ok");
+        })
+        .catch((error) => {
+          dispatch(logout());
+        });
+    };
+    checkAuth();
+  }, [dispatch]);
   return (
     <div className="bg-main border-point border-b-8 h-24 flex justify-between items-center px-5 fixed w-full">
       <Link to="/">

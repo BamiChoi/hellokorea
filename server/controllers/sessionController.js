@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import session from "express-session";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -17,6 +18,7 @@ export const login = async (req, res) => {
   }
   req.session.loggedIn = true;
   req.session.user = user;
+  req.session.save();
   const {
     loggedIn,
     user: {
@@ -50,4 +52,12 @@ export const logout = async (req, res) => {
   req.session.destroy();
   console.log(req.session);
   return res.send({ state: "success" });
+};
+
+export const checkAuth = (req, res) => {
+  if (!req.session.user) {
+    return res.status(400).send({ state: "Is not logged iin" });
+  } else {
+    return res.sendStatus(200);
+  }
 };
