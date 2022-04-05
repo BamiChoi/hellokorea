@@ -25,7 +25,7 @@ function Header() {
     console.log("check");
     const checkAuth = async () => {
       await axios
-        .get("api/session/check-auth")
+        .get("/api/session/check-auth")
         .then((response) => {
           console.log("ok");
         })
