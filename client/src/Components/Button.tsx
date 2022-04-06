@@ -2,9 +2,10 @@ interface ButtonProps {
   text: string;
   customCls?: string;
   errors?: string | undefined;
+  onClick?: React.MouseEvent<HTMLElement>;
 }
 
-function Button({ text, customCls, errors }: ButtonProps) {
+function Button({ onClick, text, customCls, errors }: ButtonProps) {
   return (
     <div className="w-full">
       <button

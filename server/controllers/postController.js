@@ -91,8 +91,7 @@ export const deletePost = async (req, res) => {
     params: { postId },
     body: { password },
   } = req;
-  const post = await Post.findById(postId);
-  console.log(post);
+  const post = await Post.findById(postId); // 리소스를 두번 찾기 되므로 개선해야함.
   if (!post) {
     return res
       .status(404)

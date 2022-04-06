@@ -22,13 +22,10 @@ function Header() {
   };
 
   useEffect(() => {
-    console.log("check");
     const checkAuth = async () => {
       await axios
         .get("/api/session/check-auth")
-        .then((response) => {
-          console.log("ok");
-        })
+        .then((response) => {})
         .catch((error) => {
           dispatch(logout());
         });

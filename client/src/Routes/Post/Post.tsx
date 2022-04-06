@@ -1,19 +1,24 @@
 import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
-import { useQuery } from "react-query";
+import { QueryClient, useQuery } from "react-query";
 import { getPost } from "api";
 import Title from "Components/Title";
 import { useForm } from "react-hook-form";
 import Input from "Components/Input";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import DeleteComment from "./DeleteComment";
+import { queryClient } from "index";
 
 interface IComment {
+  _id: string;
   text: string;
-  owner: string;
+  nickname: string;
+  avatar: string;
   upvotes: number;
   downvotes: number;
+  createdAt: string;
 }
 
 interface IOwner {
@@ -50,8 +55,18 @@ interface ICommentForm {
   serverError: string;
 }
 
+export interface IOnDeleteCommentState {
+  onDelete: boolean;
+  commentId?: string;
+}
+
 function Post() {
   const { postId, category } = useParams();
+  const [onDeleteComment, setOnDeleteComment] = useState<IOnDeleteCommentState>(
+    {
+      onDelete: false,
+    }
+  );
   const { isLoading, data, isError, error } = useQuery<IPostResponse>(
     [postId, "getPost"],
     () => getPost(postId!),
@@ -72,16 +87,18 @@ function Post() {
     await axios
       .post(`/api/comments`, data)
       .then((response) => {
-        console.log(response);
+        queryClient.invalidateQueries([postId, "getPost"]);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  const onClickDeleteComment = (commentId: string) => {
+    setOnDeleteComment({ onDelete: true, commentId });
+  };
   useEffect(() => {
     setValue("postId", postId!);
   }, [setValue, postId]);
-  console.log(data?.post.comments);
   return (
     <Wrapper>
       <div className="w-full px-10">
@@ -155,11 +172,40 @@ function Post() {
                 </button>
               </form>
             </div>
-            <ul>
-              {data?.post.comments.map((comment) => (
-                <li>{comment.text}</li>
+            <ul className="mt-10 space-y-4">
+              {data?.post?.comments?.map((comment) => (
+                <li key={comment._id} className="bg-cream p-4 rounded-md">
+                  <div className="flex justify-between">
+                    <div className="disply flex">
+                      <img
+                        alt="owner_avatar"
+                        src={"/" + comment.avatar}
+                        className="bg-white w-8 h-8 rounded-full mr-2"
+                      />
+                      <span>{comment.nickname}</span>
+                    </div>
+                    <div className="space-x-2">
+                      <span>edit</span>
+                      <span>|</span>
+                      <button onClick={() => onClickDeleteComment(comment._id)}>
+                        delete
+                      </button>
+                    </div>
+                  </div>
+                  <span>{comment.text}</span>
+                  <div className="flex justify-end">
+                    <span>{comment.createdAt}</span>
+                  </div>
+                </li>
               ))}
             </ul>
+            {onDeleteComment.onDelete ? (
+              <DeleteComment
+                postId={postId!}
+                commentId={onDeleteComment.commentId!}
+                setOnDeleteComment={setOnDeleteComment}
+              />
+            ) : null}
           </>
         ) : null}
       </div>
