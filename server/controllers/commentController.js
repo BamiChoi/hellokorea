@@ -59,3 +59,33 @@ export const deleteComment = async (req, res) => {
   }
   return res.status(200).send({ state: "success " });
 };
+
+export const editComment = async (req, res) => {
+  const {
+    session: { user },
+    params: { commentId },
+    body: { text },
+  } = req;
+  console.log(text, commentId, user._id);
+  const comment = await Comment.findById(commentId);
+  if (!comment) {
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Comment not Found" });
+  }
+  if (String(comment.owner) !== user._id) {
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "You can not edit this comment" });
+  }
+  try {
+    comment.text = text;
+    comment.save();
+    return res.status(200).send({ state: "success " });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Failed to edit this comment" });
+  }
+};

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { queryClient } from "index";
-import { IOnDeleteCommentState } from "./Post";
+import { IOnDeleteCommentState } from "../../Routes/Post/Post";
 
 interface IDeleteCommentProps {
   postId: string;
@@ -37,7 +37,7 @@ function DeleteComment({
         onClick={onClickOverlay}
         className="w-full h-full fixed top-0 left-0 bg-black z-40 opacity-50"
       ></div>
-      <div className="fixed z-50 p-4 bg-white opacity-100 w-1/3 h-2/5 rounded-md flex flex-col justify-center items-center left-0 right-0 top-40 m-auto">
+      <div className="fixed z-50 p-4 bg-white opacity-100 w-2/3 h-[300px] rounded-md flex flex-col justify-center items-center left-0 right-0 top-40 m-auto max-w-sm">
         <span className="text-lg">Do u wanna delete this comment?</span>
         <button
           onClick={onClickDelete}

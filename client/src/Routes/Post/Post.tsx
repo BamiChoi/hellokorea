@@ -1,15 +1,16 @@
 import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
-import { QueryClient, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { getPost } from "api";
 import Title from "Components/Title";
 import { useForm } from "react-hook-form";
 import Input from "Components/Input";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import DeleteComment from "./DeleteComment";
+import DeleteComment from "../../Components/post/DeleteComment";
 import { queryClient } from "index";
+import Button from "Components/Button";
 
 interface IComment {
   _id: string;
@@ -55,8 +56,19 @@ interface ICommentForm {
   serverError: string;
 }
 
+interface IEditCommentForm {
+  text: string;
+  commentId: string;
+  serverError: string;
+}
+
 export interface IOnDeleteCommentState {
   onDelete: boolean;
+  commentId?: string;
+}
+
+export interface IOnEditCommentState {
+  onEdit: boolean;
   commentId?: string;
 }
 
@@ -67,6 +79,9 @@ function Post() {
       onDelete: false,
     }
   );
+  const [onEditComment, setOnEditComment] = useState<IOnEditCommentState>({
+    onEdit: false,
+  });
   const { isLoading, data, isError, error } = useQuery<IPostResponse>(
     [postId, "getPost"],
     () => getPost(postId!),
@@ -93,8 +108,28 @@ function Post() {
         console.log(error);
       });
   };
+  const {
+    register: editCommentRegister,
+    handleSubmit: editCommentSubmit,
+    formState: { errors: editCommentErrors },
+  } = useForm<IEditCommentForm>();
   const onClickDeleteComment = (commentId: string) => {
     setOnDeleteComment({ onDelete: true, commentId });
+  };
+  const onClickEditComment = (commentId: string) => {
+    setOnEditComment({ onEdit: true, commentId });
+  };
+  const isValidEditComment = async (data: IEditCommentForm) => {
+    await axios
+      .patch(`/api/comments/${onEditComment.commentId}`, data)
+      .then((response) => {
+        console.log(response.data);
+        setOnEditComment({ onEdit: false });
+        queryClient.invalidateQueries([postId, "getPost"]);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
   };
   useEffect(() => {
     setValue("postId", postId!);
@@ -157,7 +192,7 @@ function Post() {
                 className="flex space-x-2 mt-10 items-end"
               >
                 <Input
-                  label="Write your comment"
+                  label="Edit your comment"
                   id="text"
                   type="text"
                   errors={errors?.text?.message}
@@ -185,14 +220,36 @@ function Post() {
                       <span>{comment.nickname}</span>
                     </div>
                     <div className="space-x-2">
-                      <span>edit</span>
+                      <button onClick={() => onClickEditComment(comment._id)}>
+                        edit
+                      </button>
                       <span>|</span>
                       <button onClick={() => onClickDeleteComment(comment._id)}>
                         delete
                       </button>
                     </div>
                   </div>
-                  <span>{comment.text}</span>
+                  {onEditComment.onEdit &&
+                  comment._id === onEditComment.commentId ? (
+                    <form onSubmit={editCommentSubmit(isValidEditComment)}>
+                      <Input
+                        label="Edit your comment"
+                        id="text"
+                        type="text"
+                        errors={editCommentErrors?.text?.message}
+                        required
+                        customCls="border-2 border-main px-2 py-1 w-ful"
+                        register={editCommentRegister("text", {
+                          required: "edit)Text is required.",
+                          value: `${comment.text}`,
+                        })}
+                      />
+                      <Button text="submit"></Button>
+                    </form>
+                  ) : (
+                    <span>{comment.text}</span>
+                  )}
+
                   <div className="flex justify-end">
                     <span>{comment.createdAt}</span>
                   </div>

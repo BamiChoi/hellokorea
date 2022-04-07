@@ -21,17 +21,6 @@ function Header() {
       });
   };
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      await axios
-        .get("/api/session/check-auth")
-        .then((response) => {})
-        .catch((error) => {
-          dispatch(logout());
-        });
-    };
-    checkAuth();
-  }, [dispatch]);
   return (
     <div className="bg-main border-point border-b-8 h-24 flex justify-between items-center px-5 fixed w-full">
       <Link to="/">

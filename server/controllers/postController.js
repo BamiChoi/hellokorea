@@ -65,13 +65,12 @@ export const editPost = async (req, res) => {
   } = req;
   console.log(req.body);
   console.log(postId, title, contents);
-  // authorization
+  // To do: authorization validation
   try {
     const post = await Post.findByIdAndUpdate(postId, {
       title,
       contents,
     });
-    console.log(post);
     if (post) {
       return res.status(200).send({ state: "success" });
     } else {
