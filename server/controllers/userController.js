@@ -43,18 +43,16 @@ export const signup = async (req, res) => {
       password,
       password2,
     });
+    return res.status(200).send({ state: "success" });
   } catch (error) {
     console.log(error);
     return res
       .status(400)
       .send({ field: "serverError", message: "Fail to sign up" });
   }
-
-  return res.status(200).send({ state: "success" });
 };
 
 export const editProfile = async (req, res) => {
-  console.log(req.session);
   const {
     session: {
       user: { _id, avatar },
@@ -76,17 +74,20 @@ export const editProfile = async (req, res) => {
       { new: true }
     );
     req.session.user = user;
+    return res.status(200).send({
+      nickname,
+      avatar: file ? file.path : avatar,
+      statusMessage,
+      firstname,
+      lastname,
+      birthdate,
+    });
   } catch (error) {
     console.log(error);
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Fail to edit profile" });
   }
-  return res.status(200).send({
-    nickname,
-    avatar: file ? file.path : avatar,
-    statusMessage,
-    firstname,
-    lastname,
-    birthdate,
-  });
 };
 
 export const changePassword = async (req, res) => {
@@ -111,15 +112,15 @@ export const changePassword = async (req, res) => {
     const user = await User.findById(_id);
     user.password = newPassword;
     user.save();
+    return res.status(200).send({
+      state: "success",
+    });
   } catch (error) {
     console.log(error);
     return res
       .status(400)
       .send({ field: "serverError", message: "Failed to change password" });
   }
-  return res.status(200).send({
-    state: "success",
-  });
 };
 
 export const profile = (req, res) => {

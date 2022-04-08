@@ -37,7 +37,7 @@ function Delete() {
         onClick={onClickOverlay}
         className="w-full h-full fixed top-0 left-0 flex bg-black z-40 opacity-50"
       ></div>
-      <div className="fixed z-50 bg-white opacity-100 w-2/3 h-2/5 rounded-md flex flex-col justify-center items-center">
+      <div className="fixed top-40 z-50 bg-white opacity-100 w-2/3 h-2/5 rounded-md flex flex-col justify-center items-center">
         <span className="text-lg">Do u wanna delete this post?</span>
         <form
           onSubmit={handleSubmit(isValid)}

@@ -12,10 +12,12 @@ const userSchema = new mongoose.Schema({
   verified: { type: Boolean, required: true, default: false },
   avatar: { type: String, default: "" },
   statusMessage: { type: String, default: "" },
-  meta: {
-    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
-  },
+  posts: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Post" },
+  ],
+  comments: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
+  ],
 });
 
 userSchema.pre("save", async function () {

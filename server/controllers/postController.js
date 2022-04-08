@@ -9,7 +9,6 @@ export const createPost = async (req, res) => {
     },
     body: { category, title, contents },
   } = req;
-  console.log(title, contents, category);
   try {
     const newPost = await Post.create({
       category,
@@ -18,7 +17,8 @@ export const createPost = async (req, res) => {
       owner: _id,
     });
     const user = await User.findById(_id);
-    user.meta.posts.push(newPost._id);
+    user.posts.push(newPost._id);
+    user.save();
     return res.status(200).send({ state: "success", postId: newPost._id });
   } catch (error) {
     console.log(error);
@@ -60,22 +60,26 @@ export const getPosts = async (req, res) => {
 
 export const editPost = async (req, res) => {
   const {
+    session: { user },
     params: { postId },
     body: { title, contents },
   } = req;
-  console.log(req.body);
-  console.log(postId, title, contents);
-  // To do: authorization validation
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Post not Found" });
+  }
+  if (String(post.owner) !== user._id) {
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "You can not edit this post" });
+  }
   try {
-    const post = await Post.findByIdAndUpdate(postId, {
-      title,
-      contents,
-    });
-    if (post) {
-      return res.status(200).send({ state: "success" });
-    } else {
-      return res.status(400).send({ state: "notFound" });
-    }
+    post.title = title;
+    post.contents = contents;
+    post.save();
+    return res.status(200).send({ state: "success " });
   } catch (error) {
     console.log(error);
     res
@@ -86,34 +90,40 @@ export const editPost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   const {
-    session: { user },
+    session: {
+      user: { _id: userId, password: userPassword },
+    },
     params: { postId },
     body: { password },
   } = req;
-  const post = await Post.findById(postId); // 리소스를 두번 찾기 되므로 개선해야함.
+  const post = await Post.findById(postId);
   if (!post) {
     return res
       .status(404)
       .send({ field: "ServerError", messasge: "Post not Found" }); // Form 에러 표시가 아니라 Not Found 리다이렉트 처리해야함
   }
-  if (String(post.owner._id) !== user._id) {
+  if (String(post.owner._id) !== userId) {
     return res
       .status(400)
       .send({ field: "ServerError", messasge: "You can't delete this post" });
   }
-  const passwordValidation = await bcrypt.compare(password, user.password);
+  const passwordValidation = await bcrypt.compare(password, userPassword);
   if (!passwordValidation) {
     return res
       .status(400)
       .send({ field: "password", message: "Password is wrong" });
   }
   try {
+    const user = await User.findById(userId);
     await Post.findByIdAndDelete(postId);
+    console.log(user.posts);
+    user.posts.splice(user.posts.indexOf(postId), 1);
+    user.save();
+    return res.status(200).send({ state: "success" });
   } catch (error) {
     console.log(error);
     return res
       .status(400)
       .send({ field: "serverError", message: "Failed to change password" });
   }
-  return res.status(200).send({ state: "success " });
 };

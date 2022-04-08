@@ -96,6 +96,7 @@ function Post() {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ICommentForm>();
   const isValid = async (data: ICommentForm) => {
@@ -103,6 +104,7 @@ function Post() {
       .post(`/api/comments`, data)
       .then((response) => {
         queryClient.invalidateQueries([postId, "getPost"]);
+        reset();
       })
       .catch((error) => {
         console.log(error);
