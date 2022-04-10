@@ -14,6 +14,7 @@ export interface IWritePostForm {
   contents: string;
   serverError?: string;
 }
+
 function Write() {
   const { category } = useParams();
   const navigate = useNavigate();
@@ -36,7 +37,6 @@ function Write() {
         navigate(`/${category}/${postId}`);
       })
       .catch((error) => {
-        console.log(error);
         const { field, message } = error.response.data;
         setError(field, { message });
       });

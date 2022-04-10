@@ -4,15 +4,11 @@ import parse from "html-react-parser";
 import { useQuery } from "react-query";
 import { getPost } from "api";
 import Title from "Components/Title";
-import { useForm } from "react-hook-form";
-import Input from "Components/Input";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import DeleteComment from "../../Components/post/DeleteComment";
-import { queryClient } from "index";
 import Button from "Components/Button";
+import WriteComment from "Components/post/WriteComment";
+import Comment from "Components/post/Comment";
 
-interface IComment {
+export interface IComment {
   _id: string;
   text: string;
   nickname: string;
@@ -50,38 +46,8 @@ export interface IPostResponse {
   message?: string;
 }
 
-interface ICommentForm {
-  text: string;
-  postId: string;
-  serverError: string;
-}
-
-interface IEditCommentForm {
-  text: string;
-  commentId: string;
-  serverError: string;
-}
-
-export interface IOnDeleteCommentState {
-  onDelete: boolean;
-  commentId?: string;
-}
-
-export interface IOnEditCommentState {
-  onEdit: boolean;
-  commentId?: string;
-}
-
 function Post() {
   const { postId, category } = useParams();
-  const [onDeleteComment, setOnDeleteComment] = useState<IOnDeleteCommentState>(
-    {
-      onDelete: false,
-    }
-  );
-  const [onEditComment, setOnEditComment] = useState<IOnEditCommentState>({
-    onEdit: false,
-  });
   const { isLoading, data, isError, error } = useQuery<IPostResponse>(
     [postId, "getPost"],
     () => getPost(postId!),
@@ -92,50 +58,7 @@ function Post() {
   if (isError) {
     if (error instanceof Error) console.log(error.message);
   }
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm<ICommentForm>();
-  const isValid = async (data: ICommentForm) => {
-    await axios
-      .post(`/api/comments`, data)
-      .then((response) => {
-        queryClient.invalidateQueries([postId, "getPost"]);
-        reset();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const {
-    register: editCommentRegister,
-    handleSubmit: editCommentSubmit,
-    formState: { errors: editCommentErrors },
-  } = useForm<IEditCommentForm>();
-  const onClickDeleteComment = (commentId: string) => {
-    setOnDeleteComment({ onDelete: true, commentId });
-  };
-  const onClickEditComment = (commentId: string) => {
-    setOnEditComment({ onEdit: true, commentId });
-  };
-  const isValidEditComment = async (data: IEditCommentForm) => {
-    await axios
-      .patch(`/api/comments/${onEditComment.commentId}`, data)
-      .then((response) => {
-        console.log(response.data);
-        setOnEditComment({ onEdit: false });
-        queryClient.invalidateQueries([postId, "getPost"]);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  };
-  useEffect(() => {
-    setValue("postId", postId!);
-  }, [setValue, postId]);
+
   return (
     <Wrapper>
       <div className="w-full px-10">
@@ -147,7 +70,6 @@ function Post() {
             </button>
           </Link>
         </div>
-
         {data && data.state === "success" ? (
           <>
             <div className="border-b-4 border-b-main mt-8 px-2 mb-2 pb-2">
@@ -178,93 +100,24 @@ function Post() {
             </div>
             <div className="flex space-x-4 w-full justify-end">
               <Link to={"edit"}>
-                <button className="w-20 bg-main px-3 py-2 text-white rounded-md">
-                  Edit
-                </button>
+                <Button
+                  text="Edit"
+                  customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
+                ></Button>
               </Link>
               <Link to={"delete"}>
-                <button className="w-20 bg-main px-3 py-2 text-white rounded-md ">
-                  Delete
-                </button>
+                <Button
+                  text="Delete"
+                  customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
+                ></Button>
               </Link>
             </div>
-            <div>
-              <form
-                onSubmit={handleSubmit(isValid)}
-                className="flex space-x-2 mt-10 items-end"
-              >
-                <Input
-                  label="Edit your comment"
-                  id="text"
-                  type="text"
-                  errors={errors?.text?.message}
-                  required
-                  customCls="border-2 border-main px-2 py-1 w-ful"
-                  register={register("text", {
-                    required: "Text is required.",
-                  })}
-                />
-                <button className="border-main border-2 rounded-md p-2 h-10 flex items-center">
-                  submit
-                </button>
-              </form>
-            </div>
+            <WriteComment postId={postId!}></WriteComment>
             <ul className="mt-10 space-y-4">
               {data?.post?.comments?.map((comment) => (
-                <li key={comment._id} className="bg-cream p-4 rounded-md">
-                  <div className="flex justify-between">
-                    <div className="disply flex">
-                      <img
-                        alt="owner_avatar"
-                        src={"/" + comment.avatar}
-                        className="bg-white w-8 h-8 rounded-full mr-2"
-                      />
-                      <span>{comment.nickname}</span>
-                    </div>
-                    <div className="space-x-2">
-                      <button onClick={() => onClickEditComment(comment._id)}>
-                        edit
-                      </button>
-                      <span>|</span>
-                      <button onClick={() => onClickDeleteComment(comment._id)}>
-                        delete
-                      </button>
-                    </div>
-                  </div>
-                  {onEditComment.onEdit &&
-                  comment._id === onEditComment.commentId ? (
-                    <form onSubmit={editCommentSubmit(isValidEditComment)}>
-                      <Input
-                        label="Edit your comment"
-                        id="text"
-                        type="text"
-                        errors={editCommentErrors?.text?.message}
-                        required
-                        customCls="border-2 border-main px-2 py-1 w-ful"
-                        register={editCommentRegister("text", {
-                          required: "edit)Text is required.",
-                          value: `${comment.text}`,
-                        })}
-                      />
-                      <Button text="submit"></Button>
-                    </form>
-                  ) : (
-                    <span>{comment.text}</span>
-                  )}
-
-                  <div className="flex justify-end">
-                    <span>{comment.createdAt}</span>
-                  </div>
-                </li>
+                <Comment comment={comment} postId={postId!}></Comment>
               ))}
             </ul>
-            {onDeleteComment.onDelete ? (
-              <DeleteComment
-                postId={postId!}
-                commentId={onDeleteComment.commentId!}
-                setOnDeleteComment={setOnDeleteComment}
-              />
-            ) : null}
           </>
         ) : null}
       </div>

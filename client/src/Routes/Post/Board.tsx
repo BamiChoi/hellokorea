@@ -1,4 +1,5 @@
 import { getPosts } from "api";
+import Button from "Components/Button";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import { useQuery } from "react-query";
@@ -28,9 +29,10 @@ function Board() {
         <div className="flex items-center justify-between">
           <Title text={category!}></Title>
           <Link to={`/${category}/write`}>
-            <button className="bg-main px-3 py-2 text-white rounded-md">
-              Write
-            </button>
+            <Button
+              text="write"
+              customClassName="bg-main px-3 py-2 text-white rounded-md"
+            ></Button>
           </Link>
         </div>
 

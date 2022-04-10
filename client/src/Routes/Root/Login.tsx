@@ -96,7 +96,7 @@ function Login() {
           />
           <Button
             text="Login"
-            customCls="bg-point text-black h-10 mt-4 w-full rounded-md"
+            customClassName="bg-point text-black h-10 mt-4 w-full rounded-md"
           />
         </form>
       </div>

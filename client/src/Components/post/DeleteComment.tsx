@@ -1,6 +1,8 @@
 import axios from "axios";
+import Button from "Components/Button";
+import Overlay from "Components/Overlay";
 import { queryClient } from "index";
-import { IOnDeleteCommentState } from "../../Routes/Post/Post";
+import { IOnDeleteCommentState } from "./Comment";
 
 interface IDeleteCommentProps {
   postId: string;
@@ -19,7 +21,7 @@ function DeleteComment({
     console.log("close");
     setOnDeleteComment({ onDelete: false });
   };
-  const onClickDelete = async (e: any) => {
+  const onClickDelete = async () => {
     await axios
       .delete(`/api/comments/${commentId}`)
       .then((response) => {
@@ -33,18 +35,10 @@ function DeleteComment({
   };
   return (
     <>
-      <div
-        onClick={onClickOverlay}
-        className="w-full h-full fixed top-0 left-0 bg-black z-40 opacity-50"
-      ></div>
+      <Overlay onClick={onClickOverlay}></Overlay>
       <div className="fixed z-50 p-4 bg-white opacity-100 w-2/3 h-[300px] rounded-md flex flex-col justify-center items-center left-0 right-0 top-40 m-auto max-w-sm">
         <span className="text-lg">Do u wanna delete this comment?</span>
-        <button
-          onClick={onClickDelete}
-          className="bg-main text-white hover:bg-powermain h-12 mt-4 w-full rounded-md"
-        >
-          Delete
-        </button>
+        <Button onClick={onClickDelete} text="Delete"></Button>
       </div>
     </>
   );
