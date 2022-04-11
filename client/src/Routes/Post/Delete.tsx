@@ -12,26 +12,29 @@ export interface IDeletePostFrom {
 
 function Delete() {
   const { postId, category } = useParams();
-  const navigate = useNavigate();
-  const isValid = async (data: IDeletePostFrom) => {
-    await axios
-      .post(`/api/posts/${postId}/delete`, data)
-      .then((response) => {
-        console.log(response.data);
-        navigate(`/${category}`);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<IDeletePostFrom>();
   const onClickOverlay = () => {
     navigate(-1);
   };
+  const navigate = useNavigate();
+  const isValid = async (data: IDeletePostFrom) => {
+    await axios
+      .post(`/api/posts/${postId}`, data)
+      .then((response) => {
+        console.log(response.data);
+        navigate(`/${category}`);
+      })
+      .catch((error) => {
+        const { field, message } = error.response.data;
+        setError(field, { message });
+      });
+  };
+
   return (
     <>
       <Overlay onClick={onClickOverlay}></Overlay>
@@ -51,7 +54,7 @@ function Delete() {
               required: "Password is required to delete it.",
             })}
           />
-          <Button text="Delete"></Button>
+          <Button text="Delete" errors={errors?.serverError?.message}></Button>
         </form>
       </div>
     </>

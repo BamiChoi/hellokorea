@@ -74,7 +74,6 @@ function Edit() {
         navigate("/user");
       })
       .catch((error) => {
-        console.log(error);
         const { field, message } = error.response.data;
         setError(field, { message });
       });

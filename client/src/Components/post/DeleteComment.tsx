@@ -2,6 +2,7 @@ import axios from "axios";
 import Button from "Components/Button";
 import Overlay from "Components/Overlay";
 import { queryClient } from "index";
+import { useState } from "react";
 import { IOnDeleteCommentState } from "./Comment";
 
 interface IDeleteCommentProps {
@@ -17,6 +18,7 @@ function DeleteComment({
   commentId,
   setOnDeleteComment,
 }: IDeleteCommentProps) {
+  const [deleteError, setDeleteError] = useState("");
   const onClickOverlay = () => {
     console.log("close");
     setOnDeleteComment({ onDelete: false });
@@ -30,7 +32,8 @@ function DeleteComment({
         queryClient.invalidateQueries([postId, "getPost"]);
       })
       .catch((error) => {
-        console.log(error.response.data);
+        const { message } = error.response.data;
+        setDeleteError(message);
       });
   };
   return (
@@ -38,7 +41,11 @@ function DeleteComment({
       <Overlay onClick={onClickOverlay}></Overlay>
       <div className="fixed z-50 p-4 bg-white opacity-100 w-2/3 h-[300px] rounded-md flex flex-col justify-center items-center left-0 right-0 top-40 m-auto max-w-sm">
         <span className="text-lg">Do u wanna delete this comment?</span>
-        <Button onClick={onClickDelete} text="Delete"></Button>
+        <Button
+          onClick={onClickDelete}
+          errors={deleteError}
+          text="Delete"
+        ></Button>
       </div>
     </>
   );

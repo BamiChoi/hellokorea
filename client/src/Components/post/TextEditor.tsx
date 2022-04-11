@@ -41,7 +41,7 @@ function TextEditor({ control, setDefaultContents }: ITextEditorProps) {
               defaultEditorState={defaultEditorState}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
-              editorClassName="h-80 mx-10 w-full"
+              editorClassName="h-80 mx-10 w-full z-0"
               toolbar={{
                 options: [
                   "inline",

@@ -34,13 +34,12 @@ function Edit() {
   const isValid = async (data: IWritePostForm) => {
     console.log(data);
     await axios
-      .post(`/api/posts/${postId}`, data)
+      .patch(`/api/posts/${postId}`, data)
       .then((response) => {
         console.log(response.data);
         navigate(`/${category}/${postId}`);
       })
       .catch((error) => {
-        console.log(error.response.data);
         const { field, message } = error.response.data;
         setError(field, { message });
       });

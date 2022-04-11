@@ -7,12 +7,29 @@ import Input from "Components/Input";
 import axios from "axios";
 import TextEditor from "Components/post/TextEditor";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "react-query";
 
 export interface IWritePostForm {
   category: string;
   title: string;
   contents: string;
   serverError?: string;
+}
+
+interface IWritePostResponse {
+  data: {
+    state: string;
+    postId: string;
+  };
+}
+
+interface IWritePostError {
+  response: {
+    data: {
+      field: "category" | "title" | "contents" | "serverError";
+      message: string;
+    };
+  };
 }
 
 function Write() {
@@ -29,17 +46,21 @@ function Write() {
     mode: "onBlur",
   });
   setValue("category", category!);
-  const isValid = async (data: IWritePostForm) => {
-    await axios
-      .post("/api/posts", data)
-      .then((response) => {
-        const postId = response.data.postId;
+  const { isLoading, mutate } = useMutation(
+    (newPostData: IWritePostForm) => axios.post("/api/posts", newPostData),
+    {
+      onSuccess: (data: IWritePostResponse) => {
+        const postId = data.data.postId;
         navigate(`/${category}/${postId}`);
-      })
-      .catch((error) => {
+      },
+      onError: (error: IWritePostError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
-      });
+      },
+    }
+  );
+  const isValid = async (newPostData: IWritePostForm) => {
+    mutate(newPostData);
   };
   return (
     <Wrapper>
@@ -58,7 +79,7 @@ function Write() {
             })}
           />
           <TextEditor control={control} setDefaultContents={null}></TextEditor>
-          <Button text="submit"></Button>
+          <Button text="submit" errors={errors?.serverError?.message}></Button>
         </form>
       </div>
     </Wrapper>
