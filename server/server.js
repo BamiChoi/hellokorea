@@ -6,6 +6,7 @@ import userRouter from "./routers/userRouter";
 import postRouter from "./routers/postRouter";
 import sessionRouter from "./routers/sessionRouter";
 import commentRouter from "./routers/commentRouter";
+import recommentRouter from "./routers/recommentRouter";
 
 const app = express();
 const logger = morgan("dev");
@@ -32,5 +33,6 @@ app.use("/api/session", sessionRouter);
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/comments", commentRouter);
+app.use("/api/recomments", recommentRouter);
 
 export default app;

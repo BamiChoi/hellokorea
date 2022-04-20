@@ -8,6 +8,13 @@ import Button from "Components/Button";
 import WriteComment from "Components/post/WriteComment";
 import Comment from "Components/post/Comment";
 
+interface IRecomment {
+  _id: string;
+  text: string;
+  nickname: string;
+  avatar: string;
+}
+
 export interface IComment {
   _id: string;
   text: string;
@@ -16,6 +23,7 @@ export interface IComment {
   upvotes: number;
   downvotes: number;
   createdAt: string;
+  recomments: IRecomment[];
 }
 
 interface IOwner {
@@ -115,7 +123,11 @@ function Post() {
             <WriteComment postId={postId!}></WriteComment>
             <ul className="mt-10 space-y-4">
               {data?.post?.comments?.map((comment) => (
-                <Comment comment={comment} postId={postId!}></Comment>
+                <Comment
+                  key={comment._id}
+                  comment={comment}
+                  postId={postId!}
+                ></Comment>
               ))}
             </ul>
           </>

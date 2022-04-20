@@ -1,5 +1,6 @@
 import Post from "../models/Post";
 import User from "../models/User";
+import Comment from "../models/Comment";
 import bcrypt from "bcrypt";
 
 export const createPost = async (req, res) => {
@@ -31,15 +32,17 @@ export const createPost = async (req, res) => {
 export const getPost = async (req, res) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findById(postId)
-      .populate("owner")
-      .populate("comments");
+    const post = await Post.findById(postId);
+    //   .populate("owner")
+    //   .populate("comments");
+    // Post.populate({ path: "comments", populate: { path: "recomments" } });
     if (post) {
       return res.status(200).send({ state: "success", post });
     } else {
       return res.status(400).send({ state: "notFound" });
     }
   } catch (error) {
+    console.log(error);
     return res.status(400).send({ state: "serverError" });
   }
 };

@@ -10,6 +10,8 @@ const recommentShcema = new mongoose.Schema({
   createdAt: { type: Date, required: true, default: Date.now },
   modifiedAt: { type: Date, required: true, default: Date.now },
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+  nickname: { type: String, required: true },
+  avatar: { type: String, default: "" },
 });
 
 const Recomment = mongoose.model("Recomment", recommentShcema);

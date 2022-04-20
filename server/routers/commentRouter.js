@@ -9,4 +9,5 @@ const commentRouter = express.Router();
 
 commentRouter.route("/").post(createComment);
 commentRouter.route("/:commentId").patch(editComment).delete(deleteComment);
+
 export default commentRouter;

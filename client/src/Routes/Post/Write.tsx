@@ -49,7 +49,8 @@ function Write() {
   const { isLoading, mutate } = useMutation(
     (newPostData: IWritePostForm) => axios.post("/api/posts", newPostData),
     {
-      onSuccess: (data: IWritePostResponse) => {
+      onSuccess: (data: IWritePostResponse, _, context) => {
+        console.log(context);
         const postId = data.data.postId;
         navigate(`/${category}/${postId}`);
       },

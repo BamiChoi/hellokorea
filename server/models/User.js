@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
   comments: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
   ],
+  recomments: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Recomment" },
+  ],
 });
 
 userSchema.pre("save", async function () {
