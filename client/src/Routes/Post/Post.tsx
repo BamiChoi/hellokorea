@@ -66,7 +66,6 @@ function Post() {
   if (isError) {
     if (error instanceof Error) console.log(error.message);
   }
-
   return (
     <Wrapper>
       <div className="w-full px-10">

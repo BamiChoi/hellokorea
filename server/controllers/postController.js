@@ -32,10 +32,16 @@ export const createPost = async (req, res) => {
 export const getPost = async (req, res) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findById(postId);
-    //   .populate("owner")
-    //   .populate("comments");
-    // Post.populate({ path: "comments", populate: { path: "recomments" } });
+    const post = await Post.findById(postId)
+      .populate("owner")
+      .populate({
+        path: "comments",
+        model: "Comment",
+        populate: {
+          path: "recomments",
+          model: "Recomment",
+        },
+      });
     if (post) {
       return res.status(200).send({ state: "success", post });
     } else {

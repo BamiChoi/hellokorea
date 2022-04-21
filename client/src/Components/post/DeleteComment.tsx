@@ -20,7 +20,6 @@ function DeleteComment({
 }: IDeleteCommentProps) {
   const [deleteError, setDeleteError] = useState("");
   const onClickOverlay = () => {
-    console.log("close");
     setOnDeleteComment({ onDelete: false });
   };
   const onClickDelete = async () => {

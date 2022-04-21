@@ -28,6 +28,16 @@ interface IOnEditCommentState {
   commentId?: string;
 }
 
+interface IOnDeleteRecommentState {
+  onDelete: boolean;
+  recommentId?: string;
+}
+
+interface IOnEditRecommentState {
+  onEdit: boolean;
+  recommentId?: string;
+}
+
 interface IOnWriteRecommentState {
   onWrite: boolean;
   parentsCommentId?: string;
@@ -36,6 +46,12 @@ interface IOnWriteRecommentState {
 interface IWriteRecommentForm {
   text: string;
   parentsCommentId: string;
+  serverError: string;
+}
+
+interface IEditRecommentForm {
+  text: string;
+  recommentId: string;
   serverError: string;
 }
 
@@ -52,6 +68,15 @@ function Comment({ comment, postId }: ICommentProps) {
     useState<IOnWriteRecommentState>({
       onWrite: false,
     });
+  const [onDeleteRecomment, setOnDeleteRecomment] =
+    useState<IOnDeleteRecommentState>({
+      onDelete: false,
+    });
+  const [onEditRecomment, setOnEditRecomment] = useState<IOnEditRecommentState>(
+    {
+      onEdit: false,
+    }
+  );
   const {
     register: editCommentRegister,
     handleSubmit: editCommentSubmit,
@@ -92,6 +117,28 @@ function Comment({ comment, postId }: ICommentProps) {
       .then((response) => {
         console.log(response.data);
         setOnWriteRecomment({ onWrite: false });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  };
+  const onClickEditRecomment = (recommentId: string) => {
+    setOnEditRecomment({ onEdit: true, recommentId });
+  };
+  const onClickDeleteRecomment = (recommentId: string) => {
+    setOnDeleteRecomment({ onDelete: true, recommentId });
+  };
+  const {
+    register: editRecommentRegister,
+    handleSubmit: editRecommentSubmit,
+    formState: { errors: editRecommentErrors },
+  } = useForm<IEditRecommentForm>();
+  const isValidEditRecomment = async (data: IEditRecommentForm) => {
+    await axios
+      .patch(`/api/recomments/${onEditRecomment.recommentId}`, data)
+      .then((response) => {
+        console.log(response.data);
+        setOnEditRecomment({ onEdit: false });
       })
       .catch((error) => {
         console.log(error.response.data);
@@ -166,7 +213,7 @@ function Comment({ comment, postId }: ICommentProps) {
       {onWriteRecomment.onWrite ? (
         // 대댓글  form
         <div className="flex w-full">
-          <div className="mr-2 text-2xl text-main font-semibold">Re: </div>
+          <div className="ml-12 mr-2 text-2xl text-main font-semibold">Re:</div>
           <div className="bg-cream p-4 rounded-md w-full">
             <form
               onSubmit={writeRecommentSubmit(isValidWriteRecomment)}
@@ -194,8 +241,59 @@ function Comment({ comment, postId }: ICommentProps) {
       {/* // 대댓글 list */}
       <ul>
         {comment.recomments.map((recomment) => (
-          <li key={recomment._id} className="bg-cream p-4 rounded-md">
-            {recomment.text}
+          <li key={recomment._id} className="bg-cream p-4 rounded-md ml-24">
+            <div className="flex justify-between">
+              <div className="disply flex">
+                <img
+                  alt="owner_avatar"
+                  src={"/" + recomment.avatar}
+                  className="bg-white w-8 h-8 rounded-full mr-2"
+                />
+                <span>{recomment.nickname}</span>
+              </div>
+              <div className="space-x-2">
+                <Button
+                  onClick={() => onClickEditRecomment(recomment._id)}
+                  text="edit"
+                  customClassName=" "
+                ></Button>
+                <span>|</span>
+                <Button
+                  onClick={() => onClickDeleteRecomment(recomment._id)}
+                  text="delete"
+                  customClassName=" "
+                ></Button>
+              </div>
+            </div>
+            {onEditRecomment.onEdit &&
+            recomment._id === onEditRecomment.recommentId ? (
+              <form
+                onSubmit={editRecommentSubmit(isValidEditRecomment)}
+                className="flex items-end space-x-2"
+              >
+                <Input
+                  label="Edit your comment"
+                  id="text"
+                  type="text"
+                  errors={editRecommentErrors?.text?.message}
+                  required
+                  customCls="border-2 border-main px-2 py-1 w-full"
+                  register={editRecommentRegister("text", {
+                    required: "Text is required.",
+                    value: `${recomment.text}`,
+                  })}
+                />
+                <Button
+                  text="submit"
+                  customClassName="w-20 bg-main px-3 py-2 text-white rounded-md hover:bg-powermain"
+                ></Button>
+              </form>
+            ) : (
+              <span>{recomment.text}</span>
+            )}
+            <div className="flex justify-end mt-2">
+              <span>{comment.createdAt}</span>
+            </div>
           </li>
         ))}
       </ul>
