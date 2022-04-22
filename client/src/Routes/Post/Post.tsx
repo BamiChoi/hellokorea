@@ -5,14 +5,16 @@ import { useQuery } from "react-query";
 import { getPost } from "api";
 import Title from "Components/Title";
 import Button from "Components/Button";
-import WriteComment from "Components/post/WriteComment";
+import WriteComment from "Components/post/comment/WriteComment";
 import Comment from "Components/post/Comment";
 
-interface IRecomment {
+export interface IRecomment {
   _id: string;
   text: string;
   nickname: string;
   avatar: string;
+  createdAt: string;
+  modifiedAt: string;
 }
 
 export interface IComment {

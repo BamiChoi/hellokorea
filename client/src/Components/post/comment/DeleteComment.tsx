@@ -3,7 +3,7 @@ import Button from "Components/Button";
 import Overlay from "Components/Overlay";
 import { queryClient } from "index";
 import { useState } from "react";
-import { IOnDeleteCommentState } from "./Comment";
+import { IOnDeleteCommentState } from "../Comment";
 
 interface IDeleteCommentProps {
   postId: string;
