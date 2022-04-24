@@ -1,8 +1,9 @@
-import axios from "axios";
+import { deleteComment } from "api/commentApi";
 import Button from "Components/Button";
 import Overlay from "Components/Overlay";
 import { queryClient } from "index";
 import { useState } from "react";
+import { useMutation } from "react-query";
 import { IOnDeleteCommentState } from "../Comment";
 
 interface IDeleteCommentProps {
@@ -22,19 +23,20 @@ function DeleteComment({
   const onClickOverlay = () => {
     setOnDeleteComment({ onDelete: false });
   };
-  const onClickDelete = async () => {
-    await axios
-      .delete(`/api/comments/${commentId}`)
-      .then((response) => {
-        console.log(response.data);
+  const { isLoading, mutate } = useMutation(
+    (commenetId: string) => deleteComment(commenetId),
+    {
+      onSuccess: () => {
         setOnDeleteComment({ onDelete: false });
         queryClient.invalidateQueries([postId, "getPost"]);
-      })
-      .catch((error) => {
+      },
+      onError: (error: any) => {
         const { message } = error.response.data;
         setDeleteError(message);
-      });
-  };
+      },
+    }
+  );
+  const onClickDelete = async () => mutate(commentId);
   return (
     <>
       <Overlay onClick={onClickOverlay}></Overlay>

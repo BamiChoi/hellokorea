@@ -2,11 +2,11 @@ import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { useQuery } from "react-query";
-import { getPost } from "api";
+import { getPost } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
-import WriteComment from "Components/post/comment/WriteComment";
 import Comment from "Components/post/Comment";
+import CreateComment from "Components/post/comment/CreateComment";
 
 export interface IRecomment {
   _id: string;
@@ -121,7 +121,7 @@ function Post() {
                 ></Button>
               </Link>
             </div>
-            <WriteComment postId={postId!}></WriteComment>
+            <CreateComment postId={postId!} />
             <ul className="mt-10 space-y-4">
               {data?.post?.comments?.map((comment) => (
                 <Comment

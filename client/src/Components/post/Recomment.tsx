@@ -1,13 +1,14 @@
 import Button from "Components/Button";
 import { useState } from "react";
 import { IRecomment } from "Routes/Post/Post";
+import DeleteRecomment from "./recomment/DeleteRecomment";
 import EditRecomment from "./recomment/EditRecomment";
 
 interface IRecommentProps {
   recomment: IRecomment;
 }
 
-interface IOnDeleteRecommentState {
+export interface IOnDeleteRecommentState {
   onDelete: boolean;
   recommentId?: string;
 }
@@ -71,6 +72,12 @@ function Recomment({ recomment }: IRecommentProps) {
       <div className="flex justify-end mt-2">
         <span>{recomment.createdAt}</span>
       </div>
+      {onDeleteRecomment.onDelete ? (
+        <DeleteRecomment
+          recommentId={recomment._id}
+          setOnDeleteRecomment={setOnDeleteRecomment}
+        />
+      ) : null}
     </li>
   );
 }

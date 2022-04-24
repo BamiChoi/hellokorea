@@ -72,7 +72,7 @@ export const deleteComment = async (req, res) => {
   if (!comment) {
     return res
       .status(404)
-      .send({ field: "ServerError", messasge: "Comment not Found" }); // Form 에러 표시가 아니라 Not Found 리다이렉트 처리해야함
+      .send({ field: "ServerError", messasge: "Comment not Found" }); // Todo: front에서 Form 에러 표시가 아니라 Not Found 리다이렉트 처리해야함
   }
   if (String(comment.owner._id) !== _id) {
     return res.status(400).send({

@@ -3,7 +3,7 @@ import DeleteComment from "./comment/DeleteComment";
 import Button from "Components/Button";
 import { IComment } from "Routes/Post/Post";
 import EditComement from "./comment/EditComment";
-import WriteRecomment from "./recomment/WriteRecomment";
+import WriteRecomment from "./recomment/CreateRecomment";
 import Recomment from "./Recomment";
 
 interface ICommentProps {
@@ -21,8 +21,8 @@ export interface IOnEditCommentState {
   commentId?: string;
 }
 
-export interface IOnWriteRecommentState {
-  onWrite: boolean;
+export interface IOnCreateRecommentState {
+  onCreate: boolean;
   parentsCommentId?: string;
 }
 
@@ -35,9 +35,9 @@ function Comment({ comment, postId }: ICommentProps) {
   const [onEditComment, setOnEditComment] = useState<IOnEditCommentState>({
     onEdit: false,
   });
-  const [onWriteRecomment, setOnWriteRecomment] =
-    useState<IOnWriteRecommentState>({
-      onWrite: false,
+  const [onCreateRecomment, setOnCreateRecomment] =
+    useState<IOnCreateRecommentState>({
+      onCreate: false,
     });
   const onClickDeleteComment = (commentId: string) => {
     setOnDeleteComment({ onDelete: true, commentId });
@@ -45,9 +45,9 @@ function Comment({ comment, postId }: ICommentProps) {
   const onClickEditComment = (commentId: string) => {
     setOnEditComment({ onEdit: true, commentId });
   };
-  const onClickWriteRecomment = (parentsCommentId: string) => {
+  const onClickCreateRecomment = (parentsCommentId: string) => {
     console.log(parentsCommentId);
-    setOnWriteRecomment({ onWrite: true, parentsCommentId });
+    setOnCreateRecomment({ onCreate: true, parentsCommentId });
   };
   return (
     <>
@@ -86,7 +86,7 @@ function Comment({ comment, postId }: ICommentProps) {
           <span>{comment.text}</span>
         )}
         <div className="flex justify-between mt-2">
-          <button onClick={() => onClickWriteRecomment(comment._id)}>
+          <button onClick={() => onClickCreateRecomment(comment._id)}>
             reply
           </button>
           <span>{comment.createdAt}</span>
@@ -99,13 +99,14 @@ function Comment({ comment, postId }: ICommentProps) {
           />
         ) : null}
       </li>
-      {onWriteRecomment.onWrite ? (
+      {onCreateRecomment.onCreate ? (
         <WriteRecomment
+          postId={postId!}
           parentsCommentId={comment._id}
-          setOnWriteRecomment={setOnWriteRecomment}
+          setOnCreateRecomment={setOnCreateRecomment}
         />
       ) : null}
-      <ul>
+      <ul className="space-y-4">
         {comment.recomments.map((recomment) => (
           <Recomment key={recomment._id} recomment={recomment} />
         ))}

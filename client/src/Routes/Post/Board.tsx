@@ -1,4 +1,4 @@
-import { getPosts } from "api";
+import { getPosts } from "api/postApi";
 import Button from "Components/Button";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";

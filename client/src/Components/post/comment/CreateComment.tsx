@@ -1,20 +1,29 @@
 import { useForm } from "react-hook-form";
 import Input from "Components/Input";
-import axios from "axios";
-import { useEffect } from "react";
 import { queryClient } from "index";
 import Button from "Components/Button";
+import { createComment } from "api/commentApi";
+import { useMutation } from "react-query";
 
-interface IWriteCommentProps {
+interface ICreateCommentProps {
   postId: string;
 }
-interface IWriteCommentForm {
+export interface ICreateCommentForm {
   text: string;
   postId: string;
   serverError: string;
 }
 
-function WriteComment({ postId }: IWriteCommentProps) {
+export interface ICommentError {
+  response: {
+    data: {
+      field: "text" | "serverError";
+      message: string;
+    };
+  };
+}
+
+function CreateComment({ postId }: ICreateCommentProps) {
   const {
     register,
     handleSubmit,
@@ -22,22 +31,24 @@ function WriteComment({ postId }: IWriteCommentProps) {
     setError,
     reset,
     formState: { errors },
-  } = useForm<IWriteCommentForm>();
-  const isValid = async (data: IWriteCommentForm) => {
-    await axios
-      .post(`/api/comments`, data)
-      .then((response) => {
+  } = useForm<ICreateCommentForm>();
+  const { isLoading, mutate } = useMutation(
+    (data: ICreateCommentForm) => createComment(data),
+    {
+      onSuccess: () => {
         queryClient.invalidateQueries([postId, "getPost"]);
         reset();
-      })
-      .catch((error) => {
+      },
+      onError: (error: ICommentError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
-      });
+      },
+    }
+  );
+  const isValid = async (data: ICreateCommentForm) => {
+    mutate(data);
   };
-  useEffect(() => {
-    setValue("postId", postId!);
-  }, [setValue, postId]);
+  setValue("postId", postId!);
   return (
     <>
       <form
@@ -65,4 +76,4 @@ function WriteComment({ postId }: IWriteCommentProps) {
   );
 }
 
-export default WriteComment;
+export default CreateComment;

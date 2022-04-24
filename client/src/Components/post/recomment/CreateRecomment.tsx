@@ -1,44 +1,46 @@
-import axios from "axios";
+import { createReccoment } from "api/recommentApi";
 import Button from "Components/Button";
 import Input from "Components/Input";
+import { queryClient } from "index";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IOnWriteRecommentState } from "../Comment";
+import { IOnCreateRecommentState } from "../Comment";
 
-interface IWriteRecommentProps {
+interface ICreateRecommentProps {
+  postId: string;
   parentsCommentId: string;
-  setOnWriteRecomment: React.Dispatch<
-    React.SetStateAction<IOnWriteRecommentState>
+  setOnCreateRecomment: React.Dispatch<
+    React.SetStateAction<IOnCreateRecommentState>
   >;
 }
 
-interface IWriteRecommentForm {
+export interface ICreateRecommentForm {
   text: string;
   parentsCommentId: string;
   serverError: string;
 }
 
-function WriteRecomment({
+function CreateRecomment({
+  postId,
   parentsCommentId,
-  setOnWriteRecomment,
-}: IWriteRecommentProps) {
-  const isValidWriteRecomment = async (data: IWriteRecommentForm) => {
-    await axios
-      .post(`/api/recomments`, data)
+  setOnCreateRecomment,
+}: ICreateRecommentProps) {
+  const isValidCreateRecomment = async (data: ICreateRecommentForm) => {
+    createReccoment(data)
       .then((response) => {
-        console.log(response.data);
-        setOnWriteRecomment({ onWrite: false });
+        setOnCreateRecomment({ onCreate: false });
+        queryClient.invalidateQueries([postId, "getPost"]);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
   };
   const {
-    register: writeRecommentRegister,
-    handleSubmit: writeRecommentSubmit,
+    register: createRecommentRegister,
+    handleSubmit: createRecommentSubmit,
     setValue,
-    formState: { errors: writeRecommentErrors },
-  } = useForm<IWriteRecommentForm>();
+    formState: { errors: createRecommentErrors },
+  } = useForm<ICreateRecommentForm>();
   useEffect(() => {
     setValue("parentsCommentId", parentsCommentId);
   }, [setValue, parentsCommentId]);
@@ -47,17 +49,17 @@ function WriteRecomment({
       <div className="ml-12 mr-2 text-2xl text-main font-semibold">Re:</div>
       <div className="bg-cream p-4 rounded-md w-full">
         <form
-          onSubmit={writeRecommentSubmit(isValidWriteRecomment)}
+          onSubmit={createRecommentSubmit(isValidCreateRecomment)}
           className="flex items-end space-x-2"
         >
           <Input
             label="Write recomment"
             id="text"
             type="text"
-            errors={writeRecommentErrors?.text?.message}
+            errors={createRecommentErrors?.text?.message}
             required
             customCls="border-2 border-main px-2 py-1 w-full"
-            register={writeRecommentRegister("text", {
+            register={createRecommentRegister("text", {
               required: "Text is required.",
             })}
           />
@@ -71,4 +73,4 @@ function WriteRecomment({
   );
 }
 
-export default WriteRecomment;
+export default CreateRecomment;

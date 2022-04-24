@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IWritePostForm } from "./Write";
 import { useQuery } from "react-query";
 import { IPostResponse } from "./Post";
-import { getPost } from "api";
+import { getPost } from "api/postApi";
 import { useEffect } from "react";
 
 function Edit() {
