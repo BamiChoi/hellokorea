@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import { IPost } from "./Post";
 
-interface IPostsResponse {
+export interface IPostsResponse {
   status: string;
   posts: IPost[];
 }

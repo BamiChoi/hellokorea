@@ -6,7 +6,7 @@ import { getPost } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Comment from "Components/post/Comment";
-import CreateComment from "Components/post/comment/CreateComment";
+import CreateComment from "Components/comment/CreateComment";
 
 export interface IRecomment {
   _id: string;

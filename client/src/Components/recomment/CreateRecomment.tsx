@@ -1,10 +1,12 @@
-import { createReccoment } from "api/recommentApi";
+import { createRecoment } from "api/recommentApi";
 import Button from "Components/Button";
 import Input from "Components/Input";
 import { queryClient } from "index";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IOnCreateRecommentState } from "../Comment";
+import { useMutation } from "react-query";
+import { IOnCreateRecommentState } from "../post/Comment";
+import { ICommentError } from "../comment/CreateComment";
 
 interface ICreateRecommentProps {
   postId: string;
@@ -25,22 +27,29 @@ function CreateRecomment({
   parentsCommentId,
   setOnCreateRecomment,
 }: ICreateRecommentProps) {
-  const isValidCreateRecomment = async (data: ICreateRecommentForm) => {
-    createReccoment(data)
-      .then((response) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<ICreateRecommentForm>();
+  const { isLoading, mutate } = useMutation(
+    (data: ICreateRecommentForm) => createRecoment(data),
+    {
+      onSuccess: () => {
         setOnCreateRecomment({ onCreate: false });
         queryClient.invalidateQueries([postId, "getPost"]);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
+      },
+      onError: (error: ICommentError) => {
+        const { field, message } = error.response.data;
+        setError(field, { message });
+      },
+    }
+  );
+  const isValid = async (data: ICreateRecommentForm) => {
+    mutate(data);
   };
-  const {
-    register: createRecommentRegister,
-    handleSubmit: createRecommentSubmit,
-    setValue,
-    formState: { errors: createRecommentErrors },
-  } = useForm<ICreateRecommentForm>();
   useEffect(() => {
     setValue("parentsCommentId", parentsCommentId);
   }, [setValue, parentsCommentId]);
@@ -49,17 +58,17 @@ function CreateRecomment({
       <div className="ml-12 mr-2 text-2xl text-main font-semibold">Re:</div>
       <div className="bg-cream p-4 rounded-md w-full">
         <form
-          onSubmit={createRecommentSubmit(isValidCreateRecomment)}
+          onSubmit={handleSubmit(isValid)}
           className="flex items-end space-x-2"
         >
           <Input
             label="Write recomment"
             id="text"
             type="text"
-            errors={createRecommentErrors?.text?.message}
+            errors={errors?.text?.message}
             required
             customCls="border-2 border-main px-2 py-1 w-full"
-            register={createRecommentRegister("text", {
+            register={register("text", {
               required: "Text is required.",
             })}
           />

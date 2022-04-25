@@ -1,9 +1,9 @@
 import { useState } from "react";
-import DeleteComment from "./comment/DeleteComment";
+import DeleteComment from "../comment/DeleteComment";
 import Button from "Components/Button";
 import { IComment } from "Routes/Post/Post";
-import EditComement from "./comment/EditComment";
-import WriteRecomment from "./recomment/CreateRecomment";
+import EditComement from "../comment/EditComment";
+import CreateRecoment from "../recomment/CreateRecomment";
 import Recomment from "./Recomment";
 
 interface ICommentProps {
@@ -46,7 +46,6 @@ function Comment({ comment, postId }: ICommentProps) {
     setOnEditComment({ onEdit: true, commentId });
   };
   const onClickCreateRecomment = (parentsCommentId: string) => {
-    console.log(parentsCommentId);
     setOnCreateRecomment({ onCreate: true, parentsCommentId });
   };
   return (
@@ -100,7 +99,7 @@ function Comment({ comment, postId }: ICommentProps) {
         ) : null}
       </li>
       {onCreateRecomment.onCreate ? (
-        <WriteRecomment
+        <CreateRecoment
           postId={postId!}
           parentsCommentId={comment._id}
           setOnCreateRecomment={setOnCreateRecomment}
@@ -108,7 +107,11 @@ function Comment({ comment, postId }: ICommentProps) {
       ) : null}
       <ul className="space-y-4">
         {comment.recomments.map((recomment) => (
-          <Recomment key={recomment._id} recomment={recomment} />
+          <Recomment
+            postId={postId}
+            key={recomment._id}
+            recomment={recomment}
+          />
         ))}
       </ul>
     </>

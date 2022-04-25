@@ -1,7 +1,7 @@
 import { queryClient } from "index";
 import Input from "Components/Input";
 import { useForm } from "react-hook-form";
-import { IOnEditCommentState } from "../Comment";
+import { IOnEditCommentState } from "../post/Comment";
 import Button from "Components/Button";
 import { editComment } from "api/commentApi";
 import { ICommentError } from "./CreateComment";
@@ -29,11 +29,12 @@ function EditComement({
   const {
     register,
     handleSubmit,
+    setValue,
     setError,
     formState: { errors },
   } = useForm<IEditCommentForm>();
   const { isLoading, mutate } = useMutation(
-    (data: IEditCommentForm) => editComment(data, commentId),
+    (data: IEditCommentForm) => editComment(data),
     {
       onSuccess: () => {
         setOnEditComment({ onEdit: false });
@@ -48,6 +49,7 @@ function EditComement({
   const isValidEditComment = async (data: IEditCommentForm) => {
     mutate(data);
   };
+  setValue("commentId", commentId);
   return (
     <form
       onSubmit={handleSubmit(isValidEditComment)}

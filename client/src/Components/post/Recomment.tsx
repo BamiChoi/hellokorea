@@ -1,11 +1,12 @@
 import Button from "Components/Button";
 import { useState } from "react";
 import { IRecomment } from "Routes/Post/Post";
-import DeleteRecomment from "./recomment/DeleteRecomment";
-import EditRecomment from "./recomment/EditRecomment";
+import DeleteRecomment from "../recomment/DeleteRecomment";
+import EditRecomment from "../recomment/EditRecomment";
 
 interface IRecommentProps {
   recomment: IRecomment;
+  postId: string;
 }
 
 export interface IOnDeleteRecommentState {
@@ -18,7 +19,7 @@ export interface IOnEditRecommentState {
   recommentId?: string;
 }
 
-function Recomment({ recomment }: IRecommentProps) {
+function Recomment({ recomment, postId }: IRecommentProps) {
   const [onDeleteRecomment, setOnDeleteRecomment] =
     useState<IOnDeleteRecommentState>({
       onDelete: false,
@@ -62,6 +63,7 @@ function Recomment({ recomment }: IRecommentProps) {
       {onEditRecomment.onEdit &&
       recomment._id === onEditRecomment.recommentId ? (
         <EditRecomment
+          postId={postId}
           recommentId={recomment._id}
           recommentText={recomment.text}
           setOnEditRecomment={setOnEditRecomment}
@@ -74,6 +76,7 @@ function Recomment({ recomment }: IRecommentProps) {
       </div>
       {onDeleteRecomment.onDelete ? (
         <DeleteRecomment
+          postId={postId}
           recommentId={recomment._id}
           setOnDeleteRecomment={setOnDeleteRecomment}
         />

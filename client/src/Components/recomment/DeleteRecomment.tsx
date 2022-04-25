@@ -1,11 +1,13 @@
-import axios from "axios";
+import { deleteRecomment } from "api/recommentApi";
 import Button from "Components/Button";
 import Overlay from "Components/Overlay";
 import { queryClient } from "index";
 import { useState } from "react";
-import { IOnDeleteRecommentState } from "../Recomment";
+import { useMutation } from "react-query";
+import { IOnDeleteRecommentState } from "../post/Recomment";
 
 interface IDeleteRecommentProps {
+  postId: string;
   recommentId: string;
   setOnDeleteRecomment: React.Dispatch<
     React.SetStateAction<IOnDeleteRecommentState>
@@ -13,6 +15,7 @@ interface IDeleteRecommentProps {
 }
 
 function DeleteRecomment({
+  postId,
   recommentId,
   setOnDeleteRecomment,
 }: IDeleteRecommentProps) {
@@ -20,18 +23,21 @@ function DeleteRecomment({
   const onClickOverlay = () => {
     setOnDeleteRecomment({ onDelete: false });
   };
-  const onClickDelete = async () => {
-    await axios
-      .delete(`/api/recomments/${recommentId}`)
-      .then((response) => {
-        console.log(response.data);
+  const { isLoading, mutate } = useMutation(
+    (recommentId: string) => deleteRecomment(recommentId),
+    {
+      onSuccess: () => {
         setOnDeleteRecomment({ onDelete: false });
-        // queryClient.invalidateQueries([postId, "getPost"]);
-      })
-      .catch((error) => {
+        queryClient.invalidateQueries([postId, "getPost"]);
+      },
+      onError: (error: any) => {
         const { message } = error.response.data;
         setDeleteError(message);
-      });
+      },
+    }
+  );
+  const onClickDelete = async () => {
+    mutate(recommentId);
   };
   return (
     <>
