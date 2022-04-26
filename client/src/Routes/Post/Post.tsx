@@ -1,12 +1,17 @@
 import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
-import { useQuery } from "react-query";
-import { getPost } from "api/postApi";
+import { useMutation, useQuery } from "react-query";
+import { countVote, getPost } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Comment from "Components/post/Comment";
 import CreateComment from "Components/comment/CreateComment";
+import { loggedInUser } from "reducers/auth";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { stringify } from "querystring";
+import { queryClient } from "index";
 
 export interface IRecomment {
   _id: string;
@@ -30,7 +35,7 @@ export interface IComment {
 
 interface IOwner {
   nickname: string;
-  id: string;
+  _id: string;
   avatar: string;
 }
 
@@ -56,8 +61,26 @@ export interface IPostResponse {
   message?: string;
 }
 
+export interface IVoteRequest {
+  voted: boolean;
+  postId: string | undefined;
+  type: "up" | "down";
+}
+
 function Post() {
+  const user = useSelector(loggedInUser);
   const { postId, category } = useParams();
+  const [voted, setVoted] = useState(false);
+  const { mutate } = useMutation((data: IVoteRequest) => countVote(data), {
+    onSuccess: () => {
+      queryClient.invalidateQueries([postId, "getPost"]);
+      setVoted((prev) => !prev);
+    },
+  });
+  const onClickVote = (type: "up" | "down") => {
+    const data = { postId, voted, type };
+    mutate(data);
+  };
   const { isLoading, data, isError, error } = useQuery<IPostResponse>(
     [postId, "getPost"],
     () => getPost(postId!),
@@ -107,19 +130,33 @@ function Post() {
             <div className="mx-2 border-b-2 border-b-main pb-10 pt-10 mb-10">
               {parse(data.post?.contents)}
             </div>
-            <div className="flex space-x-4 w-full justify-end">
-              <Link to={"edit"}>
-                <Button
-                  text="Edit"
-                  customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
-                ></Button>
-              </Link>
-              <Link to={"delete"}>
-                <Button
-                  text="Delete"
-                  customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
-                ></Button>
-              </Link>
+            <div className="flex w-full space-x-2 justify-end">
+              <Button
+                onClick={() => onClickVote("up")}
+                text="up"
+                customClassName="w-20 border-2 border-main bg-white px-3 py-2 text-black rounded-md"
+              />
+              <Button
+                onClick={() => onClickVote("down")}
+                text="down"
+                customClassName="w-20 border-2 border-main px-3 py-2 text-black rounded-md"
+              />
+              {user && user.id === data?.post.owner._id ? (
+                <div className="space-x-4">
+                  <Link to={"edit"}>
+                    <Button
+                      text="Edit"
+                      customClassName="w-20 hover:bg-powermain bg-main px-3 py-2  text-white rounded-md"
+                    />
+                  </Link>
+                  <Link to={"delete"}>
+                    <Button
+                      text="Delete"
+                      customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
+                    />
+                  </Link>
+                </div>
+              ) : null}
             </div>
             <CreateComment postId={postId!} />
             <ul className="mt-10 space-y-4">

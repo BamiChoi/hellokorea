@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IVoteRequest } from "Routes/Post/Post";
 
 export const getPost = async (postId: string) => {
   return await axios
@@ -24,4 +25,8 @@ export const getPosts = async (category: string) => {
         throw new Error("serverError");
       }
     });
+};
+
+export const countVote = async (data: IVoteRequest) => {
+  return await axios.post(`/api/posts/${data.postId}/vote`, data);
 };

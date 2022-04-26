@@ -136,3 +136,36 @@ export const deletePost = async (req, res) => {
       .send({ field: "serverError", message: "Failed to change password" });
   }
 };
+
+export const countVote = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { postId, voted, type },
+  } = req;
+  console.log(voted);
+  try {
+    const post = await Post.findById(postId);
+    if (voted) {
+      if (type === "up") {
+        post.meta.upvotes -= 1;
+      } else if (type === "down") {
+        post.meta.downvotes -= 1;
+      }
+    } else {
+      if (type === "up") {
+        post.meta.upvotes += 1;
+      } else if (type === "down") {
+        post.meta.downvotes += 1;
+      }
+    }
+    post.save();
+    return res.status(200).send({ state: "success " });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Failed to vote" });
+  }
+};
