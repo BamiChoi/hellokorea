@@ -10,7 +10,6 @@ import CreateComment from "Components/comment/CreateComment";
 import { loggedInUser } from "reducers/auth";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { stringify } from "querystring";
 import { queryClient } from "index";
 
 export interface IRecomment {

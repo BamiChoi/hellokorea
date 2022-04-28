@@ -1,6 +1,5 @@
 import Post from "../models/Post";
 import User from "../models/User";
-import Comment from "../models/Comment";
 import bcrypt from "bcrypt";
 
 export const createPost = async (req, res) => {
@@ -54,16 +53,35 @@ export const getPost = async (req, res) => {
 };
 
 export const getPosts = async (req, res) => {
-  const { category } = req.query;
-  try {
-    const posts = await Post.find({ category })
-      .sort({ createdAt: "desc" })
-      .populate("owner");
-    return res.status(200).send({ state: "success", posts });
-  } catch {
-    return res.satus(400).send({
-      state: "serverError",
-    });
+  const { category, sort, offset } = req.query;
+  if (sort === "upvote") {
+    try {
+      const posts = await Post.find({ category }).sort({
+        meta: { upvotes: "desc" },
+      });
+      const sortedPosts = posts.slice(0, offset);
+      return res.status(200).send({ state: "success", sortedPosts });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send({
+        state: "serverError",
+      });
+    }
+  } else {
+    try {
+      let posts = await Post.find({ category })
+        .sort({ createdAt: "desc" })
+        .populate("owner");
+      if (offset) {
+        posts = posts.slice(0, offset);
+      }
+      return res.status(200).send({ state: "success", posts });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send({
+        state: "serverError",
+      });
+    }
   }
 };
 
@@ -125,7 +143,6 @@ export const deletePost = async (req, res) => {
   try {
     const user = await User.findById(userId);
     await Post.findByIdAndDelete(postId);
-    console.log(user.posts);
     user.posts.splice(user.posts.indexOf(postId), 1);
     user.save();
     return res.status(200).send({ state: "success" });

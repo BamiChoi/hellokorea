@@ -14,9 +14,13 @@ export const getPost = async (postId: string) => {
     });
 };
 
-export const getPosts = async (category: string) => {
+export const getPosts = async (
+  category: string,
+  sort?: string,
+  offset?: number
+) => {
   return await axios
-    .get(`/api/posts`, { params: { category } })
+    .get(`/api/posts`, { params: { category, sort, offset } })
     .then((response) => response.data)
     .catch((error) => {
       if (error.response.data.state === "notFound") {

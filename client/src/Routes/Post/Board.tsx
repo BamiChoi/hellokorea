@@ -46,22 +46,22 @@ function Board() {
                 {post.title}
               </Link>
               <div className="flex justify-between w-full">
-                <div className="display flex space-x-4">
-                  <div className="disply flex">
-                    <img
-                      alt="owner_avatar"
-                      src={"/" + post.owner.avatar}
-                      className="bg-white w-6 h-6 rounded-full mr-2"
-                    />
-                    <span>{post.owner.nickname}</span>
-                  </div>
-                  <div className="space-x-1">
-                    <span>{post.meta.views} views</span>
-                    <span>{post.meta.upvotes} up</span>
-                    <span>{post.meta.downvotes} down</span>
-                  </div>
+                <div className="flex overflow-hidden items-center">
+                  <img
+                    alt="owner_avatar"
+                    src={"/" + post.owner.avatar}
+                    className="bg-white w-6 h-6 rounded-full mr-2"
+                  />
+                  <span className="text-sm overflow-hidden text-ellipsis">
+                    {post.owner.nickname}
+                  </span>
                 </div>
-                <span>{post.createdAt}</span>
+                <div className="space-x-1 text-sm">
+                  <span>{post.meta.views} views</span>
+                  <span>{post.meta.upvotes} up</span>
+                  <span>{post.meta.downvotes} down</span>
+                  <span>{post.createdAt}</span>
+                </div>
               </div>
             </li>
           ))}

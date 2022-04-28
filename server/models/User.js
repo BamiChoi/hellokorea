@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
   recomments: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Recomment" },
   ],
+  voted: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Post" },
+  ],
 });
 
 userSchema.pre("save", async function () {

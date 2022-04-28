@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { logout } from "reducers/auth";
 import { useEffect } from "react";
+import WithCategory from "Routes/protector/WithCategory";
 
 function App() {
   const dispatch = useDispatch();
@@ -81,7 +82,14 @@ function App() {
           />
         </Route>
         <Route path=":category">
-          <Route index element={<Board />} />
+          <Route
+            index
+            element={
+              <WithCategory>
+                <Board />
+              </WithCategory>
+            }
+          />
           <Route
             path="write"
             element={
