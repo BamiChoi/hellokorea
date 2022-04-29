@@ -2,39 +2,55 @@ import Button from "Components/Button";
 import Input from "Components/Input";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import Overlay from "Components/Overlay";
+import { useMutation } from "react-query";
+import { deletePost } from "api/postApi";
 
 export interface IDeletePostFrom {
   password: string;
   serverError?: string;
 }
 
+interface IDeletePostMutation {
+  postId: string;
+  data: IDeletePostFrom;
+}
+
+interface IDeletePostError {
+  response: {
+    data: {
+      state: string;
+      field: "serverError";
+      message: string;
+    };
+  };
+}
+
 function Delete() {
   const { postId, category } = useParams();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
   } = useForm<IDeletePostFrom>();
+  const { isLoading, mutate } = useMutation(
+    ({ postId, data }: IDeletePostMutation) => deletePost(postId, data),
+    {
+      onSuccess: () => navigate(`/${category}`),
+      onError: (error: IDeletePostError) => {
+        const { field, message } = error.response.data;
+        setError(field, { message });
+      },
+    }
+  );
+  const isValid = async (data: IDeletePostFrom) => {
+    mutate({ postId: postId!, data });
+  };
   const onClickOverlay = () => {
     navigate(-1);
   };
-  const navigate = useNavigate();
-  const isValid = async (data: IDeletePostFrom) => {
-    await axios
-      .post(`/api/posts/${postId}`, data)
-      .then((response) => {
-        console.log(response.data);
-        navigate(`/${category}`);
-      })
-      .catch((error) => {
-        const { field, message } = error.response.data;
-        setError(field, { message });
-      });
-  };
-
   return (
     <>
       <Overlay onClick={onClickOverlay}></Overlay>

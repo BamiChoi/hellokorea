@@ -4,52 +4,69 @@ import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Input from "Components/Input";
-import axios from "axios";
 import TextEditor from "Components/post/TextEditor";
 import { useNavigate, useParams } from "react-router-dom";
 import { IWritePostForm } from "./Write";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { IPostResponse } from "./Post";
-import { getPost } from "api/postApi";
+import { editPost, getPost } from "api/postApi";
 import { useEffect } from "react";
+
+interface IEditPostMutation {
+  postId: string;
+  data: IWritePostForm;
+}
+
+interface IEditPostError {
+  response: {
+    data: {
+      state: string;
+      field: "serverError";
+      message: string;
+    };
+  };
+}
 
 function Edit() {
   const { postId, category } = useParams();
   const { isLoading, data, isError, error } = useQuery<IPostResponse>(
     [postId, "getPost"],
     () => getPost(postId!),
-    {}
+    {
+      retry: false,
+    }
   );
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors },
     control,
     setValue,
+    formState: { errors },
   } = useForm<IWritePostForm>({
     mode: "onBlur",
   });
-  const isValid = async (data: IWritePostForm) => {
-    console.log(data);
-    await axios
-      .patch(`/api/posts/${postId}`, data)
-      .then((response) => {
-        console.log(response.data);
-        navigate(`/${category}/${postId}`);
-      })
-      .catch((error) => {
+  const { isLoading: isEditLoading, mutate } = useMutation(
+    ({ postId, data }: IEditPostMutation) => editPost(postId, data),
+    {
+      onSuccess: () => navigate(`/${category}/${postId}`),
+      onError: (error: IEditPostError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
-      });
+      },
+    }
+  );
+  const isValid = async (data: IWritePostForm) => {
+    mutate({ postId: postId!, data });
   };
+  const post = data?.data.post;
   useEffect(() => {
-    setValue("category", data?.post.category!);
-    setValue("title", data?.post.title!);
-  }, [setValue, data?.post.category, data?.post.title]);
+    setValue("category", post?.category!);
+    setValue("title", post?.title!);
+  }, [setValue, post?.category, post?.title]);
   const setDefaultContents = () => {
-    setValue("contents", data?.post.contents!);
+    setValue("contents", post?.contents!);
   };
   return (
     <Wrapper>

@@ -7,8 +7,10 @@ import { Link, useParams } from "react-router-dom";
 import { IPost } from "./Post";
 
 export interface IPostsResponse {
-  status: string;
-  posts: IPost[];
+  data: {
+    status: string;
+    posts: IPost[];
+  };
 }
 
 function Board() {
@@ -20,9 +22,7 @@ function Board() {
       retry: false,
     }
   );
-  if (isError) {
-    if (error instanceof Error) console.log(error.message);
-  }
+  // ToDo: Error handling
   return (
     <Wrapper>
       <div className="w-full flex flex-col justify-center px-10">
@@ -37,7 +37,7 @@ function Board() {
         </div>
 
         <ul className="border-y-2 border-main py-2 space-y-2">
-          {data?.posts.map((post) => (
+          {data?.data.posts.map((post) => (
             <li
               key={post._id}
               className="border-b-2 border-gray last:border-0 flex flex-col items-start pb-2 px-2"

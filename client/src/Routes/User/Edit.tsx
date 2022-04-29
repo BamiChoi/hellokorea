@@ -1,16 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
-import { loggedInUser } from "reducers/auth";
+import { IUser, loggedInUser } from "reducers/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { editUser } from "reducers/auth";
-import axios from "axios";
 import React, { useState } from "react";
 import Input from "Components/Input";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
+import { editProfile, getProfile } from "api/userApi";
+import { useMutation, useQuery } from "react-query";
+import { IProfileResponse } from "./Profile";
 
-interface IProfileForm {
+export interface IEditProfileForm {
   nickname: string;
   statusMessage: string;
   avatar: string;
@@ -20,26 +22,62 @@ interface IProfileForm {
   serverError?: string;
 }
 
+interface IEditProfileResponse {
+  data: {
+    state: string;
+    editedUser: IUser;
+  };
+}
+
+interface IEditProfileError {
+  response: {
+    data: {
+      state: string;
+      field: "nickname" | "serverError";
+      message: string;
+    };
+  };
+}
+
+interface IEditProfileMutation {
+  id: string;
+  data: IEditProfileForm;
+}
+
 function Edit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(loggedInUser);
-  const {
-    id,
-    nickname,
-    statusMessage,
-    avatar,
-    firstname,
-    lastname,
-    birthdate,
-  } = user || {};
+  const { isLoading, data, isError, error } = useQuery<IProfileResponse>(
+    [user.id, "getProfile"],
+    () => getProfile(user.id),
+    {
+      retry: false,
+    }
+  );
+  // ToDo: Error handling
+  const { isLoading: isEditLoading, mutate } = useMutation(
+    ({ id, data }: IEditProfileMutation) => editProfile(id, data),
+    {
+      onSuccess: (data: IEditProfileResponse) => {
+        dispatch(editUser({ ...data.data.editedUser }));
+        navigate("/user");
+      },
+      onError: (error: IEditProfileError) => {
+        const { field, message } = error.response.data;
+        setError(field, { message });
+      },
+    }
+  );
+  const { nickname, avatar, statusMessage, firstname, lastname, birthdate } =
+    data?.data.user || {};
   const [newAvatar, setNewAvatar] = useState("");
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<IProfileForm>({
+  } = useForm<IEditProfileForm>({
     defaultValues: {
       nickname,
       avatar,
@@ -58,25 +96,9 @@ function Edit() {
     };
     reader.readAsDataURL(event.target.files![0]);
   };
-  const isValid = async (data: IProfileForm) => {
-    let formData = new FormData();
-    formData.append("avatar", data.avatar[0]);
-    formData.append("nickname", data.nickname);
-    formData.append("firstname", data.firstname);
-    formData.append("lastname", data.lastname);
-    formData.append("birthdate", data.birthdate);
-    formData.append("statusMessage", data.statusMessage);
-    await axios
-      .post(`/api/users/${id}`, formData)
-      .then((response) => {
-        console.log(response.data);
-        dispatch(editUser({ ...response.data }));
-        navigate("/user");
-      })
-      .catch((error) => {
-        const { field, message } = error.response.data;
-        setError(field, { message });
-      });
+  const isValid = async (data: IEditProfileForm) => {
+    const id = user.id;
+    mutate({ id, data });
   };
 
   return (
@@ -91,7 +113,7 @@ function Edit() {
           <div className="flex justify-start items-center w-full ">
             <img
               alt="avatar"
-              src={newAvatar ? newAvatar : "/" + avatar}
+              src={newAvatar ? newAvatar : "/" + data?.data.user.avatar}
               className="bg-white w-32 h-32 rounded-full mb-4"
             />
             <div className="flex flex-col ml-5 space-y-2">

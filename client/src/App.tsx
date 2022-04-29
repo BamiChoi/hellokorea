@@ -7,8 +7,8 @@ import Profile from "Routes/User/Profile";
 import Password from "Routes/User/Password";
 import Board from "Routes/Post/Board";
 import Write from "Routes/Post/Write";
-import LogoutOnly from "Routes/protector/LogoutOnly";
-import LoggedInOnly from "Routes/protector/LoggedInOnly";
+import LogoutOnly from "Routes/middlewares/LogoutOnly";
+import LoggedInOnly from "Routes/middlewares/LoggedInOnly";
 import Post from "Routes/Post/Post";
 import ProfileEdit from "Routes/User/Edit";
 import PostEdit from "Routes/Post/Edit";
@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { logout } from "reducers/auth";
 import { useEffect } from "react";
-import WithCategory from "Routes/protector/WithCategory";
+import WithCategory from "Routes/middlewares/WithCategory";
 
 function App() {
   const dispatch = useDispatch();

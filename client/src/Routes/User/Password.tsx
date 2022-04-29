@@ -2,22 +2,37 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser, logout } from "reducers/auth";
-import axios from "axios";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
 import Input from "Components/Input";
+import { useMutation } from "react-query";
+import { changePassword } from "api/userApi";
 
-interface IPasswordChangeForm {
+export interface IPasswordChangeForm {
   currentPassword: string;
   newPassword: string;
   newPassword2: string;
   serverError?: string;
 }
 
+interface IPasswordChangeMutation {
+  id: string;
+  data: IPasswordChangeForm;
+}
+
+interface IPasswordChangeError {
+  response: {
+    data: {
+      state: string;
+      field: "currentPassword" | "newPassword2" | "serverError";
+      message: string;
+    };
+  };
+}
+
 function Password() {
   const user = useSelector(loggedInUser);
-  const { id } = user || {};
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -28,26 +43,23 @@ function Password() {
     formState: { errors },
   } = useForm<IPasswordChangeForm>({ mode: "onBlur" });
   const newPassword = watch("newPassword");
-
-  const isValid = async (data: IPasswordChangeForm) => {
-    await axios
-      .post(`/api/users/${id}/password`, data)
-      .then(async (response) => {
-        window.alert("Password Change is Done. Please login again");
-        await axios
-          .get("/api/session")
-          .then((response) => {
-            dispatch(logout());
-            navigate("/login");
-          })
-          .catch((error) => {
-            // ToDo: redirect to Error page
-          });
-      })
-      .catch((error) => {
+  const { isLoading, mutate } = useMutation(
+    ({ id, data }: IPasswordChangeMutation) => changePassword(id, data),
+    {
+      onSuccess: () => {
+        window.alert("Password change is success. Please Login again");
+        dispatch(logout());
+        navigate("/login");
+      },
+      onError: (error: IPasswordChangeError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
-      });
+      },
+    }
+  );
+  const isValid = async (data: IPasswordChangeForm) => {
+    const id = user.id;
+    mutate({ id, data });
   };
   return (
     <Wrapper>

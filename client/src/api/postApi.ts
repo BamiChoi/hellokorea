@@ -1,17 +1,10 @@
 import axios from "axios";
+import { IDeletePostFrom } from "Routes/Post/Delete";
 import { IVoteRequest } from "Routes/Post/Post";
+import { IWritePostForm } from "Routes/Post/Write";
 
 export const getPost = async (postId: string) => {
-  return await axios
-    .get(`/api/posts/${postId}`)
-    .then((response) => response.data)
-    .catch((error) => {
-      if (error.response.data.state === "notFound") {
-        throw new Error("notFound");
-      } else {
-        throw new Error("serverError");
-      }
-    });
+  return await axios.get(`/api/posts/${postId}`);
 };
 
 export const getPosts = async (
@@ -19,18 +12,21 @@ export const getPosts = async (
   sort?: string,
   offset?: number
 ) => {
-  return await axios
-    .get(`/api/posts`, { params: { category, sort, offset } })
-    .then((response) => response.data)
-    .catch((error) => {
-      if (error.response.data.state === "notFound") {
-        throw new Error("notFound");
-      } else {
-        throw new Error("serverError");
-      }
-    });
+  return await axios.get(`/api/posts`, { params: { category, sort, offset } });
 };
 
 export const countVote = async (data: IVoteRequest) => {
   return await axios.post(`/api/posts/${data.postId}/vote`, data);
+};
+
+export const createPost = async (data: IWritePostForm) => {
+  return axios.post("/api/posts", data);
+};
+
+export const editPost = async (postId: string, data: IWritePostForm) => {
+  return await axios.patch(`/api/posts/${postId}`, data);
+};
+
+export const deletePost = async (postId: string, data: IDeletePostFrom) => {
+  return await axios.post(`/api/posts/${postId}`, data);
 };

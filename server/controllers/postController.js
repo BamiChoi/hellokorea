@@ -9,6 +9,13 @@ export const createPost = async (req, res) => {
     },
     body: { category, title, contents },
   } = req;
+  const user = await User.findById(_id);
+  if (!user)
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "You can't write a post.",
+    });
   try {
     const newPost = await Post.create({
       category,
@@ -16,15 +23,16 @@ export const createPost = async (req, res) => {
       contents,
       owner: _id,
     });
-    const user = await User.findById(_id);
     user.posts.push(newPost._id);
     user.save();
     return res.status(200).send({ state: "success", postId: newPost._id });
   } catch (error) {
     console.log(error);
-    return res
-      .status(400)
-      .send({ field: "serverError", message: "Fail to write a post" });
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Failed to write a post",
+    });
   }
 };
 
@@ -93,14 +101,18 @@ export const editPost = async (req, res) => {
   } = req;
   const post = await Post.findById(postId);
   if (!post) {
-    return res
-      .status(400)
-      .send({ field: "serverError", message: "Post not Found" });
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Post not Found",
+    });
   }
   if (String(post.owner) !== user._id) {
-    return res
-      .status(400)
-      .send({ field: "serverError", message: "You can not edit this post" });
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "You can not edit this post",
+    });
   }
   try {
     post.title = title;
@@ -109,9 +121,11 @@ export const editPost = async (req, res) => {
     return res.status(200).send({ state: "success " });
   } catch (error) {
     console.log(error);
-    res
-      .status(400)
-      .send({ field: "serverError", message: "Fail to edit this post" });
+    res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Failed to edit this post",
+    });
   }
 };
 
@@ -127,7 +141,7 @@ export const deletePost = async (req, res) => {
   if (!post) {
     return res
       .status(404)
-      .send({ field: "ServerError", messasge: "Post not Found" }); // Form 에러 표시가 아니라 Not Found 리다이렉트 처리해야함
+      .send({ field: "ServerError", messasge: "Post not Found" });
   }
   if (String(post.owner._id) !== userId) {
     return res

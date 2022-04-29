@@ -5,4 +5,5 @@ const sessionRouter = express.Router();
 
 sessionRouter.route("/").get(logout).post(login);
 sessionRouter.route("/check-auth").get(checkAuth);
+
 export default sessionRouter;

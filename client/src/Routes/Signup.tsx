@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Input from "Components/Input";
 import Button from "Components/Button";
+import { useMutation } from "react-query";
+import { signupUser } from "api/userApi";
 
-interface ISignupForm {
+export interface ISignupForm {
   email: string;
   firstname: string;
   lastname: string;
@@ -15,6 +16,16 @@ interface ISignupForm {
   password: string;
   password2: string;
   serverError?: string;
+}
+
+interface ISignupError {
+  response: {
+    data: {
+      state: string;
+      field: "email" | "password" | "nickname";
+      message: string;
+    };
+  };
 }
 
 function Signup() {
@@ -27,33 +38,18 @@ function Signup() {
     setError,
   } = useForm<ISignupForm>({ mode: "onBlur" });
   const password = watch("password");
-  const isValid = async (data: ISignupForm) => {
-    const {
-      email,
-      nickname,
-      firstname,
-      lastname,
-      birthdate,
-      password,
-      password2,
-    } = data;
-    await axios
-      .post("/api/users", {
-        email,
-        nickname,
-        firstname,
-        lastname,
-        birthdate,
-        password,
-        password2,
-      })
-      .then((response) => {
-        navigate("/login");
-      })
-      .catch((error) => {
+  const { isLoading, mutate } = useMutation(
+    (data: ISignupForm) => signupUser(data),
+    {
+      onSuccess: () => navigate("/login"),
+      onError: (error: ISignupError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
-      });
+      },
+    }
+  );
+  const isValid = async (data: ISignupForm) => {
+    mutate(data);
   };
   return (
     <Wrapper>

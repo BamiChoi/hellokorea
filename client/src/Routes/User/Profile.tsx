@@ -1,14 +1,30 @@
 import { useSelector } from "react-redux";
-import { loggedInUser } from "reducers/auth";
+import { IUser, loggedInUser } from "reducers/auth";
 import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 import Activities from "Components/user/Activities";
 import RecentActivity from "Components/user/RecentActivity";
 import ProfileMenuNav from "Components/user/ProfileMenuNav";
+import { getProfile } from "api/userApi";
+import { useQuery } from "react-query";
+
+export interface IProfileResponse {
+  data: {
+    status: string;
+    user: IUser;
+  };
+}
 
 function Profile() {
   const user = useSelector(loggedInUser);
-  const { nickname, statusMessage, avatar } = user || {};
+  const { isLoading, data, isError, error } = useQuery<IProfileResponse>(
+    [user.id, "getProfile"],
+    () => getProfile(user.id),
+    {
+      retry: false,
+    }
+  );
+  // ToDo: Error Handling
   return (
     <Wrapper>
       <div className="w-full flex flex-col items-center justify-center px-10">
@@ -34,20 +50,19 @@ function Profile() {
           <div className="flex justify-start items-center w-full ml-20">
             <img
               alt="avatar"
-              src={"/" + avatar}
+              src={"/" + data?.data.user.avatar}
               className="bg-white w-32 h-32 rounded-full mb-4"
             />
             <div className="flex flex-col ml-14 space-y-4">
-              <span>{nickname}</span>
-              <span>{statusMessage}</span>
+              <span>{data?.data.user.nickname}</span>
+              <span>{data?.data.user.statusMessage}</span>
             </div>
           </div>
         </div>
         <div>
           <Activities />
           <ProfileMenuNav />
-          <RecentActivity nickname={nickname} activity="Recent Posts" />
-          <RecentActivity nickname={nickname} activity="Recent Comments" />
+          <RecentActivity nickname={user.nickname} />
         </div>
       </div>
     </Wrapper>

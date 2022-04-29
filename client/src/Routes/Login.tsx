@@ -1,15 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { login } from "reducers/auth";
+import { IUser, login } from "reducers/auth";
 import Wrapper from "Components/Wrapper";
-import axios from "axios";
 import Input from "Components/Input";
 import Button from "Components/Button";
+import { useMutation } from "react-query";
+import { loginUser } from "api/sessionApi";
 
-interface ILoginForm {
+export interface ILoginForm {
   email: string;
   password: string;
+  serverError?: string;
+}
+
+interface ILoginResponse {
+  data: {
+    state: string;
+    loggedInUser: IUser;
+  };
+}
+
+interface ILoginError {
+  response: {
+    data: {
+      state: string;
+      field: "email" | "password" | "serverError";
+      message: string;
+    };
+  };
 }
 
 function Login() {
@@ -21,46 +40,21 @@ function Login() {
     formState: { errors },
     setError,
   } = useForm<ILoginForm>({ mode: "onBlur" });
-  const isValid = async (data: ILoginForm) => {
-    await axios
-      .post("api/session", {
-        email: data.email,
-        password: data.password,
-      })
-      .then((response) => {
-        const {
-          id,
-          nickname,
-          email,
-          firstname,
-          lastname,
-          birthdate,
-          avatar,
-          loggedIn,
-          statusMessage,
-          verified,
-        } = response.data;
-        navigate("/"); // maximum depth error 때문에 dispatch 보다 위에 올림. 바람직하지 않음.
-        dispatch(
-          login({
-            id,
-            nickname,
-            email,
-            firstname,
-            lastname,
-            birthdate,
-            avatar,
-            loggedIn,
-            statusMessage,
-            verified,
-          })
-        );
-      })
-      .catch((error) => {
-        const field = error.response.data.field;
-        const message = error.response.data.message;
+  const { isLoading, mutate } = useMutation(
+    (data: ILoginForm) => loginUser(data),
+    {
+      onSuccess: (data: ILoginResponse) => {
+        navigate("/");
+        dispatch(login(data.data.loggedInUser));
+      },
+      onError: (error: ILoginError) => {
+        const { field, message } = error.response.data;
         setError(field, { message });
-      });
+      },
+    }
+  );
+  const isValid = async (data: ILoginForm) => {
+    mutate(data);
   };
   return (
     <Wrapper>

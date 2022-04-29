@@ -1,5 +1,4 @@
 import List from "Components/List";
-import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import { useQuery } from "react-query";
 import { IPostsResponse } from "./Post/Board";
@@ -16,11 +15,10 @@ function Home() {
   if (isError) {
     if (error instanceof Error) console.log(error.message);
   }
-  console.log(data);
   return (
     <Wrapper>
       <div className="w-full flex flex-col justify-center px-10">
-        <List posts={data?.posts} category="notice" board="notice" />
+        <List posts={data?.data.posts} category="notice" board="notice" />
       </div>
     </Wrapper>
   );

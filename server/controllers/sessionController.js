@@ -1,14 +1,15 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
-import session from "express-session";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    return res
-      .status(400)
-      .send({ field: "email", message: "This email does not exist" });
+    return res.status(400).send({
+      state: "failed",
+      field: "email",
+      message: "This email does not exist",
+    });
   }
   const passwordValidation = await bcrypt.compare(password, user.password);
   if (!passwordValidation) {
@@ -16,13 +17,26 @@ export const login = async (req, res) => {
       .status(400)
       .send({ field: "password", message: "Password is not correct" });
   }
-  req.session.loggedIn = true;
-  req.session.user = user;
-  req.session.save();
-  const {
-    loggedIn,
-    user: {
-      _id: id,
+  try {
+    req.session.loggedIn = true;
+    req.session.user = user;
+    req.session.save();
+    const {
+      loggedIn,
+      user: {
+        _id: id,
+        nickname,
+        email: userEmail,
+        statusMessage,
+        firstname,
+        lastname,
+        birthdate,
+        avatar,
+        verified,
+      },
+    } = req.session;
+    const loggedInUser = {
+      id,
       nickname,
       email: userEmail,
       statusMessage,
@@ -30,22 +44,19 @@ export const login = async (req, res) => {
       lastname,
       birthdate,
       avatar,
+      loggedIn,
       verified,
-    },
-  } = req.session;
-
-  return res.status(200).send({
-    id,
-    nickname,
-    email: userEmail,
-    statusMessage,
-    firstname,
-    lastname,
-    birthdate,
-    avatar,
-    loggedIn,
-    verified,
-  });
+    };
+    return res
+      .status(200)
+      .send({ state: "failed", state: "success", loggedInUser });
+  } catch {
+    return req.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Failed to login",
+    });
+  }
 };
 
 export const logout = async (req, res) => {

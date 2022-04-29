@@ -1,23 +1,23 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedInUser, logout } from "reducers/auth";
-import axios from "axios";
 import Usermenu from "./Usermenu";
+import { useMutation } from "react-query";
+import { logoutUser } from "api/sessionApi";
 
 function Header() {
   const user = useSelector(loggedInUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isLoading, mutate } = useMutation(logoutUser, {
+    onSuccess: () => {
+      dispatch(logout());
+      navigate("/");
+    },
+    onError: (error) => console.log(error), // ToDo: Error handling
+  });
   const onClickLogout = async () => {
-    await axios
-      .get("/api/session")
-      .then((response) => {
-        dispatch(logout());
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error); // ToDo: redirect to Error page
-      });
+    mutate();
   };
   return (
     <div className="bg-main border-point border-b-8 h-24 flex justify-between items-center px-5 fixed w-full z-[999]">
