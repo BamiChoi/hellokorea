@@ -63,7 +63,7 @@ function Password() {
   };
   return (
     <Wrapper>
-      <div className="w-full flex flex-col items-center justify-center px-10">
+      <main className="w-full flex flex-col items-center justify-center px-10">
         <Title text="Change password"></Title>
         <form
           onSubmit={handleSubmit(isValid)}
@@ -116,7 +116,7 @@ function Password() {
 
           <Button text="Change Password" errors={errors.serverError?.message} />
         </form>
-      </div>
+      </main>
     </Wrapper>
   );
 }

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedInUser, logout } from "reducers/auth";
-import Usermenu from "./Usermenu";
+import NavItem from "./NavItem";
 import { useMutation } from "react-query";
 import { logoutUser } from "api/sessionApi";
 
@@ -20,29 +20,24 @@ function Header() {
     mutate();
   };
   return (
-    <div className="bg-main border-point border-b-8 h-24 flex justify-between items-center px-5 fixed w-full z-[999]">
+    <header className="bg-main border-point border-b-8 h-24 flex justify-between items-center px-5 fixed w-full z-[999]">
       <Link to="/">
         <h1 className="text-white text-2xl">HELLO KOREA</h1>
       </Link>
-      <div className="flex space-x-2">
+      <nav>
         {user ? (
-          <>
-            <Usermenu url="/user" text="My page"></Usermenu>
-            <button
-              onClick={onClickLogout}
-              className="bg-white rounded-md px-2 py-1 w-20 hover:text-main cursor-pointer  text-center"
-            >
-              Logout
-            </button>
-          </>
+          <ul className="list-none flex space-x-2">
+            <NavItem url="/user" text="My page" />
+            <NavItem onClick={onClickLogout} text="logout" />
+          </ul>
         ) : (
-          <>
-            <Usermenu url="/signup" text="Sign up"></Usermenu>
-            <Usermenu url="/login" text="Login"></Usermenu>
-          </>
+          <ul className="list-none flex space-x-2">
+            <NavItem url="/signup" text="Sign up" />
+            <NavItem url="/login" text="Login" />
+          </ul>
         )}
-      </div>
-    </div>
+      </nav>
+    </header>
   );
 }
 

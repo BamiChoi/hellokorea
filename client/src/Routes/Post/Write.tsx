@@ -65,7 +65,7 @@ function Write() {
   };
   return (
     <Wrapper>
-      <div className="w-full h-full flex flex-col justify-center items-center">
+      <main className="w-full h-full flex flex-col justify-center items-center">
         <Title text="Write a post"></Title>
         <form onSubmit={handleSubmit(isValid)} className="h-full px-10 h-">
           <Input
@@ -82,7 +82,7 @@ function Write() {
           <TextEditor control={control} setDefaultContents={null}></TextEditor>
           <Button text="submit" errors={errors?.serverError?.message}></Button>
         </form>
-      </div>
+      </main>
     </Wrapper>
   );
 }

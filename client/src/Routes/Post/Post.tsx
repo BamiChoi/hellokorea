@@ -93,46 +93,49 @@ function Post() {
     if (error instanceof Error) console.log(error.message);
   }
   const post = data && data?.data.post;
+  // ToDo: Sementic을 잘 적용할 수 있도록 HTML 구조 개선.
   return (
     <Wrapper>
-      <div className="w-full px-10">
-        <div className="flex items-center justify-between">
+      <main className="w-full px-10">
+        <nav className="flex items-center justify-between w-full">
           <Title text={category!}></Title>
-          <Link to={`/${category}/write`}>
-            <button className="bg-main px-3 py-2 text-white rounded-md">
-              Write
-            </button>
-          </Link>
-        </div>
+          <Button
+            text="Write"
+            url={`/${category}/write`}
+            customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md "
+          />
+        </nav>
         {post ? (
           <>
-            <div className="border-b-4 border-b-main mt-8 px-2 mb-2 pb-2">
-              <h1>{post.title}</h1>
-            </div>
-            <div className="mb-1 flex items-center space-x-4 justify-between px-2">
-              <div className="flex justify-between w-full">
-                <div className="display flex space-x-4">
-                  <div className="disply flex">
-                    <img
-                      alt="owner_avatar"
-                      src={"/" + post.owner.avatar}
-                      className="bg-white w-8 h-8 rounded-full mr-2"
-                    />
-                    <span>{post.owner.nickname}</span>
+            <section>
+              <h1 className="border-b-4 border-b-main mt-8 px-2 mb-2 pb-2">
+                {post.title}
+              </h1>
+              <section className="mb-1 flex items-center space-x-4 justify-between px-2">
+                <div className="flex justify-between w-full">
+                  <div className="display flex space-x-4">
+                    <div className="disply flex">
+                      <img
+                        alt="owner_avatar"
+                        src={"/" + post.owner.avatar}
+                        className="bg-white w-8 h-8 rounded-full mr-2"
+                      />
+                      <span>{post.owner.nickname}</span>
+                    </div>
+                    <div className="space-x-1">
+                      <span>{post.meta.views} views</span>
+                      <span>{post.meta.upvotes} up</span>
+                      <span>{post.meta.downvotes} down</span>
+                    </div>
                   </div>
-                  <div className="space-x-1">
-                    <span>{post.meta.views} views</span>
-                    <span>{post.meta.upvotes} up</span>
-                    <span>{post.meta.downvotes} down</span>
-                  </div>
+                  <span>{post.createdAt}</span>
                 </div>
-                <span>{post.createdAt}</span>
-              </div>
-            </div>
-            <div className="mx-2 border-b-2 border-b-main pb-10 pt-10 mb-10">
-              {parse(data.data.post?.contents)}
-            </div>
-            <div className="flex w-full space-x-2 justify-end">
+              </section>
+              <article className="mx-2 border-b-2 border-b-main pb-10 pt-10 mb-10">
+                {parse(data.data.post?.contents)}
+              </article>
+            </section>
+            <section className="flex w-full space-x-2 justify-end">
               <Button
                 onClick={() => onClickVote("up")}
                 text="up"
@@ -144,7 +147,7 @@ function Post() {
                 customClassName="w-20 border-2 border-main px-3 py-2 text-black rounded-md"
               />
               {user && user.id === post.owner._id ? (
-                <div className="space-x-4">
+                <div className="space-x-2">
                   <Link to={"edit"}>
                     <Button
                       text="Edit"
@@ -159,20 +162,22 @@ function Post() {
                   </Link>
                 </div>
               ) : null}
-            </div>
+            </section>
             <CreateComment postId={postId!} />
-            <ul className="mt-10 space-y-4">
-              {post.comments?.map((comment) => (
-                <Comment
-                  key={comment._id}
-                  comment={comment}
-                  postId={postId!}
-                ></Comment>
-              ))}
-            </ul>
+            <section>
+              <ul className="mt-10 space-y-4">
+                {post.comments?.map((comment) => (
+                  <Comment
+                    key={comment._id}
+                    comment={comment}
+                    postId={postId!}
+                  ></Comment>
+                ))}
+              </ul>
+            </section>
           </>
         ) : null}
-      </div>
+      </main>
       <Outlet />
     </Wrapper>
   );

@@ -1,25 +1,12 @@
-import List from "Components/List";
+import List from "Components/post/PostList";
 import Wrapper from "Components/Wrapper";
-import { useQuery } from "react-query";
-import { IPostsResponse } from "./Post/Board";
-import { getPosts } from "api/postApi";
 
 function Home() {
-  const { isLoading, data, isError, error } = useQuery<IPostsResponse>(
-    ["notice", "getPosts"],
-    () => getPosts("notice", "new", 5),
-    {
-      retry: false,
-    }
-  );
-  if (isError) {
-    if (error instanceof Error) console.log(error.message);
-  }
   return (
     <Wrapper>
-      <div className="w-full flex flex-col justify-center px-10">
-        <List posts={data?.data.posts} category="notice" board="notice" />
-      </div>
+      <main className="w-full flex flex-col justify-center px-10">
+        <List title="notice" category="notice" sort="new" />
+      </main>
     </Wrapper>
   );
 }

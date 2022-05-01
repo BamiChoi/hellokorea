@@ -53,7 +53,7 @@ function Signup() {
   };
   return (
     <Wrapper>
-      <div className="w-full h-full flex flex-col justify-center items-center">
+      <main className="w-full h-full flex flex-col justify-center items-center">
         <Title text="Sign up" />
         <form
           onSubmit={handleSubmit(isValid)}
@@ -145,7 +145,7 @@ function Signup() {
           />
           <Button text="Create Account" errors={errors.serverError?.message} />
         </form>
-      </div>
+      </main>
     </Wrapper>
   );
 }

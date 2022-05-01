@@ -100,10 +100,10 @@ function Edit() {
     const id = user.id;
     mutate({ id, data });
   };
-
+  // ToDo : HTML 구조 개선
   return (
     <Wrapper>
-      <div className="w-full flex flex-col items-center justify-center px-10">
+      <main className="w-full flex flex-col items-center justify-center px-10">
         <Title text="Edit my info" />
         <form
           onSubmit={handleSubmit(isValid)}
@@ -217,7 +217,7 @@ function Edit() {
           </div>
           <Button text="Save Changes" errors={errors.serverError?.message} />
         </form>
-      </div>
+      </main>
     </Wrapper>
   );
 }

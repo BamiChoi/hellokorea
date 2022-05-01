@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom";
+
 interface ButtonProps {
   text: string;
   customClassName?: string;
   errors?: string | undefined;
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  url?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-function Button({ onClick, text, customClassName, errors }: ButtonProps) {
+function Button({ text, customClassName, url, onClick, errors }: ButtonProps) {
   return (
     <>
       <button
@@ -15,9 +18,11 @@ function Button({ onClick, text, customClassName, errors }: ButtonProps) {
             : "bg-main text-white hover:bg-powermain h-12 mt-4 w-full rounded-md"
         }
       >
-        {text}
+        <Link to={url ? url : ""}>{text}</Link>
       </button>
-      <span className="text-warning font-semibold">{errors}</span>
+      {errors ? (
+        <span className="text-warning font-semibold">{errors}</span>
+      ) : null}
     </>
   );
 }

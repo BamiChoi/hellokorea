@@ -70,8 +70,8 @@ function Edit() {
   };
   return (
     <Wrapper>
-      <div className="w-full h-full flex flex-col justify-center items-center">
-        <Title text="Edit post"></Title>
+      <main className="w-full h-full flex flex-col justify-center items-center">
+        <Title text="Edit post" />
         <form onSubmit={handleSubmit(isValid)} className="h-full px-10 h-">
           <Input
             label="Title"
@@ -90,7 +90,7 @@ function Edit() {
           ></TextEditor>
           <Button text="submit"></Button>
         </form>
-      </div>
+      </main>
     </Wrapper>
   );
 }

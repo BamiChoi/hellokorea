@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Sort } from "Components/post/PostList";
 import { IDeletePostFrom } from "Routes/Post/Delete";
 import { IVoteRequest } from "Routes/Post/Post";
 import { IWritePostForm } from "Routes/Post/Write";
@@ -9,7 +10,7 @@ export const getPost = async (postId: string) => {
 
 export const getPosts = async (
   category: string,
-  sort?: string,
+  sort?: Sort,
   offset?: number
 ) => {
   return await axios.get(`/api/posts`, { params: { category, sort, offset } });

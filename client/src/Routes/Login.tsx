@@ -58,7 +58,7 @@ function Login() {
   };
   return (
     <Wrapper>
-      <div className="w-full h-full flex justify-center items-center">
+      <main className="w-full h-full flex justify-center items-center">
         <form
           onSubmit={handleSubmit(isValid)}
           className="flex flex-col h-72 bg-main justify-center p-10 rounded-xl mt-24 w-96 space-y-4"
@@ -93,7 +93,7 @@ function Login() {
             customClassName="bg-point text-black h-10 mt-4 w-full rounded-md"
           />
         </form>
-      </div>
+      </main>
     </Wrapper>
   );
 }
