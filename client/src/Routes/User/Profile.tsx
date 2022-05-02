@@ -29,15 +29,17 @@ function Profile() {
   const profile = data?.data.user;
   return (
     <Wrapper>
-      <main className="w-full flex flex-col items-center justify-center px-10">
-        <Title text="My page" />
-        <ProfileCard profile={profile!} />
-        <section>
-          <Activities />
-          <ProfileMenuNav />
-          <RecentActivity nickname={user.nickname} />
-        </section>
-      </main>
+      {profile ? (
+        <main className="w-full flex flex-col items-center justify-center px-10">
+          <Title text="My page" />
+          <ProfileCard profile={profile} />
+          <section>
+            <Activities />
+            <ProfileMenuNav />
+            <RecentActivity nickname={user.nickname} />
+          </section>
+        </main>
+      ) : null}
     </Wrapper>
   );
 }

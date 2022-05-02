@@ -9,8 +9,18 @@ const postShcema = new mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
   meta: {
     views: { type: Number, required: true, default: 0 },
-    upvotes: { type: Number, required: true, default: 0 },
-    downvotes: { type: Number, required: true, default: 0 },
+    upvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    downvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 });

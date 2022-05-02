@@ -81,14 +81,14 @@ export const getActivities = async (req, res) => {
   try {
     const user = await User.findById(_id)
       .populate("posts")
-      .populate("comments");
+      .populate({ path: "comments", populate: { path: "target" } });
     if (!user) {
       return res
-        .satus(400)
+        .status(400)
         .send({ state: "failed", message: "User not Found" });
     }
-    const recentPosts = user.posts.slice(0, offset);
-    const recentComments = user.comments.slice(0, offset);
+    const recentPosts = user.posts.slice(0, offset).reverse();
+    const recentComments = user.comments.slice(0, offset).reverse();
     const activities = { recentPosts, recentComments };
     return res.status(200).send({ state: "success", activities });
   } catch (error) {

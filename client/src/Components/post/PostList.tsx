@@ -30,7 +30,7 @@ function PostList({ title, category, sort }: IPostListProps) {
       </Link>
       <ul className="border-y-2 border-main py-2 space-y-2">
         {data?.data.posts?.map((post) => (
-          <PostItem post={post} category={category} />
+          <PostItem key={post._id} post={post} category={category} />
         ))}
       </ul>
     </>

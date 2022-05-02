@@ -9,7 +9,7 @@ import Comment from "Components/post/Comment";
 import CreateComment from "Components/comment/CreateComment";
 import { loggedInUser } from "reducers/auth";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { queryClient } from "index";
 
 export interface IRecomment {
@@ -22,12 +22,13 @@ export interface IRecomment {
 }
 
 export interface IComment {
+  target: IPost;
   _id: string;
   text: string;
   nickname: string;
   avatar: string;
-  upvotes: number;
-  downvotes: number;
+  upvotes: string[];
+  downvotes: string[];
   createdAt: string;
   recomments: IRecomment[];
 }
@@ -49,8 +50,8 @@ export interface IPost {
   comments: IComment[];
   meta: {
     views: number;
-    upvotes: number;
-    downvotes: number;
+    upvotes: string[];
+    downvotes: string[];
   };
 }
 
@@ -58,28 +59,32 @@ export interface IPostResponse {
   data: {
     state: string;
     post: IPost;
+    isUpvoted: boolean;
+    isDownvoted: boolean;
     message?: string;
   };
 }
+interface IVoteState {
+  voted: boolean;
+  type?: "up" | "down";
+}
 
 export interface IVoteRequest {
-  voted: boolean;
-  postId: string | undefined;
-  type: "up" | "down";
+  postId: string;
+  votedState: IVoteState;
 }
 
 function Post() {
   const user = useSelector(loggedInUser);
   const { postId, category } = useParams();
-  const [voted, setVoted] = useState(false);
+  const [votedState, setVotedState] = useState<IVoteState>({ voted: false });
   const { mutate } = useMutation((data: IVoteRequest) => countVote(data), {
     onSuccess: () => {
       queryClient.invalidateQueries([postId, "getPost"]);
-      setVoted((prev) => !prev); // 다른 버튼 누를 경우도 있어서 이렇게하면 안됨.
     },
   });
-  const onClickVote = (type: "up" | "down") => {
-    const data = { postId, voted, type };
+  const onClickVote = (action: "up" | "down") => {
+    const data = { postId: postId!, votedState, action };
     mutate(data);
   };
   const { isLoading, data, isError, error } = useQuery<IPostResponse>(
@@ -92,7 +97,20 @@ function Post() {
   if (isError) {
     if (error instanceof Error) console.log(error.message);
   }
-  const post = data && data?.data.post;
+  const post = data?.data.post;
+  const isUpvoted = data?.data.isUpvoted;
+  const isDownvoted = data?.data.isDownvoted;
+  useEffect(() => {
+    if (isUpvoted) {
+      setVotedState({ voted: true, type: "up" });
+    } else if (isDownvoted) {
+      setVotedState({ voted: true, type: "down" });
+    } else if (!isUpvoted) {
+      setVotedState({ voted: false });
+    } else if (!isDownvoted) {
+      setVotedState({ voted: false });
+    }
+  }, [isUpvoted, isDownvoted]);
   // ToDo: Sementic을 잘 적용할 수 있도록 HTML 구조 개선.
   return (
     <Wrapper>
@@ -124,8 +142,8 @@ function Post() {
                     </div>
                     <div className="space-x-1">
                       <span>{post.meta.views} views</span>
-                      <span>{post.meta.upvotes} up</span>
-                      <span>{post.meta.downvotes} down</span>
+                      <span>{post.meta.upvotes.length} up</span>
+                      <span>{post.meta.downvotes.length} down</span>
                     </div>
                   </div>
                   <span>{post.createdAt}</span>
@@ -138,28 +156,33 @@ function Post() {
             <section className="flex w-full space-x-2 justify-end">
               <Button
                 onClick={() => onClickVote("up")}
-                text="up"
+                text={
+                  votedState.voted && votedState.type === "up" ? "up(v)" : "up"
+                }
                 customClassName="w-20 border-2 border-main bg-white px-3 py-2 text-black rounded-md"
               />
               <Button
                 onClick={() => onClickVote("down")}
-                text="down"
+                text={
+                  votedState.voted && votedState.type === "down"
+                    ? "down(v)"
+                    : "down"
+                }
                 customClassName="w-20 border-2 border-main px-3 py-2 text-black rounded-md"
               />
               {user && user.id === post.owner._id ? (
                 <div className="space-x-2">
-                  <Link to={"edit"}>
-                    <Button
-                      text="Edit"
-                      customClassName="w-20 hover:bg-powermain bg-main px-3 py-2  text-white rounded-md"
-                    />
-                  </Link>
-                  <Link to={"delete"}>
-                    <Button
-                      text="Delete"
-                      customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
-                    />
-                  </Link>
+                  <Button
+                    text="Edit"
+                    url="edit"
+                    customClassName="w-20 hover:bg-powermain bg-main px-3 py-2  text-white rounded-md"
+                  />
+
+                  <Button
+                    text="Delete"
+                    url="delete"
+                    customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
+                  />
                 </div>
               ) : null}
             </section>

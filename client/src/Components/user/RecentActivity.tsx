@@ -86,7 +86,9 @@ function RecentActivity({ nickname }: IRecentActivityProps) {
               key={comment._id}
               className="border-b-[1px] border-gray hover:bg-gray hover:cursor-pointer px-1 py-1"
             >
-              <Link to={``}>{comment.text}</Link>
+              <Link to={`/${comment.target.category}/${comment.target._id}`}>
+                {comment.text}
+              </Link>
             </li>
           ))}
         </ul>

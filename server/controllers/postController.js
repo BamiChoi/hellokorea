@@ -37,26 +37,42 @@ export const createPost = async (req, res) => {
 };
 
 export const getPost = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+  } = req;
+  const user = await User.findById(_id);
   const { postId } = req.params;
   try {
     const post = await Post.findById(postId)
       .populate("owner")
       .populate({
         path: "comments",
-        model: "Comment",
         populate: {
           path: "recomments",
-          model: "Recomment",
         },
       });
     if (post) {
-      return res.status(200).send({ state: "success", post });
+      const isUpvoted = user
+        ? post.meta.upvotes.indexOf(user._id) == -1
+          ? false
+          : true
+        : false;
+      const isDownvoted = user
+        ? post.meta.downvotes.indexOf(user._id) == -1
+          ? false
+          : true
+        : false;
+      return res
+        .status(200)
+        .send({ state: "success", post, isUpvoted, isDownvoted });
     } else {
-      return res.status(400).send({ state: "notFound" });
+      return res.status(400).send({ state: "failed", messasge: "notFound" });
     }
   } catch (error) {
     console.log(error);
-    return res.status(400).send({ state: "serverError" });
+    return res.status(400).send({ state: "failed", message: "serverError" });
   }
 };
 
@@ -72,7 +88,8 @@ export const getPosts = async (req, res) => {
     } catch (error) {
       console.log(error);
       return res.status(400).send({
-        state: "serverError",
+        state: "failed",
+        messasge: "serverError",
       });
     }
   } else {
@@ -87,7 +104,8 @@ export const getPosts = async (req, res) => {
     } catch (error) {
       console.log(error);
       return res.status(400).send({
-        state: "serverError",
+        state: "failed",
+        messagee: "serverError",
       });
     }
   }
@@ -173,22 +191,37 @@ export const countVote = async (req, res) => {
     session: {
       user: { _id },
     },
-    body: { postId, voted, type },
+    body: { postId, votedState, action },
   } = req;
-  console.log(voted);
+  const user = await User.findById(_id);
+
+  if (!user) {
+    return res.status(400).send({ state: "failed", message: "Not found user" });
+  }
   try {
     const post = await Post.findById(postId);
-    if (voted) {
-      if (type === "up") {
-        post.meta.upvotes -= 1;
-      } else if (type === "down") {
-        post.meta.downvotes -= 1;
+    const { voted, type } = votedState;
+    if (action == "up") {
+      if (!voted) {
+        post.meta.upvotes.push(user._id);
+      } else {
+        if (type == "up") {
+          post.meta.upvotes.splice(post.meta.upvotes.indexOf(user._id), 1);
+        } else {
+          post.meta.downvotes.splice(post.meta.downvotes.indexOf(user._id, 1));
+          post.meta.upvotes.push(user._id);
+        }
       }
-    } else {
-      if (type === "up") {
-        post.meta.upvotes += 1;
-      } else if (type === "down") {
-        post.meta.downvotes += 1;
+    } else if (action == "down") {
+      if (!voted) {
+        post.meta.downvotes.push(user._id);
+      } else {
+        if (type == "down") {
+          post.meta.downvotes.splice(post.meta.downvotes.indexOf(user._id), 1);
+        } else {
+          post.meta.upvotes.splice(post.meta.upvotes.indexOf(user._id, 1));
+          post.meta.downvotes.push(user._id);
+        }
       }
     }
     post.save();
