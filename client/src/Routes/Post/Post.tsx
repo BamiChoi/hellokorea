@@ -1,5 +1,5 @@
 import Wrapper from "Components/Wrapper";
-import { Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { useMutation, useQuery } from "react-query";
 import { countVote, getPost } from "api/postApi";
@@ -117,11 +117,12 @@ function Post() {
       <main className="w-full px-10">
         <nav className="flex items-center justify-between w-full">
           <Title text={category!}></Title>
-          <Button
-            text="Write"
-            url={`/${category}/write`}
-            customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md "
-          />
+          <Link to={`/${category}/write`}>
+            <Button
+              text="Write"
+              customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md "
+            />
+          </Link>
         </nav>
         {post ? (
           <>
@@ -172,17 +173,18 @@ function Post() {
               />
               {user && user.id === post.owner._id ? (
                 <div className="space-x-2">
-                  <Button
-                    text="Edit"
-                    url="edit"
-                    customClassName="w-20 hover:bg-powermain bg-main px-3 py-2  text-white rounded-md"
-                  />
-
-                  <Button
-                    text="Delete"
-                    url="delete"
-                    customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
-                  />
+                  <Link to="edit">
+                    <Button
+                      text="Edit"
+                      customClassName="w-20 hover:bg-powermain bg-main px-3 py-2  text-white rounded-md"
+                    />
+                  </Link>
+                  <Link to="delete">
+                    <Button
+                      text="Delete"
+                      customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
+                    />
+                  </Link>
                 </div>
               ) : null}
             </section>
