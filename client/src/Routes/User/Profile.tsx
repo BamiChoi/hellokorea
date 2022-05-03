@@ -7,7 +7,7 @@ import RecentActivity from "Components/user/RecentActivity";
 import ProfileMenuNav from "Components/user/ProfileMenuNav";
 import { getProfile } from "api/userApi";
 import { useQuery } from "react-query";
-import ProfileCard from "Components/user/ProfileCard";
+import ProfileInfo from "Components/user/ProfileInfo";
 
 export interface IProfileResponse {
   data: {
@@ -32,7 +32,7 @@ function Profile() {
       {profile ? (
         <main className="w-full flex flex-col items-center justify-center px-10">
           <Title text="My page" />
-          <ProfileCard profile={profile} />
+          <ProfileInfo profile={profile} />
           <section>
             <Activities />
             <ProfileMenuNav />

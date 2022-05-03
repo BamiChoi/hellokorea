@@ -14,8 +14,8 @@ function PostItem({ post, category }: IPostItemProps) {
       </Link>
       <div className="flex justify-end w-full space-x-1 text-sm">
         <span>{post.meta.views} views</span>
-        <span>{post.meta.upvotes} up</span>
-        <span>{post.meta.downvotes} down</span>
+        <span>{post.meta.upvotes.length} up</span>
+        <span>{post.meta.downvotes.length} down</span>
       </div>
     </li>
   );

@@ -95,7 +95,7 @@ export const getActivities = async (req, res) => {
     console.log(error);
     return res.status(400).send({
       state: "failed",
-      state: "serverError",
+      message: "serverError",
     });
   }
 };
@@ -103,18 +103,20 @@ export const getActivities = async (req, res) => {
 export const editProfile = async (req, res) => {
   const {
     session: {
-      user: { _id, avatar },
+      user: { _id, avatar, nickname: oldNickname },
     },
     body: { nickname, statusMessage, firstname, lastname, birthdate },
     file,
   } = req;
-  const nicknameExists = await User.exists({ nickname });
-  if (nicknameExists) {
-    return res.status(400).send({
-      state: "failed",
-      field: "nickname",
-      message: "Nickname already exists",
-    });
+  if (oldNickname !== nickname) {
+    const nicknameExists = await User.exists({ nickname });
+    if (nicknameExists) {
+      return res.status(400).send({
+        state: "failed",
+        field: "nickname",
+        message: "Nickname already exists",
+      });
+    }
   }
   try {
     const user = await User.findByIdAndUpdate(
@@ -130,7 +132,7 @@ export const editProfile = async (req, res) => {
       { new: true }
     );
     req.session.user = user;
-    const editedUser = {
+    const updatedUser = {
       nickname,
       avatar: file ? file.path : avatar,
       statusMessage,
@@ -140,7 +142,7 @@ export const editProfile = async (req, res) => {
     };
     return res.status(200).send({
       state: "success",
-      editedUser,
+      updatedUser,
     });
   } catch (error) {
     console.log(error);

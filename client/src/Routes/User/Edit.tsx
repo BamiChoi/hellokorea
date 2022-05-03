@@ -3,7 +3,7 @@ import { IUser, loggedInUser } from "reducers/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { editUser } from "reducers/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "Components/Input";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
@@ -11,11 +11,12 @@ import Button from "Components/Button";
 import { editProfile, getProfile } from "api/userApi";
 import { useMutation, useQuery } from "react-query";
 import { IProfileResponse } from "./Profile";
+import { queryClient } from "index";
 
 export interface IEditProfileForm {
   nickname: string;
   statusMessage: string;
-  avatar: string;
+  avatar: FileList;
   firstname: string;
   lastname: string;
   birthdate: string;
@@ -41,7 +42,7 @@ interface IEditProfileError {
 
 interface IEditProfileMutation {
   id: string;
-  data: IEditProfileForm;
+  formData: any;
 }
 
 function Edit() {
@@ -57,7 +58,7 @@ function Edit() {
   );
   // ToDo: Error handling
   const { isLoading: isEditLoading, mutate } = useMutation(
-    ({ id, data }: IEditProfileMutation) => editProfile(id, data),
+    ({ id, formData }: IEditProfileMutation) => editProfile(id, formData),
     {
       onSuccess: (data: IEditProfileResponse) => {
         dispatch(editUser({ ...data.data.editedUser }));
@@ -69,155 +70,160 @@ function Edit() {
       },
     }
   );
-  const { nickname, avatar, statusMessage, firstname, lastname, birthdate } =
-    data?.data.user || {};
-  const [newAvatar, setNewAvatar] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("");
   const {
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<IEditProfileForm>({
-    defaultValues: {
-      nickname,
-      avatar,
-      statusMessage,
-      firstname,
-      lastname,
-      birthdate,
-    },
     mode: "onBlur",
   });
-  const onChangeAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileUri = reader.result;
-      setNewAvatar(`${fileUri!}`);
-    };
-    reader.readAsDataURL(event.target.files![0]);
-  };
+  const avatar = watch("avatar");
+  useEffect(() => {
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  }, [avatar]);
   const isValid = async (data: IEditProfileForm) => {
     const id = user.id;
-    mutate({ id, data });
+    let formData = new FormData();
+    formData.append("avatar", data.avatar[0]);
+    formData.append("nickname", data.nickname);
+    formData.append("firstname", data.firstname);
+    formData.append("lastname", data.lastname);
+    formData.append("birthdate", data.birthdate);
+    formData.append("statusMessage", data.statusMessage);
+    mutate({ id, formData });
   };
   // ToDo : HTML 구조 개선
   return (
     <Wrapper>
-      <main className="w-full flex flex-col items-center justify-center px-10">
-        <Title text="Edit my info" />
-        <form
-          onSubmit={handleSubmit(isValid)}
-          encType="multipart/form-data"
-          className="h-full px-10 mx-10 rounded-xl w-full bg-cream flex flex-col justify-start items-center py-11"
-        >
-          <div className="flex justify-start items-center w-full ">
-            <img
-              alt="avatar"
-              src={newAvatar ? newAvatar : "/" + data?.data.user.avatar}
-              className="bg-white w-32 h-32 rounded-full mb-4"
-            />
-            <div className="flex flex-col ml-5 space-y-2">
+      {data?.data.user ? (
+        <main className="w-full flex flex-col items-center justify-center px-10">
+          <Title text="Edit my info" />
+          <form
+            onSubmit={handleSubmit(isValid)}
+            encType="multipart/form-data"
+            className="h-full px-10 mx-10 rounded-xl w-full bg-cream flex flex-col justify-start items-center py-11"
+          >
+            <div className="flex justify-start items-center w-full ">
+              <img
+                alt="avatar"
+                src={
+                  avatarPreview ? avatarPreview : "/" + data?.data.user.avatar
+                }
+                className="bg-white w-32 h-32 rounded-full mb-4"
+              />
+              <div className="flex flex-col ml-5 space-y-2">
+                <Input
+                  label="Nickname"
+                  id="nickname"
+                  type="text"
+                  errors={errors?.nickname?.message}
+                  required
+                  register={register("nickname", {
+                    required: "Nickname is required",
+                    value: data?.data.user.nickname,
+                  })}
+                />
+                <Input
+                  label="Status Message"
+                  id="statusMessage"
+                  type="text"
+                  errors={errors?.statusMessage?.message}
+                  required={false}
+                  register={register("statusMessage", {
+                    value: data?.data.user.statusMessage,
+                  })}
+                />
+
+                <div className="flex flex-col w-full">
+                  <label
+                    htmlFor="avatar"
+                    className="cursor-pointer  bg-point text-center rounded-md py-1 hover:text-white flex justify-center"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                    Change profile image
+                  </label>
+                  <input
+                    {...register("avatar")}
+                    id="avatar"
+                    type="file"
+                    className="hidden"
+                  />
+                </div>
+                <Link to="/user/edit/password">
+                  <div className="flex bg-brightgreen text-black rounded-md py-1 cursor-pointer justify-center hover:text-white">
+                    <svg
+                      className="w-6 h-6"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                    <span>Change password</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+            <div className="w-full pt-10 space-y-4 mb-10">
               <Input
-                label="Nickname"
-                id="nickname"
+                label="First name"
+                id="firstname"
                 type="text"
-                errors={errors?.nickname?.message}
+                errors={errors?.firstname?.message}
                 required
-                register={register("nickname", {
-                  required: "Nickname is required",
+                register={register("firstname", {
+                  required: "First name is required",
+                  value: data?.data.user.firstname,
                 })}
               />
               <Input
-                label="Status Message"
-                id="statusMessage"
+                label="Last name"
+                id="lastname"
                 type="text"
-                errors={errors?.statusMessage?.message}
-                required={false}
-                register={register("statusMessage")}
+                errors={errors?.lastname?.message}
+                required
+                register={register("lastname", {
+                  required: "Last name is required",
+                  value: data?.data.user.lastname,
+                })}
               />
-
-              <div className="flex flex-col w-full">
-                <label
-                  htmlFor="avatar"
-                  className="cursor-pointer  bg-point text-center rounded-md py-1 hover:text-white flex justify-center"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                  Change profile image
-                </label>
-                <input
-                  {...register("avatar", {
-                    onChange: (event) => onChangeAvatar(event),
-                  })}
-                  id="avatar"
-                  type="file"
-                  className="hidden"
-                />
-              </div>
-              <Link to="/user/edit/password">
-                <div className="flex bg-brightgreen text-black rounded-md py-1 cursor-pointer justify-center hover:text-white">
-                  <svg
-                    className="w-6 h-6"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                  <span>Change password</span>
-                </div>
-              </Link>
+              <Input
+                label="Birthdate"
+                id="birthdate"
+                type="date"
+                errors={errors?.birthdate?.message}
+                required
+                register={register("birthdate", {
+                  required: "Birtdate is required",
+                  value: data?.data.user.birthdate,
+                })}
+              />
             </div>
-          </div>
-          <div className="w-full pt-10 space-y-4 mb-10">
-            <Input
-              label="First name"
-              id="firstname"
-              type="text"
-              errors={errors?.firstname?.message}
-              required
-              register={register("firstname", {
-                required: "First name is required",
-              })}
-            />
-            <Input
-              label="Last name"
-              id="lastname"
-              type="text"
-              errors={errors?.lastname?.message}
-              required
-              register={register("lastname", {
-                required: "Last name is required",
-              })}
-            />
-            <Input
-              label="Birthdate"
-              id="birthdate"
-              type="date"
-              errors={errors?.birthdate?.message}
-              required
-              register={register("birthdate", {
-                required: "Birtdate is required",
-              })}
-            />
-          </div>
-          <Button text="Save Changes" errors={errors.serverError?.message} />
-        </form>
-      </main>
+            <Button text="Save Changes" errors={errors.serverError?.message} />
+          </form>
+        </main>
+      ) : null}
     </Wrapper>
   );
 }

@@ -4,7 +4,7 @@ interface IProfileCardProps {
   profile: IUser;
 }
 
-function ProfileCard({ profile }: IProfileCardProps) {
+function ProfileInfo({ profile }: IProfileCardProps) {
   return (
     <div className="w-full mx-10 rounded-xl bg-cream flex flex-col justify-start items-center py-5 mb-5">
       <div className="w-full flex justify-end">
@@ -39,4 +39,4 @@ function ProfileCard({ profile }: IProfileCardProps) {
   );
 }
 
-export default ProfileCard;
+export default ProfileInfo;

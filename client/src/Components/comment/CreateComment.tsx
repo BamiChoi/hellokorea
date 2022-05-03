@@ -46,6 +46,8 @@ function CreateComment({ postId }: ICreateCommentProps) {
     }
   );
   const isValid = async (data: ICreateCommentForm) => {
+    console.log(isLoading);
+    console.log("submit");
     mutate(data);
   };
   setValue("postId", postId!);
@@ -70,7 +72,7 @@ function CreateComment({ postId }: ICreateCommentProps) {
           text="submit"
           customClassName="border-main border-2 rounded-md p-2 h-10 flex items-center"
           errors={errors.serverError?.message}
-        ></Button>
+        />
       </form>
     </>
   );

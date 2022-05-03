@@ -1,5 +1,5 @@
 import Wrapper from "Components/Wrapper";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { useMutation, useQuery } from "react-query";
 import { countVote, getPost } from "api/postApi";
