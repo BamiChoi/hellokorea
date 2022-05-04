@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
-interface UsermenuProps {
+interface IMenuProps {
   url?: string;
   text: string;
   onClick?: React.MouseEventHandler<HTMLLIElement>;
 }
 
-function NavItem({ url, text, onClick }: UsermenuProps) {
+function Menu({ url, text, onClick }: IMenuProps) {
   return (
     <li
       onClick={onClick}
@@ -17,4 +17,4 @@ function NavItem({ url, text, onClick }: UsermenuProps) {
   );
 }
 
-export default NavItem;
+export default Menu;

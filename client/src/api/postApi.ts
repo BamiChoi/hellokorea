@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Sort } from "Components/post/PostList";
+import { Sort } from "Components/home/List";
 import { IDeletePostFrom } from "Routes/Post/Delete";
 import { IVoteRequest } from "Routes/Post/Post";
 import { IWritePostForm } from "Routes/Post/Write";

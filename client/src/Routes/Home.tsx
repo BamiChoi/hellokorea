@@ -1,4 +1,4 @@
-import List from "Components/post/PostList";
+import List from "Components/home/List";
 import Wrapper from "Components/Wrapper";
 
 function Home() {

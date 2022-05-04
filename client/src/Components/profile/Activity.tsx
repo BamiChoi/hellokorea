@@ -1,36 +1,12 @@
-import { getActivities } from "api/userApi";
 import { Link } from "react-router-dom";
-import { IComment, IPost } from "Routes/Post/Post";
-import { useSelector } from "react-redux";
-import { loggedInUser } from "reducers/auth";
-import { useQuery } from "react-query";
-
-export interface IActivities {
-  recentPosts: IPost[];
-  recentComments: IComment[];
-}
-
-interface IActivitiesResponse {
-  data: {
-    status: string;
-    activities: IActivities;
-  };
-}
+import { IActivities } from "Routes/User/Profile";
 
 interface IRecentActivityProps {
   nickname: string;
+  activities: IActivities;
 }
 
-function RecentActivity({ nickname }: IRecentActivityProps) {
-  const user = useSelector(loggedInUser);
-  const { isLoading, data, isError, error } = useQuery<IActivitiesResponse>(
-    "getActivities",
-    () => getActivities(user.id),
-    {
-      retry: false,
-    }
-  );
-  // Todo: Error handling
+function RecentActivity({ nickname, activities }: IRecentActivityProps) {
   return (
     <>
       <div className="w-96 mb-10">
@@ -52,7 +28,7 @@ function RecentActivity({ nickname }: IRecentActivityProps) {
           {nickname}'s Recent posts
         </h3>
         <ul className="space-y-2">
-          {data?.data.activities.recentPosts.map((post) => (
+          {activities.recentPosts.map((post) => (
             <li
               key={post._id}
               className="border-b-[1px] border-gray hover:bg-gray hover:cursor-pointer px-1 py-1"
@@ -81,7 +57,7 @@ function RecentActivity({ nickname }: IRecentActivityProps) {
           {nickname}'s Recent comments
         </h3>
         <ul className="space-y-2">
-          {data?.data.activities.recentComments.map((comment) => (
+          {activities.recentComments.map((comment) => (
             <li
               key={comment._id}
               className="border-b-[1px] border-gray hover:bg-gray hover:cursor-pointer px-1 py-1"

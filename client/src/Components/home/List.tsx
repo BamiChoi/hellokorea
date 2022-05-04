@@ -2,17 +2,17 @@ import { getPosts } from "api/postApi";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { IPostsResponse } from "Routes/Post/Board";
-import PostItem from "./PostItem";
+import Item from "./Item";
 
 export type Sort = "new" | "votes" | "views";
 
-interface IPostListProps {
+interface IListProps {
   title: string;
   category: string;
   sort: Sort;
 }
 
-function PostList({ title, category, sort }: IPostListProps) {
+function List({ title, category, sort }: IListProps) {
   const { isLoading, data, isError, error } = useQuery<IPostsResponse>(
     [category, "getPosts"],
     () => getPosts(category, sort, 5),
@@ -30,11 +30,11 @@ function PostList({ title, category, sort }: IPostListProps) {
       </Link>
       <ul className="border-y-2 border-main py-2 space-y-2">
         {data?.data.posts?.map((post) => (
-          <PostItem key={post._id} post={post} category={category} />
+          <Item key={post._id} post={post} category={category} />
         ))}
       </ul>
     </>
   );
 }
 
-export default PostList;
+export default List;

@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { IPost } from "Routes/Post/Post";
 
-interface IPostItemProps {
+interface IItemProps {
   post: IPost;
   category: string;
 }
 
-function PostItem({ post, category }: IPostItemProps) {
+function Item({ post, category }: IItemProps) {
   return (
     <li className="border-b-2 border-gray last:border-0 flex justify-between items-start pb-2 px-2">
       <Link to={`${category}/${post._id}`}>
@@ -21,4 +21,4 @@ function PostItem({ post, category }: IPostItemProps) {
   );
 }
 
-export default PostItem;
+export default Item;

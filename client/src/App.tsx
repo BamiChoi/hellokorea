@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "Components/Header";
+import Header from "Components/Header/Header";
 import Home from "Routes/Home";
 import Signup from "Routes/Signup";
 import Login from "Routes/Login";

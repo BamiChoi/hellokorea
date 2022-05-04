@@ -1,9 +1,9 @@
 import { useState } from "react";
-import DeleteComment from "../comment/DeleteComment";
+import DeleteModal from "../comment/DeleteModal";
 import Button from "Components/Button";
 import { IComment } from "Routes/Post/Post";
-import EditComement from "../comment/EditComment";
-import CreateRecoment from "../recomment/CreateRecomment";
+import EditForm from "../comment/EditForm";
+import CreateForm from "../recomment/CreateForm";
 import Recomment from "./Recomment";
 
 interface ICommentProps {
@@ -75,7 +75,7 @@ function Comment({ comment, postId }: ICommentProps) {
           </div>
         </div>
         {onEditComment.onEdit && comment._id === onEditComment.commentId ? (
-          <EditComement
+          <EditForm
             postId={postId}
             commentId={comment._id}
             commentText={comment.text}
@@ -91,7 +91,7 @@ function Comment({ comment, postId }: ICommentProps) {
           <span>{comment.createdAt}</span>
         </div>
         {onDeleteComment.onDelete ? (
-          <DeleteComment
+          <DeleteModal
             postId={postId!}
             commentId={onDeleteComment.commentId!}
             setOnDeleteComment={setOnDeleteComment}
@@ -99,7 +99,7 @@ function Comment({ comment, postId }: ICommentProps) {
         ) : null}
       </li>
       {onCreateRecomment.onCreate ? (
-        <CreateRecoment
+        <CreateForm
           postId={postId!}
           parentsCommentId={comment._id}
           setOnCreateRecomment={setOnCreateRecomment}

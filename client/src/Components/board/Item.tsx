@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { IPost } from "Routes/Post/Post";
 
-interface IBoardItemProps {
+interface IItemProps {
   post: IPost;
 }
 
-function BoardItem({ post }: IBoardItemProps) {
+function Item({ post }: IItemProps) {
   return (
     <li
       key={post._id}
@@ -36,4 +36,4 @@ function BoardItem({ post }: IBoardItemProps) {
   );
 }
 
-export default BoardItem;
+export default Item;

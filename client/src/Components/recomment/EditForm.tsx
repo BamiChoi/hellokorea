@@ -1,60 +1,59 @@
-import { queryClient } from "index";
-import Input from "Components/Input";
-import { useForm } from "react-hook-form";
-import { IOnEditCommentState } from "../post/Comment";
+import { editRecomment } from "api/recommentApi";
 import Button from "Components/Button";
-import { editComment } from "api/commentApi";
-import { ICommentError } from "./CreateComment";
+import Input from "Components/Input";
+import { queryClient } from "index";
+import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import { ICommentFormError } from "../comment/CreateForm";
+import { IOnEditRecommentState } from "../post/Recomment";
 
-interface IEditCommentProps {
+interface IEditRecommentProps {
   postId: string;
-  commentId: string;
-  commentText: string;
-  setOnEditComment: React.Dispatch<React.SetStateAction<IOnEditCommentState>>;
+  recommentId: string;
+  recommentText: string;
+  setOnEditRecomment: React.Dispatch<
+    React.SetStateAction<IOnEditRecommentState>
+  >;
 }
 
-export interface IEditCommentForm {
+export interface IEditRecommentForm {
   text: string;
-  commentId: string;
+  recommentId: string;
   serverError: string;
 }
 
-function EditComement({
+function EditForm({
   postId,
-  commentId,
-  commentText,
-  setOnEditComment,
-}: IEditCommentProps) {
+  recommentId,
+  recommentText,
+  setOnEditRecomment,
+}: IEditRecommentProps) {
   const {
     register,
     handleSubmit,
     setValue,
     setError,
     formState: { errors },
-  } = useForm<IEditCommentForm>();
+  } = useForm<IEditRecommentForm>();
   const { isLoading, mutate } = useMutation(
-    (data: IEditCommentForm) => editComment(data),
+    (data: IEditRecommentForm) => editRecomment(data),
     {
       onSuccess: () => {
-        setOnEditComment({ onEdit: false });
+        setOnEditRecomment({ onEdit: false });
         queryClient.invalidateQueries([postId, "getPost"]);
       },
-      onError: (error: ICommentError) => {
+      onError: (error: ICommentFormError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
       },
     }
   );
-  const isValidEditComment = async (data: IEditCommentForm) => {
+  const isValid = async (data: IEditRecommentForm) => {
     mutate(data);
   };
-  setValue("commentId", commentId);
+  setValue("recommentId", recommentId);
   return (
-    <form
-      onSubmit={handleSubmit(isValidEditComment)}
-      className="flex items-end space-x-2"
-    >
+    <form onSubmit={handleSubmit(isValid)} className="flex items-end space-x-2">
       <Input
         label="Edit your comment"
         id="text"
@@ -64,7 +63,7 @@ function EditComement({
         customCls="border-2 border-main px-2 py-1 w-full"
         register={register("text", {
           required: "Text is required.",
-          value: `${commentText}`,
+          value: `${recommentText}`,
         })}
       />
       <Button
@@ -75,4 +74,4 @@ function EditComement({
   );
 }
 
-export default EditComement;
+export default EditForm;

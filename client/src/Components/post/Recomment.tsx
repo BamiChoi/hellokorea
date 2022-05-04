@@ -1,8 +1,8 @@
 import Button from "Components/Button";
 import { useState } from "react";
 import { IRecomment } from "Routes/Post/Post";
-import DeleteRecomment from "../recomment/DeleteRecomment";
-import EditRecomment from "../recomment/EditRecomment";
+import DeleteModal from "../recomment/DeleteModal";
+import EditForm from "../recomment/EditForm";
 
 interface IRecommentProps {
   recomment: IRecomment;
@@ -62,7 +62,7 @@ function Recomment({ recomment, postId }: IRecommentProps) {
       </div>
       {onEditRecomment.onEdit &&
       recomment._id === onEditRecomment.recommentId ? (
-        <EditRecomment
+        <EditForm
           postId={postId}
           recommentId={recomment._id}
           recommentText={recomment.text}
@@ -75,7 +75,7 @@ function Recomment({ recomment, postId }: IRecommentProps) {
         <span>{recomment.createdAt}</span>
       </div>
       {onDeleteRecomment.onDelete ? (
-        <DeleteRecomment
+        <DeleteModal
           postId={postId}
           recommentId={recomment._id}
           setOnDeleteRecomment={setOnDeleteRecomment}

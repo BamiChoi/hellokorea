@@ -6,9 +6,9 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { IOnCreateRecommentState } from "../post/Comment";
-import { ICommentError } from "../comment/CreateComment";
+import { ICommentFormError } from "../comment/CreateForm";
 
-interface ICreateRecommentProps {
+interface ICreateFormProps {
   postId: string;
   parentsCommentId: string;
   setOnCreateRecomment: React.Dispatch<
@@ -22,11 +22,11 @@ export interface ICreateRecommentForm {
   serverError: string;
 }
 
-function CreateRecomment({
+function CreateForm({
   postId,
   parentsCommentId,
   setOnCreateRecomment,
-}: ICreateRecommentProps) {
+}: ICreateFormProps) {
   const {
     register,
     handleSubmit,
@@ -41,7 +41,7 @@ function CreateRecomment({
         setOnCreateRecomment({ onCreate: false });
         queryClient.invalidateQueries([postId, "getPost"]);
       },
-      onError: (error: ICommentError) => {
+      onError: (error: ICommentFormError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
       },
@@ -82,4 +82,4 @@ function CreateRecomment({
   );
 }
 
-export default CreateRecomment;
+export default CreateForm;

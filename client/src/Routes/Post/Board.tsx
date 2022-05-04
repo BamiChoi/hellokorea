@@ -1,6 +1,6 @@
 import { getPosts } from "api/postApi";
 import Button from "Components/Button";
-import BoardItem from "Components/post/BoardItem";
+import Item from "Components/board/Item";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import { useQuery } from "react-query";
@@ -39,7 +39,7 @@ function Board() {
         </nav>
         <ul className="border-y-2 border-main py-2 space-y-2">
           {data?.data.posts.map((post) => (
-            <BoardItem post={post} />
+            <Item post={post} />
           ))}
         </ul>
       </main>

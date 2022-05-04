@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ICreateRecommentForm } from "Components/recomment/CreateRecomment";
-import { IEditRecommentForm } from "Components/recomment/EditRecomment";
+import { ICreateRecommentForm } from "Components/recomment/CreateForm";
+import { IEditRecommentForm } from "Components/recomment/EditForm";
 
 export const createRecoment = async (data: ICreateRecommentForm) => {
   return await axios.post(`/api/recomments`, data);

@@ -5,7 +5,7 @@ import Button from "Components/Button";
 import { createComment } from "api/commentApi";
 import { useMutation } from "react-query";
 
-interface ICreateCommentProps {
+interface ICreateFormProps {
   postId: string;
 }
 export interface ICreateCommentForm {
@@ -14,7 +14,7 @@ export interface ICreateCommentForm {
   serverError: string;
 }
 
-export interface ICommentError {
+export interface ICommentFormError {
   response: {
     data: {
       field: "text" | "serverError";
@@ -23,7 +23,7 @@ export interface ICommentError {
   };
 }
 
-function CreateComment({ postId }: ICreateCommentProps) {
+function CreateForm({ postId }: ICreateFormProps) {
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ function CreateComment({ postId }: ICreateCommentProps) {
         queryClient.invalidateQueries([postId, "getPost"]);
         reset();
       },
-      onError: (error: ICommentError) => {
+      onError: (error: ICommentFormError) => {
         const { field, message } = error.response.data;
         setError(field, { message });
       },
@@ -78,4 +78,4 @@ function CreateComment({ postId }: ICreateCommentProps) {
   );
 }
 
-export default CreateComment;
+export default CreateForm;

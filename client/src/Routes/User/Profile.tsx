@@ -2,17 +2,23 @@ import { useSelector } from "react-redux";
 import { IUser, loggedInUser } from "reducers/auth";
 import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
-import Activities from "Components/user/Activities";
-import RecentActivity from "Components/user/RecentActivity";
-import ProfileMenuNav from "Components/user/ProfileMenuNav";
+import Activity from "Components/profile/Activity";
+import Nav from "Components/profile/Nav";
 import { getProfile } from "api/userApi";
 import { useQuery } from "react-query";
-import ProfileInfo from "Components/user/ProfileInfo";
+import Info from "Components/profile/Info";
+import { IComment, IPost } from "Routes/Post/Post";
+
+export interface IActivities {
+  recentPosts: IPost[];
+  recentComments: IComment[];
+}
 
 export interface IProfileResponse {
   data: {
     status: string;
     user: IUser;
+    activities: IActivities;
   };
 }
 
@@ -32,11 +38,13 @@ function Profile() {
       {profile ? (
         <main className="w-full flex flex-col items-center justify-center px-10">
           <Title text="My page" />
-          <ProfileInfo profile={profile} />
+          <Info profile={profile} />
           <section>
-            <Activities />
-            <ProfileMenuNav />
-            <RecentActivity nickname={user.nickname} />
+            <Nav />
+            <Activity
+              nickname={user.nickname}
+              activities={data?.data.activities}
+            />
           </section>
         </main>
       ) : null}

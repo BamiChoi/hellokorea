@@ -6,7 +6,7 @@ import { countVote, getPost } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Comment from "Components/post/Comment";
-import CreateComment from "Components/comment/CreateComment";
+import CreateForm from "Components/comment/CreateForm";
 import { loggedInUser } from "reducers/auth";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -188,7 +188,7 @@ function Post() {
                 </div>
               ) : null}
             </section>
-            <CreateComment postId={postId!} />
+            <CreateForm postId={postId!} />
             <section>
               <ul className="mt-10 space-y-4">
                 {post.comments?.map((comment) => (

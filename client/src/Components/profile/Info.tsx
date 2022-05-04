@@ -1,10 +1,10 @@
 import { IUser } from "reducers/auth";
 
-interface IProfileCardProps {
+interface IInfoProps {
   profile: IUser;
 }
 
-function ProfileInfo({ profile }: IProfileCardProps) {
+function Info({ profile }: IInfoProps) {
   return (
     <div className="w-full mx-10 rounded-xl bg-cream flex flex-col justify-start items-center py-5 mb-5">
       <div className="w-full flex justify-end">
@@ -39,4 +39,4 @@ function ProfileInfo({ profile }: IProfileCardProps) {
   );
 }
 
-export default ProfileInfo;
+export default Info;

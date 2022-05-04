@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedInUser, logout } from "reducers/auth";
-import NavItem from "./NavItem";
+import Menu from "./Item";
 import { useMutation } from "react-query";
 import { logoutUser } from "api/sessionApi";
 
@@ -27,13 +27,13 @@ function Header() {
       <nav>
         {user ? (
           <ul className="list-none flex space-x-2">
-            <NavItem url="/user" text="My page" />
-            <NavItem onClick={onClickLogout} text="logout" />
+            <Menu url="/user" text="My page" />
+            <Menu onClick={onClickLogout} text="logout" />
           </ul>
         ) : (
           <ul className="list-none flex space-x-2">
-            <NavItem url="/signup" text="Sign up" />
-            <NavItem url="/login" text="Login" />
+            <Menu url="/signup" text="Sign up" />
+            <Menu url="/login" text="Login" />
           </ul>
         )}
       </nav>

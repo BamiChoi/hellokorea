@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { IOnDeleteRecommentState } from "../post/Recomment";
 
-interface IDeleteRecommentProps {
+interface IDeleteModalProps {
   postId: string;
   recommentId: string;
   setOnDeleteRecomment: React.Dispatch<
@@ -14,11 +14,11 @@ interface IDeleteRecommentProps {
   >;
 }
 
-function DeleteRecomment({
+function DeleteModal({
   postId,
   recommentId,
   setOnDeleteRecomment,
-}: IDeleteRecommentProps) {
+}: IDeleteModalProps) {
   const [deleteError, setDeleteError] = useState("");
   const onClickOverlay = () => {
     setOnDeleteRecomment({ onDelete: false });
@@ -54,4 +54,4 @@ function DeleteRecomment({
   );
 }
 
-export default DeleteRecomment;
+export default DeleteModal;
