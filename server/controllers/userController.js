@@ -81,31 +81,6 @@ export const getProfile = async (req, res) => {
   }
 };
 
-export const getActivities = async (req, res) => {
-  const { _id } = req.session.user;
-  const offset = 5;
-  try {
-    const user = await User.findById(_id)
-      .populate("posts")
-      .populate({ path: "comments", populate: { path: "target" } });
-    if (!user) {
-      return res
-        .status(400)
-        .send({ state: "failed", message: "User not Found" });
-    }
-    const recentPosts = user.posts.slice(0, offset).reverse();
-    const recentComments = user.comments.slice(0, offset).reverse();
-    const activities = { recentPosts, recentComments };
-    return res.status(200).send({ state: "success", activities });
-  } catch (error) {
-    console.log(error);
-    return res.status(400).send({
-      state: "failed",
-      message: "serverError",
-    });
-  }
-};
-
 export const editProfile = async (req, res) => {
   const {
     session: {

@@ -11,10 +11,6 @@ export const getProfile = async (id: string) => {
   return await axios.get(`/api/users/${id}`);
 };
 
-export const getActivities = async (id: string) => {
-  return await axios.get(`/api/users/${id}/activities`);
-};
-
 export const editProfile = async (id: string, data: IEditProfileForm) => {
   return await axios.post(`/api/users/${id}`, data);
 };

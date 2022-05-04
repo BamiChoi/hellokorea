@@ -16,6 +16,5 @@ userRouter
   .get(getProfile)
   .post(uploadAvatar.single("avatar"), editProfile);
 userRouter.route("/:id/password").post(changePassword);
-userRouter.route("/:id/activities").get(getActivities);
 
 export default userRouter;
