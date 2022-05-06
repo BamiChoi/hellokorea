@@ -14,7 +14,7 @@ userRouter.route("/").post(signup);
 userRouter
   .route("/:id")
   .get(getProfile)
-  .post(uploadAvatar.single("avatar"), editProfile);
+  .put(uploadAvatar.single("avatar"), editProfile);
 userRouter.route("/:id/password").post(changePassword);
 
 export default userRouter;

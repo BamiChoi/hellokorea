@@ -1,3 +1,4 @@
+import { mutateVote } from "../libs/utils";
 import Comment from "../models/Comment";
 import Post from "../models/Post";
 import User from "../models/User";
@@ -95,5 +96,29 @@ export const deleteComment = async (req, res) => {
     return res
       .status(400)
       .send({ field: "serverError", message: "Failed to delete comment" });
+  }
+};
+
+export const countVote = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { commentId, votedState, action },
+  } = req;
+  const user = await User.findById(_id);
+  if (!user) {
+    return res.status(400).send({ state: "failed", message: "Not found user" });
+  }
+  try {
+    const comment = await Comment.findById(commentId);
+    mutateVote(votedState, action, comment, user._id);
+    comment.save();
+    return res.status(200).send({ state: "success" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Failed to vote" });
   }
 };

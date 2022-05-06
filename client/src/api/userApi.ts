@@ -12,7 +12,7 @@ export const getProfile = async (id: string) => {
 };
 
 export const editProfile = async (id: string, data: IEditProfileForm) => {
-  return await axios.post(`/api/users/${id}`, data);
+  return await axios.put(`/api/users/${id}`, data);
 };
 
 export const changePassword = async (id: string, data: IPasswordChangeForm) => {

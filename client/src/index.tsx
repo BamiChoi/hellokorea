@@ -8,6 +8,7 @@ import { store, persistor } from "store";
 import App from "./App";
 import "Index.css";
 import { ReactQueryDevtools } from "react-query/devtools";
+import CheckAuth from "Routes/middlewares/CheckAuth";
 
 export const queryClient = new QueryClient();
 
@@ -17,7 +18,9 @@ ReactDOM.render(
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
           <Router>
-            <App />
+            <CheckAuth>
+              <App />
+            </CheckAuth>
           </Router>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

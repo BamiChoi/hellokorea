@@ -9,8 +9,18 @@ const commentShcema = new mongoose.Schema({
   nickname: { type: String, required: true },
   avatar: { type: String, default: "" },
   meta: {
-    upvotes: { type: Number, required: true, default: 0 },
-    downvotes: { type: Number, required: true, default: 0 },
+    upvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    downvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   recomments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Recomment" }],
 });

@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteModal from "../comment/DeleteModal";
 import Button from "Components/Button";
-import { IComment } from "Routes/Post/Post";
+import { IComment, IVoteState } from "Routes/Post/Post";
 import EditForm from "../comment/EditForm";
 import CreateForm from "../recomment/CreateForm";
 import Recomment from "./Recomment";
+import { useSelector } from "react-redux";
+import { loggedInUser } from "reducers/auth";
+import { useMutation } from "react-query";
+import { countVote } from "api/commentApi";
+import { queryClient } from "index";
 
 interface ICommentProps {
   comment: IComment;
@@ -26,7 +31,13 @@ export interface IOnCreateRecommentState {
   parentsCommentId?: string;
 }
 
+export interface IVoteRequest {
+  commentId: string;
+  votedState: IVoteState;
+}
+
 function Comment({ comment, postId }: ICommentProps) {
+  const user = useSelector(loggedInUser);
   const [onDeleteComment, setOnDeleteComment] = useState<IOnDeleteCommentState>(
     {
       onDelete: false,
@@ -48,6 +59,32 @@ function Comment({ comment, postId }: ICommentProps) {
   const onClickCreateRecomment = (parentsCommentId: string) => {
     setOnCreateRecomment({ onCreate: true, parentsCommentId });
   };
+  const [votedState, setVotedState] = useState<IVoteState>({ voted: false });
+  const { mutate } = useMutation((data: IVoteRequest) => countVote(data), {
+    onSuccess: () => {
+      queryClient.invalidateQueries([postId, "getPost"]);
+    },
+  });
+  const onClickVote = (action: "up" | "down") => {
+    const data = { commentId: comment._id, votedState, action };
+    mutate(data);
+  };
+
+  useEffect(() => {
+    const upvotedUser = comment.meta.upvotes.indexOf(user.id);
+    const downvotedUser = comment.meta.downvotes.indexOf(user.id);
+    const isUpvoted = upvotedUser === -1 ? false : true;
+    const isDownvoted = downvotedUser === -1 ? false : true;
+    if (isUpvoted) {
+      setVotedState({ voted: true, type: "up" });
+    } else if (isDownvoted) {
+      setVotedState({ voted: true, type: "down" });
+    } else if (!isUpvoted) {
+      setVotedState({ voted: false });
+    } else if (!isDownvoted) {
+      setVotedState({ voted: false });
+    }
+  }, [user.id, comment.meta.upvotes, comment.meta.downvotes]);
   return (
     <>
       <li className="bg-cream p-4 rounded-md">
@@ -61,17 +98,43 @@ function Comment({ comment, postId }: ICommentProps) {
             <span>{comment.nickname}</span>
           </div>
           <div className="space-x-2">
-            <Button
-              onClick={() => onClickEditComment(comment._id)}
-              text="edit"
-              customClassName=" "
-            ></Button>
-            <span>|</span>
-            <Button
-              onClick={() => onClickDeleteComment(comment._id)}
-              text="delete"
-              customClassName=" "
-            ></Button>
+            {user ? (
+              <>
+                <Button
+                  onClick={() => onClickVote("up")}
+                  text="upvote"
+                  customClassName=" "
+                />
+                <span>|</span>
+                <Button
+                  onClick={() => onClickVote("down")}
+                  text="downvote"
+                  customClassName=" "
+                />
+                <span>|</span>
+                <Button
+                  onClick={() => onClickCreateRecomment(comment._id)}
+                  text="reply"
+                  customClassName=" "
+                />
+              </>
+            ) : null}
+            {user && user.id === comment.owner ? (
+              <>
+                <span>|</span>
+                <Button
+                  onClick={() => onClickEditComment(comment._id)}
+                  text="edit"
+                  customClassName=" "
+                ></Button>
+                <span>|</span>
+                <Button
+                  onClick={() => onClickDeleteComment(comment._id)}
+                  text="delete"
+                  customClassName=" "
+                ></Button>
+              </>
+            ) : null}
           </div>
         </div>
         {onEditComment.onEdit && comment._id === onEditComment.commentId ? (
@@ -85,9 +148,10 @@ function Comment({ comment, postId }: ICommentProps) {
           <span>{comment.text}</span>
         )}
         <div className="flex justify-between mt-2">
-          <button onClick={() => onClickCreateRecomment(comment._id)}>
-            reply
-          </button>
+          <div className="space-x-2">
+            <span>{comment.meta.upvotes.length} upvotes</span>
+            <span>{comment.meta.downvotes.length} downvotes</span>
+          </div>
           <span>{comment.createdAt}</span>
         </div>
         {onDeleteComment.onDelete ? (

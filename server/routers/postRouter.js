@@ -11,6 +11,6 @@ import {
 const postRouter = express.Router();
 
 postRouter.route("/").get(getPosts).post(createPost);
-postRouter.route("/:postId").get(getPost).patch(editPost).post(deletePost);
+postRouter.route("/:postId").get(getPost).put(editPost).post(deletePost);
 postRouter.route("/:postId/vote").post(countVote);
 export default postRouter;

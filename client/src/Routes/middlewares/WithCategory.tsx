@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router-dom";
-import { ProtectedRouteProps } from "./LogoutOnly";
+import { IMiddlewareProps } from "./LogoutOnly";
 
-function WithCategory({ children }: ProtectedRouteProps) {
+function WithCategory({ children }: IMiddlewareProps) {
   const { category } = useParams();
   const categoryList = ["notice", "beauty"];
   return categoryList.includes(category!) ? (

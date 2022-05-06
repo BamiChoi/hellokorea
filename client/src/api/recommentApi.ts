@@ -7,7 +7,7 @@ export const createRecoment = async (data: ICreateRecommentForm) => {
 };
 
 export const editRecomment = async (data: IEditRecommentForm) => {
-  return await axios.patch(`/api/recomments/${data.recommentId}`, data);
+  return await axios.put(`/api/recomments/${data.recommentId}`, data);
 };
 
 export const deleteRecomment = async (recommentId: string) => {

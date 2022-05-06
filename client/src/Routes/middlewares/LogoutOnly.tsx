@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { loggedInUser } from "reducers/auth";
 
-export interface ProtectedRouteProps {
+export interface IMiddlewareProps {
   children: React.ReactNode;
 }
 
-function LogoutOnly({ children }: ProtectedRouteProps) {
+function LogoutOnly({ children }: IMiddlewareProps) {
   const user = useSelector(loggedInUser);
   return !user ? <>{children}</> : <Navigate to="/login" />;
 }

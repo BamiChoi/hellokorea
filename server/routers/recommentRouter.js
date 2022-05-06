@@ -10,7 +10,7 @@ const recommentRouter = express.Router();
 recommentRouter.route("/").post(createRecomment);
 recommentRouter
   .route("/:recommentId")
-  .patch(editRecomment)
+  .put(editRecomment)
   .delete(deleteRecomment);
 
 export default recommentRouter;

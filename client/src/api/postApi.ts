@@ -25,7 +25,7 @@ export const createPost = async (data: IWritePostForm) => {
 };
 
 export const editPost = async (postId: string, data: IWritePostForm) => {
-  return await axios.patch(`/api/posts/${postId}`, data);
+  return await axios.put(`/api/posts/${postId}`, data);
 };
 
 export const deletePost = async (postId: string, data: IDeletePostFrom) => {

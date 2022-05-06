@@ -26,9 +26,12 @@ export interface IComment {
   _id: string;
   text: string;
   nickname: string;
+  owner: string;
   avatar: string;
-  upvotes: string[];
-  downvotes: string[];
+  meta: {
+    upvotes: string[];
+    downvotes: string[];
+  };
   createdAt: string;
   recomments: IRecomment[];
 }
@@ -64,7 +67,7 @@ export interface IPostResponse {
     message?: string;
   };
 }
-interface IVoteState {
+export interface IVoteState {
   voted: boolean;
   type?: "up" | "down";
 }
