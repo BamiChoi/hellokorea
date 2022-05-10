@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DeleteModal from "../comment/DeleteModal";
 import Button from "Components/Button";
-import { IComment, IVoteState } from "Routes/Post/Post";
+import { action, IComment, IVoteRequest, IVoteState } from "Routes/Post/Post";
 import EditForm from "../comment/EditForm";
 import CreateForm from "../recomment/CreateForm";
 import Recomment from "./Recomment";
@@ -31,10 +31,7 @@ export interface IOnCreateRecommentState {
   parentsCommentId?: string;
 }
 
-export interface IVoteRequest {
-  commentId: string;
-  votedState: IVoteState;
-}
+export type VoteToComment = Pick<IVoteRequest, "commentId" | "votedState">;
 
 function Comment({ comment, postId }: ICommentProps) {
   const user = useSelector(loggedInUser);
@@ -60,31 +57,33 @@ function Comment({ comment, postId }: ICommentProps) {
     setOnCreateRecomment({ onCreate: true, parentsCommentId });
   };
   const [votedState, setVotedState] = useState<IVoteState>({ voted: false });
-  const { mutate } = useMutation((data: IVoteRequest) => countVote(data), {
+  const { mutate } = useMutation((data: VoteToComment) => countVote(data), {
     onSuccess: () => {
       queryClient.invalidateQueries([postId, "getPost"]);
     },
   });
-  const onClickVote = (action: "up" | "down") => {
+  const onClickVote = (action: action) => {
     const data = { commentId: comment._id, votedState, action };
     mutate(data);
   };
 
   useEffect(() => {
-    const upvotedUser = comment.meta.upvotes.indexOf(user.id);
-    const downvotedUser = comment.meta.downvotes.indexOf(user.id);
-    const isUpvoted = upvotedUser === -1 ? false : true;
-    const isDownvoted = downvotedUser === -1 ? false : true;
-    if (isUpvoted) {
-      setVotedState({ voted: true, type: "up" });
-    } else if (isDownvoted) {
-      setVotedState({ voted: true, type: "down" });
-    } else if (!isUpvoted) {
-      setVotedState({ voted: false });
-    } else if (!isDownvoted) {
-      setVotedState({ voted: false });
+    if (user) {
+      const upvotedUser = comment.meta.upvotes.indexOf(user.id);
+      const downvotedUser = comment.meta.downvotes.indexOf(user.id);
+      const isUpvoted = upvotedUser === -1 ? false : true;
+      const isDownvoted = downvotedUser === -1 ? false : true;
+      if (isUpvoted) {
+        setVotedState({ voted: true, type: "up" });
+      } else if (isDownvoted) {
+        setVotedState({ voted: true, type: "down" });
+      } else if (!isUpvoted) {
+        setVotedState({ voted: false });
+      } else if (!isDownvoted) {
+        setVotedState({ voted: false });
+      }
     }
-  }, [user.id, comment.meta.upvotes, comment.meta.downvotes]);
+  }, [user, user?.id, comment.meta.upvotes, comment.meta.downvotes]);
   return (
     <>
       <li className="bg-cream p-4 rounded-md">

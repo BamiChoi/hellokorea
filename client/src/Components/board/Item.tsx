@@ -7,10 +7,7 @@ interface IItemProps {
 
 function Item({ post }: IItemProps) {
   return (
-    <li
-      key={post._id}
-      className="border-b-2 border-gray last:border-0 flex flex-col items-start pb-2 px-2"
-    >
+    <li className="border-b-2 border-gray last:border-0 flex flex-col items-start pb-2 px-2">
       <Link to={post._id} className="w-full mb-2 text-lg">
         {post.title}
       </Link>

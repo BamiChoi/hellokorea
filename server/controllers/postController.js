@@ -1,7 +1,7 @@
 import Post from "../models/Post";
 import User from "../models/User";
 import bcrypt from "bcrypt";
-import { mutateVote } from "../libs/utils";
+import { getIsUserVoted, mutateVote } from "../libs/utils";
 
 export const createPost = async (req, res) => {
   const {
@@ -55,17 +55,9 @@ export const getPost = async (req, res) => {
             user: { _id },
           },
         } = req;
-        const user = await User.findById(_id);
-        const isUpvoted = user
-          ? post.meta.upvotes.indexOf(user._id) === -1
-            ? false
-            : true
-          : false;
-        const isDownvoted = user
-          ? post.meta.downvotes.indexOf(user._id) === -1
-            ? false
-            : true
-          : false;
+        // const isUpvoted = getIsUserVoted(post.meta.upvotes, user._id);
+        // const isDownvoted = getIsUserVoted(post.meta.downvotes, user._id);
+        const { isUpvoted, isDownvoted } = getIsUserVoted(post, _id);
         return res
           .status(200)
           .send({ state: "success", post, isUpvoted, isDownvoted });

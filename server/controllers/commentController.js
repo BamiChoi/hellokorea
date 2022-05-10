@@ -1,4 +1,4 @@
-import { mutateVote } from "../libs/utils";
+import { deleteEl, mutateVote } from "../libs/utils";
 import Comment from "../models/Comment";
 import Post from "../models/Post";
 import User from "../models/User";
@@ -86,9 +86,9 @@ export const deleteComment = async (req, res) => {
     const user = await User.findById(_id);
     const post = await Post.findById(postId);
     await Comment.findByIdAndDelete(commentId);
-    user.comments.splice(user.comments.indexOf(commentId), 1);
+    deleteEl(user.comments, commentId);
     user.save();
-    post.comments.splice(post.comments.indexOf(commentId), 1);
+    deleteEl(post.comments, commentId);
     post.save();
     return res.status(200).send({ state: "success " });
   } catch (error) {
@@ -112,7 +112,8 @@ export const countVote = async (req, res) => {
   }
   try {
     const comment = await Comment.findById(commentId);
-    mutateVote(votedState, action, comment, user._id);
+    const voteData = { votedState, action, resource: comment, userId: _id };
+    mutateVote(voteData);
     comment.save();
     return res.status(200).send({ state: "success" });
   } catch (error) {

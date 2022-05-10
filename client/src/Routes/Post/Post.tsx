@@ -67,26 +67,32 @@ export interface IPostResponse {
     message?: string;
   };
 }
+
+export type action = "up" | "down";
+
 export interface IVoteState {
   voted: boolean;
-  type?: "up" | "down";
+  type?: action;
 }
 
 export interface IVoteRequest {
   postId: string;
+  commentId: string;
   votedState: IVoteState;
 }
+
+export type VoteToPost = Pick<IVoteRequest, "postId" | "votedState">;
 
 function Post() {
   const user = useSelector(loggedInUser);
   const { postId, category } = useParams();
   const [votedState, setVotedState] = useState<IVoteState>({ voted: false });
-  const { mutate } = useMutation((data: IVoteRequest) => countVote(data), {
+  const { mutate } = useMutation((data: VoteToPost) => countVote(data), {
     onSuccess: () => {
       queryClient.invalidateQueries([postId, "getPost"]);
     },
   });
-  const onClickVote = (action: "up" | "down") => {
+  const onClickVote = (action: action) => {
     const data = { postId: postId!, votedState, action };
     mutate(data);
   };
@@ -158,22 +164,28 @@ function Post() {
               </article>
             </section>
             <section className="flex w-full space-x-2 justify-end">
-              <Button
-                onClick={() => onClickVote("up")}
-                text={
-                  votedState.voted && votedState.type === "up" ? "up(v)" : "up"
-                }
-                customClassName="w-20 border-2 border-main bg-white px-3 py-2 text-black rounded-md"
-              />
-              <Button
-                onClick={() => onClickVote("down")}
-                text={
-                  votedState.voted && votedState.type === "down"
-                    ? "down(v)"
-                    : "down"
-                }
-                customClassName="w-20 border-2 border-main px-3 py-2 text-black rounded-md"
-              />
+              {user ? (
+                <>
+                  <Button
+                    onClick={() => onClickVote("up")}
+                    text={
+                      votedState.voted && votedState.type === "up"
+                        ? "up(v)"
+                        : "up"
+                    }
+                    customClassName="w-20 border-2 border-main bg-white px-3 py-2 text-black rounded-md"
+                  />
+                  <Button
+                    onClick={() => onClickVote("down")}
+                    text={
+                      votedState.voted && votedState.type === "down"
+                        ? "down(v)"
+                        : "down"
+                    }
+                    customClassName="w-20 border-2 border-main px-3 py-2 text-black rounded-md"
+                  />
+                </>
+              ) : null}
               {user && user.id === post.owner._id ? (
                 <div className="space-x-2">
                   <Link to="edit">

@@ -39,7 +39,7 @@ function Board() {
         </nav>
         <ul className="border-y-2 border-main py-2 space-y-2">
           {data?.data.posts.map((post) => (
-            <Item post={post} />
+            <Item key={post._id} post={post} />
           ))}
         </ul>
       </main>

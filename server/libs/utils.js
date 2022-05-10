@@ -1,31 +1,49 @@
-export const mutateVote = (votedState, action, resource, userId) => {
-  const { voted, type } = votedState;
+export const deleteEl = (ArrayField, id) => {
+  return ArrayField.splice(ArrayField.indexOf(id), 1);
+};
+
+export const mutateVote = (data) => {
+  const {
+    votedState: { voted, type },
+    action,
+    resource,
+    userId,
+  } = data;
+  const upvotes = resource.meta.upvotes;
+  const downvotes = resource.meta.downvotes;
   if (action == "up") {
     if (!voted) {
-      resource.meta.upvotes.push(userId);
+      upvotes.push(userId);
     } else {
       if (type == "up") {
-        resource.meta.upvotes.splice(resource.meta.upvotes.indexOf(userId), 1);
+        deleteEl(upvotes, userId);
       } else {
-        resource.meta.downvotes.splice(
-          resource.meta.downvotes.indexOf(userId, 1)
-        );
-        resource.meta.upvotes.push(userId);
+        deleteEl(downvotes, userId);
+        upvotes.push(userId);
       }
     }
   } else if (action == "down") {
     if (!voted) {
-      resource.meta.downvotes.push(userId);
+      downvotes.push(userId);
     } else {
       if (type == "down") {
-        resource.meta.downvotes.splice(
-          resource.meta.downvotes.indexOf(userId),
-          1
-        );
+        deleteEl(downvotes, userId);
       } else {
-        resource.meta.upvotes.splice(resource.meta.upvotes.indexOf(userId, 1));
-        resource.meta.downvotes.push(userId);
+        deleteEl(upvotes, userId);
+        downvotes.push(userId);
       }
     }
   }
+};
+
+// export const getIsUserVoted = (votes, userId) => {
+//   const isVoted = user ? (votes.indexOf(userId) === -1 ? false : true) : false;
+//   return isVoted;
+// };
+
+export const getIsUserVoted = (post, userId) => {
+  const isUpvoted = post.meta.upvotes.indexOf(userId) === -1 ? false : true;
+  const isDownvoted = post.meta.downvotes.indexOf(userId) === -1 ? false : true;
+
+  return { isUpvoted, isDownvoted };
 };
