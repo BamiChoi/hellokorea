@@ -77,9 +77,7 @@ function Comment({ comment, postId }: ICommentProps) {
         setVotedState({ voted: true, type: "up" });
       } else if (isDownvoted) {
         setVotedState({ voted: true, type: "down" });
-      } else if (!isUpvoted) {
-        setVotedState({ voted: false });
-      } else if (!isDownvoted) {
+      } else if (!isUpvoted && !isDownvoted) {
         setVotedState({ voted: false });
       }
     }

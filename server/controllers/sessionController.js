@@ -61,7 +61,6 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   req.session.destroy();
-  console.log(req.session);
   return res.send({ state: "success" });
 };
 

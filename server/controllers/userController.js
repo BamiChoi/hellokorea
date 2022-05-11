@@ -161,6 +161,7 @@ export const changePassword = async (req, res) => {
     const user = await User.findById(_id);
     user.password = newPassword;
     user.save();
+    req.session.destroy();
     return res.status(200).send({
       state: "success",
     });

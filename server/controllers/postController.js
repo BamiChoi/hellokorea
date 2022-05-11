@@ -195,7 +195,8 @@ export const countVote = async (req, res) => {
   }
   try {
     const post = await Post.findById(postId);
-    mutateVote(votedState, action, post, user._id);
+    const voteData = { votedState, action, resource: post, userId: _id };
+    mutateVote(voteData);
     post.save();
     return res.status(200).send({ state: "success " });
   } catch (error) {

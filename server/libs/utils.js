@@ -36,11 +36,6 @@ export const mutateVote = (data) => {
   }
 };
 
-// export const getIsUserVoted = (votes, userId) => {
-//   const isVoted = user ? (votes.indexOf(userId) === -1 ? false : true) : false;
-//   return isVoted;
-// };
-
 export const getIsUserVoted = (post, userId) => {
   const isUpvoted = post.meta.upvotes.indexOf(userId) === -1 ? false : true;
   const isDownvoted = post.meta.downvotes.indexOf(userId) === -1 ? false : true;
