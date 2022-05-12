@@ -50,8 +50,8 @@ export interface IPost {
   title: string;
   contents: string;
   owner: IOwner;
-  createdAt: Date;
-  modifedAt: Date;
+  createdAt: string;
+  modifedAt: string;
   comments: IComment[];
   meta: {
     views: number;

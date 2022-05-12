@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IRecomment } from "Routes/Post/Post";
 import DeleteModal from "../recomment/DeleteModal";
 import EditForm from "../recomment/EditForm";
+import { format, parseISO } from "date-fns";
 
 interface IRecommentProps {
   recomment: IRecomment;
@@ -35,6 +36,7 @@ function Recomment({ recomment, postId }: IRecommentProps) {
   const onClickDeleteRecomment = (recommentId: string) => {
     setOnDeleteRecomment({ onDelete: true, recommentId });
   };
+  const parsedTimeStamp = parseISO(recomment.createdAt);
   return (
     <li className="bg-cream p-4 rounded-md ml-24">
       <div className="flex justify-between">
@@ -72,7 +74,7 @@ function Recomment({ recomment, postId }: IRecommentProps) {
         <span>{recomment.text}</span>
       )}
       <div className="flex justify-end mt-2">
-        <span>{recomment.createdAt}</span>
+        <span>{format(parsedTimeStamp, "yyyy-MM-dd-hh:mm")}</span>
       </div>
       {onDeleteRecomment.onDelete ? (
         <DeleteModal

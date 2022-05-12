@@ -1,11 +1,13 @@
 import { IPost } from "Routes/Post/Post";
 import parse from "html-react-parser";
+import { format, parseISO } from "date-fns";
 
 interface IContentProps {
   post: IPost;
 }
 
 function Content({ post }: IContentProps) {
+  const parsedTimeStamp = parseISO(post.createdAt);
   return (
     <>
       <h1 className="border-b-4 border-b-main mt-8 px-2 mb-2 pb-2">
@@ -28,7 +30,7 @@ function Content({ post }: IContentProps) {
               <span>{post.meta.downvotes.length} down</span>
             </div>
           </div>
-          <span>{post.createdAt}</span>
+          <span>{format(parsedTimeStamp, "yyyy-MM-dd-hh:mm")}</span>
         </div>
       </section>
       <section>

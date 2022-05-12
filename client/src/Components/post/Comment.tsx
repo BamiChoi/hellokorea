@@ -10,6 +10,7 @@ import { loggedInUser } from "reducers/auth";
 import { useMutation } from "react-query";
 import { countVote } from "api/commentApi";
 import { queryClient } from "index";
+import { format, parseISO } from "date-fns";
 
 interface ICommentProps {
   comment: IComment;
@@ -66,7 +67,7 @@ function Comment({ comment, postId }: ICommentProps) {
     const data = { commentId: comment._id, votedState, action };
     mutate(data);
   };
-
+  const parsedTimeStamp = parseISO(comment.createdAt);
   useEffect(() => {
     if (user) {
       const upvotedUser = comment.meta.upvotes.indexOf(user.id);
@@ -149,7 +150,7 @@ function Comment({ comment, postId }: ICommentProps) {
             <span>{comment.meta.upvotes.length} upvotes</span>
             <span>{comment.meta.downvotes.length} downvotes</span>
           </div>
-          <span>{comment.createdAt}</span>
+          <span>{format(parsedTimeStamp, "yyyy-MM-dd-hh:mm")}</span>
         </div>
         {onDeleteComment.onDelete ? (
           <DeleteModal
