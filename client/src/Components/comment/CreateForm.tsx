@@ -37,6 +37,7 @@ function CreateForm({ postId }: ICreateFormProps) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries([postId, "getPost"]);
+        // invalidteQueries 대신 setQueryData를 이용한 더 효율적인 업데이트 방식을 고려해봐야합니다.
         reset();
       },
       onError: (error: ICommentFormError) => {

@@ -1,7 +1,5 @@
-import { getPosts } from "api/postApi";
-import { useQuery } from "react-query";
+import { usePosts } from "libs/usePosts";
 import { Link } from "react-router-dom";
-import { IPostsResponse } from "Routes/Post/Board";
 import Item from "./Item";
 
 export type Sort = "new" | "votes" | "views";
@@ -13,16 +11,7 @@ interface IListProps {
 }
 
 function List({ title, category, sort }: IListProps) {
-  const { isLoading, data, isError, error } = useQuery<IPostsResponse>(
-    [category, "getPosts"],
-    () => getPosts(category, sort, 5),
-    {
-      retry: false,
-    }
-  );
-  if (isError) {
-    if (error instanceof Error) console.log(error.message);
-  }
+  const { isLoading, data, errorMessage } = usePosts(category, sort, 5);
   return (
     <>
       <Link to={category}>
@@ -32,6 +21,9 @@ function List({ title, category, sort }: IListProps) {
         {data?.data.posts?.map((post) => (
           <Item key={post._id} post={post} category={category} />
         ))}
+        {errorMessage ? (
+          <li className="p-4 text-center">{errorMessage}</li>
+        ) : null}
       </ul>
     </>
   );

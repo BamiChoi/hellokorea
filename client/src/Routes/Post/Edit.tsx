@@ -7,10 +7,10 @@ import Input from "Components/Input";
 import TextEditor from "Components/post/TextEditor";
 import { useNavigate, useParams } from "react-router-dom";
 import { IWritePostForm } from "./Write";
-import { useMutation, useQuery } from "react-query";
-import { IPostResponse } from "./Post";
-import { editPost, getPost } from "api/postApi";
+import { useMutation } from "react-query";
+import { editPost } from "api/postApi";
 import { useEffect } from "react";
+import { usePost } from "libs/usePost";
 
 interface IEditPostMutation {
   postId: string;
@@ -29,13 +29,7 @@ interface IEditPostError {
 
 function Edit() {
   const { postId, category } = useParams();
-  const { isLoading, data, isError, error } = useQuery<IPostResponse>(
-    [postId, "getPost"],
-    () => getPost(postId!),
-    {
-      retry: false,
-    }
-  );
+  const { isLoading, data, errorMessage } = usePost(postId!);
   const navigate = useNavigate();
   const {
     register,

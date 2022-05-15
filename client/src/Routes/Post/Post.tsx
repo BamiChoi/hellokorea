@@ -13,6 +13,7 @@ import { queryClient } from "index";
 import Content from "Components/post/Content";
 import Reaction from "Components/post/Reaction";
 import OwnerOnly from "Components/post/OwnerOnly";
+import { usePost } from "libs/usePost";
 
 export interface IRecomment {
   _id: string;
@@ -60,16 +61,6 @@ export interface IPost {
   };
 }
 
-export interface IPostResponse {
-  data: {
-    state: string;
-    post: IPost;
-    isUpvoted: boolean;
-    isDownvoted: boolean;
-    message?: string;
-  };
-}
-
 export type action = "up" | "down";
 
 export interface IVoteState {
@@ -98,16 +89,7 @@ function Post() {
     const data = { postId: postId!, votedState, action };
     mutate(data);
   };
-  const { isLoading, data, isError, error } = useQuery<IPostResponse>(
-    [postId, "getPost"],
-    () => getPost(postId!),
-    {
-      retry: false,
-    }
-  );
-  if (isError) {
-    if (error instanceof Error) console.log(error.message);
-  }
+  const { isLoading, data, errorMessage } = usePost(postId!);
   const post = data?.data.post;
   const isUpvoted = data?.data.isUpvoted;
   const isDownvoted = data?.data.isDownvoted;
@@ -156,7 +138,11 @@ function Post() {
               </ul>
             </section>
           </>
-        ) : null}
+        ) : (
+          <div className="flex p-10 justify-center items-center">
+            {errorMessage}
+          </div>
+        )}
       </main>
       <Outlet />
     </Wrapper>

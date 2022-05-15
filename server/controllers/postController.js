@@ -12,7 +12,7 @@ export const createPost = async (req, res) => {
   } = req;
   const user = await User.findById(_id);
   if (!user)
-    return res.status(400).send({
+    return res.status(401).send({
       state: "failed",
       field: "serverError",
       message: "You can't write a post.",
@@ -26,7 +26,7 @@ export const createPost = async (req, res) => {
     });
     user.posts.push(newPost._id);
     user.save();
-    return res.status(200).send({ state: "success", postId: newPost._id });
+    return res.status(201).send({ state: "success", postId: newPost._id });
   } catch (error) {
     console.log(error);
     return res.status(400).send({
@@ -55,8 +55,6 @@ export const getPost = async (req, res) => {
             user: { _id },
           },
         } = req;
-        // const isUpvoted = getIsUserVoted(post.meta.upvotes, user._id);
-        // const isDownvoted = getIsUserVoted(post.meta.downvotes, user._id);
         const { isUpvoted, isDownvoted } = getIsUserVoted(post, _id);
         return res
           .status(200)
@@ -64,7 +62,7 @@ export const getPost = async (req, res) => {
       }
       return res.status(200).send({ state: "success", post });
     } else {
-      return res.status(400).send({ state: "failed", messasge: "notFound" });
+      return res.status(404).send({ state: "failed", messasge: "notFound" });
     }
   } catch (error) {
     console.log(error);

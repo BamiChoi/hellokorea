@@ -8,10 +8,9 @@ import Input from "Components/Input";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";
-import { editProfile, getProfile } from "api/userApi";
-import { useMutation, useQuery } from "react-query";
-import { IProfileResponse } from "./Profile";
-import { queryClient } from "index";
+import { editProfile } from "api/userApi";
+import { useMutation } from "react-query";
+import { useUser } from "libs/useUser";
 
 export interface IEditProfileForm {
   nickname: string;
@@ -49,14 +48,7 @@ function Edit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(loggedInUser);
-  const { isLoading, data, isError, error } = useQuery<IProfileResponse>(
-    [user.id, "getProfile"],
-    () => getProfile(user.id),
-    {
-      retry: false,
-    }
-  );
-  // ToDo: Error handling
+  const { isLoading, data, errorMessage } = useUser(user.id);
   const { isLoading: isEditLoading, mutate } = useMutation(
     ({ id, formData }: IEditProfileMutation) => editProfile(id, formData),
     {
@@ -98,12 +90,12 @@ function Edit() {
     formData.append("statusMessage", data.statusMessage);
     mutate({ id, formData });
   };
-  // ToDo : HTML 구조 개선
+  // 컴포넌트 분리
   return (
     <Wrapper>
-      {data?.data.user ? (
-        <main className="w-full flex flex-col items-center justify-center px-10">
-          <Title text="Edit my info" />
+      <main className="w-full flex flex-col items-center justify-center px-10">
+        <Title text="Edit my info" />
+        {data?.data.user ? (
           <form
             onSubmit={handleSubmit(isValid)}
             encType="multipart/form-data"
@@ -115,7 +107,7 @@ function Edit() {
                 src={
                   avatarPreview ? avatarPreview : "/" + data?.data.user.avatar
                 }
-                className="bg-white w-32 h-32 rounded-full mb-4"
+                className="bg-white w-32 h-32 rounded-full mb-4 object-cover"
               />
               <div className="flex flex-col ml-5 space-y-2">
                 <Input
@@ -222,8 +214,12 @@ function Edit() {
             </div>
             <Button text="Save Changes" errors={errors.serverError?.message} />
           </form>
-        </main>
-      ) : null}
+        ) : (
+          <div className="flex p-10 justify-center items-center">
+            {errorMessage}
+          </div>
+        )}
+      </main>
     </Wrapper>
   );
 }

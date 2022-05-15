@@ -1,11 +1,10 @@
-import { getPosts } from "api/postApi";
 import Button from "Components/Button";
 import Item from "Components/board/Item";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
-import { useQuery } from "react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IPost } from "./Post";
+import { usePosts } from "libs/usePosts";
 
 export interface IPostsResponse {
   data: {
@@ -15,16 +14,8 @@ export interface IPostsResponse {
 }
 
 function Board() {
-  const navigate = useNavigate();
   const { category } = useParams();
-  const { isLoading, data, isError, error } = useQuery<IPostsResponse>(
-    [category, "getPosts"],
-    () => getPosts(category!),
-    {
-      retry: false,
-    }
-  );
-  // ToDo: Error handling
+  const { isLoading, data, errorMessage } = usePosts(category!, "new", 20);
   return (
     <Wrapper>
       <main className="w-full flex flex-col justify-center px-10">
@@ -41,6 +32,9 @@ function Board() {
           {data?.data.posts.map((post) => (
             <Item key={post._id} post={post} />
           ))}
+          {errorMessage ? (
+            <li className="p-4 text-center">{errorMessage}</li>
+          ) : null}
         </ul>
       </main>
     </Wrapper>

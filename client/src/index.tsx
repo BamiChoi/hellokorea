@@ -8,7 +8,7 @@ import { store, persistor } from "store";
 import App from "./App";
 import "Index.css";
 import { ReactQueryDevtools } from "react-query/devtools";
-import CheckAuth from "Routes/middlewares/CheckAuth";
+import CheckAuth from "Routes/middlewares/withAuth";
 
 export const queryClient = new QueryClient();
 

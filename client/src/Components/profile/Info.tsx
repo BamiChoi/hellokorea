@@ -28,7 +28,8 @@ function Info({ profile }: IInfoProps) {
         <img
           alt="avatar"
           src={"/" + profile.avatar}
-          className="bg-white w-32 h-32 rounded-full mb-4"
+          className="bg-white w-32 h-32 rounded-full mb-4 object-cover
+          "
         />
         <div className="flex flex-col ml-14 space-y-4">
           <span>{profile.nickname}</span>
