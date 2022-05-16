@@ -1,3 +1,4 @@
+import ErrorMsg from "Components/ErrorMsg";
 import { usePosts } from "libs/usePosts";
 import { Link } from "react-router-dom";
 import Item from "./Item";
@@ -18,11 +19,12 @@ function List({ title, category, sort }: IListProps) {
         <h3 className="mb-2 bg-main text-white py-1 px-2">{title}</h3>
       </Link>
       <ul className="border-y-2 border-main py-2 space-y-2">
-        {data?.data.posts?.map((post) => (
-          <Item key={post._id} post={post} category={category} />
-        ))}
-        {errorMessage ? (
-          <li className="p-4 text-center">{errorMessage}</li>
+        {data ? (
+          data.data.posts?.map((post) => (
+            <Item key={post._id} post={post} category={category} />
+          ))
+        ) : errorMessage ? (
+          <ErrorMsg text={errorMessage} />
         ) : null}
       </ul>
     </>

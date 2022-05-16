@@ -20,7 +20,6 @@ export const useUser = (userId: string) => {
     () => getProfile(userId),
     {
       retry: false,
-      // initialData 설정하여 /user에서 얻은 데이터가 캐시에 있을 경우 그대로 쓰기
       onError: (error) => {
         const message = handleErrorResponse(error);
         setErrorMessage(message);

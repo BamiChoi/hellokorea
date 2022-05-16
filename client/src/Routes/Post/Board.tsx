@@ -5,6 +5,7 @@ import Wrapper from "Components/Wrapper";
 import { Link, useParams } from "react-router-dom";
 import { IPost } from "./Post";
 import { usePosts } from "libs/usePosts";
+import ErrorMsg from "Components/ErrorMsg";
 
 export interface IPostsResponse {
   data: {
@@ -29,11 +30,10 @@ function Board() {
           </Link>
         </nav>
         <ul className="border-y-2 border-main py-2 space-y-2">
-          {data?.data.posts.map((post) => (
-            <Item key={post._id} post={post} />
-          ))}
-          {errorMessage ? (
-            <li className="p-4 text-center">{errorMessage}</li>
+          {data ? (
+            data.data.posts.map((post) => <Item key={post._id} post={post} />)
+          ) : errorMessage ? (
+            <ErrorMsg text={errorMessage} />
           ) : null}
         </ul>
       </main>

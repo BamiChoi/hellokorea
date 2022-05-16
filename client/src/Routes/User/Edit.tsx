@@ -3,7 +3,7 @@ import { IUser, loggedInUser } from "reducers/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { editUser } from "reducers/auth";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "Components/Input";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
@@ -11,6 +11,7 @@ import Button from "Components/Button";
 import { editProfile } from "api/userApi";
 import { useMutation } from "react-query";
 import { useUser } from "libs/useUser";
+import { queryClient } from "index";
 
 export interface IEditProfileForm {
   nickname: string;
@@ -25,7 +26,7 @@ export interface IEditProfileForm {
 interface IEditProfileResponse {
   data: {
     state: string;
-    editedUser: IUser;
+    updatedUser: IUser;
   };
 }
 
@@ -53,7 +54,8 @@ function Edit() {
     ({ id, formData }: IEditProfileMutation) => editProfile(id, formData),
     {
       onSuccess: (data: IEditProfileResponse) => {
-        dispatch(editUser({ ...data.data.editedUser }));
+        queryClient.invalidateQueries([user.id, "getProfile"]);
+        dispatch(editUser({ ...data.data.updatedUser }));
         navigate("/user");
       },
       onError: (error: IEditProfileError) => {

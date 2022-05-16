@@ -14,6 +14,7 @@ import Content from "Components/post/Content";
 import Reaction from "Components/post/Reaction";
 import OwnerOnly from "Components/post/OwnerOnly";
 import { usePost } from "libs/usePost";
+import ErrorMsg from "Components/ErrorMsg";
 
 export interface IRecomment {
   _id: string;
@@ -138,11 +139,9 @@ function Post() {
               </ul>
             </section>
           </>
-        ) : (
-          <div className="flex p-10 justify-center items-center">
-            {errorMessage}
-          </div>
-        )}
+        ) : errorMessage ? (
+          <ErrorMsg text={errorMessage} />
+        ) : null}
       </main>
       <Outlet />
     </Wrapper>

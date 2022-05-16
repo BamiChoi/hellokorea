@@ -7,6 +7,7 @@ import Nav from "Components/profile/Nav";
 import Info from "Components/profile/Info";
 import { IComment, IPost } from "Routes/Post/Post";
 import { useUser } from "libs/useUser";
+import ErrorMsg from "Components/ErrorMsg";
 
 export interface IActivities {
   recentPosts: IPost[];
@@ -40,11 +41,9 @@ function Profile() {
               />
             </section>
           </>
-        ) : (
-          <div className="flex p-10 justify-center items-center">
-            {errorMessage}
-          </div>
-        )}
+        ) : errorMessage ? (
+          <ErrorMsg text={errorMessage} />
+        ) : null}
       </main>
     </Wrapper>
   );

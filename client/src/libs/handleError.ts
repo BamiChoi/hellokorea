@@ -6,7 +6,7 @@ export const handleErrorResponse = (error: any) => {
       errorMessage = "Failed to load data, please try again.";
       break;
     case 401:
-      errorMessage = "You are not authenticated. please login";
+      errorMessage = "You are not authenticated. please login.";
       break;
     case 403:
       errorMessage = "You are not autorization to this request.";
@@ -15,7 +15,10 @@ export const handleErrorResponse = (error: any) => {
       errorMessage = "We can not found.";
       break;
     case 500:
-      errorMessage = "Server Error";
+      errorMessage = "Server Error. please try again.";
+      break;
+    default:
+      errorMessage = "Occurred unknwon error, please try again.";
   }
   return errorMessage;
 };
