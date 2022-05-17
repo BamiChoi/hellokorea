@@ -1,7 +1,7 @@
 import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
-import { countVote, getPost } from "api/postApi";
+import { useMutation } from "react-query";
+import { countVote } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Comment from "Components/post/Comment";

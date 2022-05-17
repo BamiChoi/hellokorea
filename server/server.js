@@ -7,6 +7,8 @@ import postRouter from "./routers/postRouter";
 import sessionRouter from "./routers/sessionRouter";
 import commentRouter from "./routers/commentRouter";
 import recommentRouter from "./routers/recommentRouter";
+import cookieParser from "cookie-parser";
+import { viewMiddleware } from "./middlewares";
 
 const app = express();
 const logger = morgan("dev");
@@ -14,6 +16,7 @@ const logger = morgan("dev");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   session({
     name: "hellokorea",
@@ -28,6 +31,7 @@ app.use(
     }),
   })
 );
+app.use(viewMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/session", sessionRouter);
 app.use("/api/users", userRouter);

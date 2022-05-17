@@ -12,5 +12,5 @@ const postRouter = express.Router();
 
 postRouter.route("/").get(getPosts).post(createPost);
 postRouter.route("/:postId").get(getPost).put(editPost).post(deletePost);
-postRouter.route("/:postId/vote").post(countVote);
+postRouter.route("/:postId/votes").post(countVote);
 export default postRouter;

@@ -17,7 +17,7 @@ export const getPosts = async (
 };
 
 export const countVote = async (data: VoteToPost) => {
-  return await axios.post(`/api/posts/${data.postId}/vote`, data);
+  return await axios.post(`/api/posts/${data.postId}/votes`, data);
 };
 
 export const createPost = async (data: IWritePostForm) => {
