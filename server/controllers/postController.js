@@ -37,28 +37,8 @@ export const createPost = async (req, res) => {
   }
 };
 
-const checkVisited = (visitList, postId) => {
-  console.log(visitList);
-  console.log(postId);
-  if (visitList.includes(`${postId}`)) {
-    return true;
-  } else return false;
-};
-
-const countView = (isVisited, post) => {
-  if (!isVisited) {
-    post.meta.views += 1;
-    post.save();
-    return true;
-  }
-  return false;
-};
-
 export const getPost = async (req, res) => {
-  const {
-    params: { postId },
-    cookies: { visited },
-  } = req;
+  const { postId } = req.params;
   try {
     const post = await Post.findById(postId)
       .populate("owner")
@@ -69,8 +49,6 @@ export const getPost = async (req, res) => {
         },
       });
     if (post) {
-      const isVisited = checkVisited(visited, post._id);
-      const isCounted = countView(isVisited, post);
       if (req.session.user) {
         const {
           session: {
@@ -78,17 +56,9 @@ export const getPost = async (req, res) => {
           },
         } = req;
         const { isUpvoted, isDownvoted } = getIsUserVoted(post, _id);
-        if (isCounted) {
-          visited.push(post._id);
-          return res
-            .cookie("visited", visited)
-            .status(200)
-            .send({ state: "success", post, isUpvoted, isDownvoted });
-        } else {
-          return res
-            .status(200)
-            .send({ state: "success", post, isUpvoted, isDownvoted });
-        }
+        return res
+          .status(200)
+          .send({ state: "success", post, isUpvoted, isDownvoted });
       }
       return res.status(200).send({ state: "success", post });
     } else {
@@ -232,5 +202,26 @@ export const countVote = async (req, res) => {
     return res
       .status(400)
       .send({ field: "serverError", message: "Failed to vote" });
+  }
+};
+
+export const countView = async (req, res) => {
+  const { postId } = req.params;
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Post not Found",
+    });
+  }
+  try {
+    post.meta.views += 1;
+    post.save();
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .send({ field: "serverError", message: "Failed to count view" });
   }
 };

@@ -31,3 +31,8 @@ export const editPost = async (postId: string, data: IWritePostForm) => {
 export const deletePost = async (postId: string, data: IDeletePostFrom) => {
   return await axios.post(`/api/posts/${postId}`, data);
 };
+
+export const countView = async (postId: string) => {
+  console.log(postId);
+  return await axios.post(`/api/posts/${postId}/views`);
+};

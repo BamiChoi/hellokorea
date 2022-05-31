@@ -1,7 +1,7 @@
 import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
-import { countVote } from "api/postApi";
+import { countView, countVote } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Comment from "Components/post/Comment";
@@ -15,6 +15,7 @@ import Reaction from "Components/post/Reaction";
 import OwnerOnly from "Components/post/OwnerOnly";
 import { usePost } from "libs/usePost";
 import ErrorMsg from "Components/ErrorMsg";
+import { addViewHistory } from "libs/utils";
 
 export interface IRecomment {
   _id: string;
@@ -90,6 +91,12 @@ function Post() {
     const data = { postId: postId!, votedState, action };
     mutate(data);
   };
+  const { mutate: mutateView } = useMutation(
+    (postId: string) => countView(postId),
+    {
+      onSuccess: () => {},
+    }
+  );
   const { isLoading, data, errorMessage } = usePost(postId!);
   const post = data?.data.post;
   const isUpvoted = data?.data.isUpvoted;
@@ -103,6 +110,18 @@ function Post() {
       setVotedState({ voted: false });
     }
   }, [isUpvoted, isDownvoted]);
+  useEffect(() => {
+    const viewHistory = localStorage.getItem("view_history");
+    if (!viewHistory) {
+      localStorage.setItem("view_history", postId!);
+      mutateView(postId!);
+    } else {
+      if (!viewHistory.includes(postId!)) {
+        mutateView(postId!);
+        addViewHistory(postId!, viewHistory);
+      }
+    }
+  }, [postId, mutateView]);
   return (
     <Wrapper>
       <main className="w-full px-10">
