@@ -111,16 +111,9 @@ function Post() {
     }
   }, [isUpvoted, isDownvoted]);
   useEffect(() => {
-    const viewHistory = localStorage.getItem("view_history");
-    if (!viewHistory) {
-      localStorage.setItem("view_history", postId!);
-      mutateView(postId!);
-    } else {
-      if (!viewHistory.includes(postId!)) {
-        mutateView(postId!);
-        addViewHistory(postId!, viewHistory);
-      }
-    }
+    const viewsHistory = localStorage.getItem("views_history");
+    const added = addViewHistory(postId!, viewsHistory);
+    if (added) mutateView(postId!);
   }, [postId, mutateView]);
   return (
     <Wrapper>
