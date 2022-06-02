@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { logout } from "reducers/auth";
+import { logout } from "reducers/user";
 import { useEffect } from "react";
 import { IMiddlewareProps } from "./LogoutOnly";
 

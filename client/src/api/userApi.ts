@@ -18,3 +18,7 @@ export const editProfile = async (id: string, data: IEditProfileForm) => {
 export const changePassword = async (id: string, data: IPasswordChangeForm) => {
   return await axios.post(`/api/users/${id}/password`, data);
 };
+
+export const toggleBookmark = async (id: string, postId: string) => {
+  return await axios.post(`/api/users/${id}/bookmarks`, { postId });
+};

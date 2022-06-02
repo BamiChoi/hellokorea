@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { loggedInUser, logout } from "reducers/auth";
+import { loggedInUser, logout } from "reducers/user";
 import Menu from "./Menu";
 import { useMutation } from "react-query";
 import { logoutUser } from "api/sessionApi";

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { IUser, login } from "reducers/auth";
+import { IUser, login } from "reducers/user";
 import Wrapper from "Components/Wrapper";
 import Input from "Components/Input";
 import Button from "Components/Button";

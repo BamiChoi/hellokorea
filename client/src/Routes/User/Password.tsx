@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { loggedInUser, logout } from "reducers/auth";
+import { loggedInUser, logout } from "reducers/user";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import Button from "Components/Button";

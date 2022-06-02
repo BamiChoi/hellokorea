@@ -33,6 +33,7 @@ export const login = async (req, res) => {
         birthdate,
         avatar,
         verified,
+        bookmarks,
       },
     } = req.session;
     const loggedInUser = {
@@ -46,6 +47,7 @@ export const login = async (req, res) => {
       avatar,
       loggedIn,
       verified,
+      bookmarks,
     };
     return res
       .status(200)

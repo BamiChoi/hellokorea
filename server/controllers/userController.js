@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import { deleteEl } from "../libs/utils";
 
 export const signup = async (req, res) => {
   const {
@@ -171,6 +172,40 @@ export const changePassword = async (req, res) => {
       state: "failed",
       field: "serverError",
       message: "Failed to change password",
+    });
+  }
+};
+
+export const toggleBookmark = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { postId },
+  } = req;
+  const user = await User.findById(_id);
+  if (!user) {
+    return res.status(400).send({ state: "failed", message: "Not found user" });
+  }
+  try {
+    const exists = user.bookmarks.includes(postId);
+    if (exists) {
+      deleteEl(user.bookmarks, postId);
+    } else {
+      user.bookmarks.push(postId);
+    }
+    user.save();
+    console.log(user.bookmarks);
+    return res.status(200).send({
+      state: "success",
+      bookmarks: user.bookmarks,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Failed to add to bookmarks",
     });
   }
 };

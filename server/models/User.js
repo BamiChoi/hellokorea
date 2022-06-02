@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
   voted: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Post" },
   ],
+  bookmarks: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Post" },
+  ],
 });
 
 userSchema.pre("save", async function () {

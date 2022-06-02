@@ -6,7 +6,7 @@ import Title from "Components/Title";
 import Button from "Components/Button";
 import Comment from "Components/post/Comment";
 import CreateForm from "Components/comment/CreateForm";
-import { loggedInUser } from "reducers/auth";
+import { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { queryClient } from "index";

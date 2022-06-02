@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { IUser, loggedInUser } from "reducers/auth";
+import { IUser, loggedInUser } from "reducers/user";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { editUser } from "reducers/auth";
+import { edit } from "reducers/user";
 import { useEffect, useState } from "react";
 import Input from "Components/Input";
 import Title from "Components/Title";
@@ -55,7 +55,7 @@ function Edit() {
     {
       onSuccess: (data: IEditProfileResponse) => {
         queryClient.invalidateQueries([user.id, "getProfile"]);
-        dispatch(editUser({ ...data.data.updatedUser }));
+        dispatch(edit({ ...data.data.updatedUser }));
         navigate("/user");
       },
       onError: (error: IEditProfileError) => {

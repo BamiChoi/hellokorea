@@ -1,4 +1,4 @@
-import { IUser } from "reducers/auth";
+import { IUser } from "reducers/user";
 
 interface IInfoProps {
   profile: IUser;

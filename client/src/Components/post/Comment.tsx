@@ -6,7 +6,7 @@ import EditForm from "../comment/EditForm";
 import CreateForm from "../recomment/CreateForm";
 import Recomment from "./Recomment";
 import { useSelector } from "react-redux";
-import { loggedInUser } from "reducers/auth";
+import { loggedInUser } from "reducers/user";
 import { useMutation } from "react-query";
 import { countVote } from "api/commentApi";
 import { queryClient } from "index";

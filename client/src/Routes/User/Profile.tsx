@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { IUser, loggedInUser } from "reducers/auth";
+import { IUser, loggedInUser } from "reducers/user";
 import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 import Activity from "Components/profile/Activity";
