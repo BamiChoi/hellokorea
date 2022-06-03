@@ -3,7 +3,7 @@ import Menu from "./Menu";
 function Nav() {
   return (
     <div className="grid grid-cols-3 grid-rows-1 gap-2 mb-8">
-      <Menu text="Bookmark" url="#">
+      <Menu text="Bookmark" url="/user/bookmark">
         <svg
           className="w-6 h-6"
           fill="currentColor"

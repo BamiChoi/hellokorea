@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Post from "../models/Post";
 import bcrypt from "bcrypt";
 import { deleteEl } from "../libs/utils";
 
@@ -195,7 +196,6 @@ export const toggleBookmark = async (req, res) => {
       user.bookmarks.push(postId);
     }
     user.save();
-    console.log(user.bookmarks);
     return res.status(200).send({
       state: "success",
       bookmarks: user.bookmarks,
@@ -207,5 +207,26 @@ export const toggleBookmark = async (req, res) => {
       field: "serverError",
       message: "Failed to add to bookmarks",
     });
+  }
+};
+
+export const getBookmark = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session;
+  const user = await User.findById(_id);
+  if (!user) {
+    return res.status(400).send({ state: "failed", message: "Not found user" });
+  }
+  try {
+    const bookmarks = user.bookmarks;
+    const bookmarkedPosts = bookmarks.map(async (postId) => {
+      const post = await Post.findById(postId).populate("owner");
+      return post;
+    });
+    const posts = await Promise.all(bookmarkedPosts);
+    return res.status(200).send({ state: "success", posts });
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -9,7 +9,10 @@ function Item({ post }: IItemProps) {
   const parsedTimeStamp = parseISO(post.createdAt);
   return (
     <li className="border-b-2 border-gray last:border-0 flex flex-col items-start pb-2 px-2">
-      <Link to={post._id} className="w-full mb-2 text-lg">
+      <Link
+        to={`/${post.category}/${post._id}`}
+        className="w-full mb-2 text-lg"
+      >
         {post.title}
       </Link>
       <div className="flex justify-between w-full">

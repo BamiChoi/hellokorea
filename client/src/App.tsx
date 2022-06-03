@@ -15,6 +15,7 @@ import PostEdit from "Routes/Post/Edit";
 import Delete from "Routes/Post/Delete";
 
 import WithCategory from "Routes/middlewares/WithCategory";
+import Bookmark from "Routes/User/Bookmark";
 
 function App() {
   return (
@@ -49,6 +50,14 @@ function App() {
               </LoggedInOnly>
             }
           />
+          <Route
+            path="bookmark"
+            element={
+              <LoggedInOnly>
+                <Bookmark />
+              </LoggedInOnly>
+            }
+          ></Route>
           <Route
             path="edit"
             element={

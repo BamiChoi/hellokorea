@@ -1,18 +1,9 @@
 import Button from "Components/Button";
-import Item from "Components/board/Item";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
 import { Link, useParams } from "react-router-dom";
-import { IPost } from "./Post";
 import { usePosts } from "libs/usePosts";
-import ErrorMsg from "Components/ErrorMsg";
-
-export interface IPostsResponse {
-  data: {
-    status: string;
-    posts: IPost[];
-  };
-}
+import List from "Components/board/List";
 
 function Board() {
   const { category } = useParams();
@@ -21,7 +12,7 @@ function Board() {
     <Wrapper>
       <main className="w-full flex flex-col justify-center px-10">
         <nav className="flex items-center justify-between w-full">
-          <Title text={category!}></Title>
+          <Title text={category!} />
           <Link to={`/${category}/write`}>
             <Button
               text="Write"
@@ -29,13 +20,7 @@ function Board() {
             />
           </Link>
         </nav>
-        <ul className="border-y-2 border-main py-2 space-y-2">
-          {data ? (
-            data.data.posts.map((post) => <Item key={post._id} post={post} />)
-          ) : errorMessage ? (
-            <ErrorMsg text={errorMessage} />
-          ) : null}
-        </ul>
+        <List data={data} errorMessage={errorMessage} />
       </main>
     </Wrapper>
   );
