@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { IPost } from "Routes/Post/Post";
 import { format, parseISO } from "date-fns";
+
 interface IItemProps {
   post: IPost;
 }

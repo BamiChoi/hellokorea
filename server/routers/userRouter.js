@@ -5,7 +5,7 @@ import {
   signup,
   changePassword,
   toggleBookmark,
-  getBookmark,
+  getBookmarks,
 } from "../controllers/userController";
 import { uploadAvatar } from "../middlewares";
 
@@ -17,6 +17,6 @@ userRouter
   .get(getProfile)
   .put(uploadAvatar.single("avatar"), editProfile);
 userRouter.route("/:id/password").post(changePassword);
-userRouter.route("/:id/bookmarks").get(getBookmark).post(toggleBookmark);
+userRouter.route("/:id/bookmarks").get(getBookmarks).post(toggleBookmark);
 
 export default userRouter;

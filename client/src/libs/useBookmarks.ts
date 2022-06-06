@@ -1,14 +1,14 @@
-import { getBookmark } from "api/userApi";
+import { getBookmarks } from "api/userApi";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { handleErrorResponse } from "./handleError";
 import { IPostsResponse } from "./usePosts";
 
-export const useBookmark = (userId: string) => {
+export const useBookmarks = (userId: string) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const { isLoading, data } = useQuery<IPostsResponse>(
     ["getBookmark"],
-    () => getBookmark(userId),
+    () => getBookmarks(userId),
     {
       retry: false,
       onError: (error) => {

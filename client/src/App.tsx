@@ -15,7 +15,7 @@ import PostEdit from "Routes/Post/Edit";
 import Delete from "Routes/Post/Delete";
 
 import WithCategory from "Routes/middlewares/WithCategory";
-import Bookmark from "Routes/User/Bookmark";
+import Bookmarks from "Routes/User/Bookmarks";
 
 function App() {
   return (
@@ -51,10 +51,10 @@ function App() {
             }
           />
           <Route
-            path="bookmark"
+            path="bookmarks"
             element={
               <LoggedInOnly>
-                <Bookmark />
+                <Bookmarks />
               </LoggedInOnly>
             }
           ></Route>

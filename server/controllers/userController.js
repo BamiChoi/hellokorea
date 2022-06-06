@@ -205,12 +205,12 @@ export const toggleBookmark = async (req, res) => {
     return res.status(400).send({
       state: "failed",
       field: "serverError",
-      message: "Failed to add to bookmarks",
+      message: "Failed to toggle bookmarks",
     });
   }
 };
 
-export const getBookmark = async (req, res) => {
+export const getBookmarks = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
@@ -228,5 +228,10 @@ export const getBookmark = async (req, res) => {
     return res.status(200).send({ state: "success", posts });
   } catch (error) {
     console.log(error);
+    return res.status(400).send({
+      state: "failed",
+      field: "serverError",
+      message: "Failed to get bookmarks",
+    });
   }
 };

@@ -70,6 +70,8 @@ export const getPost = async (req, res) => {
   }
 };
 
+// ToDo: sort 로직을 따로 빼고, 완전히 구현하기.
+// 정렬을 프론트에서 하는 것과 비교해서 무엇이 더 좋을까요?
 export const getPosts = async (req, res) => {
   const { category, sort, offset } = req.query;
   if (sort === "upvote") {

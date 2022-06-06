@@ -1,22 +1,22 @@
 import List from "Components/board/List";
 import Title from "Components/Title";
 import Wrapper from "Components/Wrapper";
-import { useBookmark } from "libs/useBookmark";
+import { useBookmarks } from "libs/useBookmarks";
 import { useSelector } from "react-redux";
 import { loggedInUser } from "reducers/user";
 
-function Bookmark() {
+function Bookmarks() {
   const user = useSelector(loggedInUser);
-  const { isLoading, data, errorMessage } = useBookmark(user.id);
+  const { isLoading, data, errorMessage } = useBookmarks(user.id);
   console.log(data);
   return (
     <Wrapper>
       <main className="w-full flex flex-col justify-center px-10">
-        <Title text="My Bookmark" />
+        <Title text="My Bookmarks" />
         <List data={data} errorMessage={errorMessage} />
       </main>
     </Wrapper>
   );
 }
 
-export default Bookmark;
+export default Bookmarks;

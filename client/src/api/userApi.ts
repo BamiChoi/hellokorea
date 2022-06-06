@@ -23,6 +23,6 @@ export const toggleBookmark = async (id: string, postId: string) => {
   return await axios.post(`/api/users/${id}/bookmarks`, { postId });
 };
 
-export const getBookmark = async (id: string) => {
+export const getBookmarks = async (id: string) => {
   return await axios.get(`/api/users/${id}/bookmarks`);
 };
