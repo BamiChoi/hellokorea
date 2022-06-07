@@ -26,12 +26,14 @@ function Header() {
       </Link>
       <nav>
         {user ? (
-          <ul className="list-none flex space-x-2">
-            <Menu url="/user" text="My page" />
+          <ul className="list-none flex space-x-4 items-center">
+            <li>
+              <span className="text-white">Hello, {user.firstname}</span>
+            </li>
             <Menu onClick={onClickLogout} text="logout" />
           </ul>
         ) : (
-          <ul className="list-none flex space-x-2">
+          <ul className="list-none flex space-x-2 items-center">
             <Menu url="/signup" text="Sign up" />
             <Menu url="/login" text="Login" />
           </ul>

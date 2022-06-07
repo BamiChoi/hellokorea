@@ -14,7 +14,7 @@ interface IListProps {
 function List({ title, category, sort }: IListProps) {
   const { isLoading, data, errorMessage } = usePosts(category, sort, 5);
   return (
-    <>
+    <div>
       <Link to={category}>
         <h3 className="mb-2 bg-main text-white py-1 px-2">{title}</h3>
       </Link>
@@ -27,7 +27,7 @@ function List({ title, category, sort }: IListProps) {
           <ErrorMsg text={errorMessage} />
         ) : null}
       </ul>
-    </>
+    </div>
   );
 }
 

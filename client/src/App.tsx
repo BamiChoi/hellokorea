@@ -16,6 +16,7 @@ import Delete from "Routes/Post/Delete";
 
 import WithCategory from "Routes/middlewares/WithCategory";
 import Bookmarks from "Routes/User/Bookmarks";
+import Nav from "Components/navigator/Nav";
 
 function App() {
   return (
@@ -112,6 +113,7 @@ function App() {
           ></Route>
         </Route>
       </Routes>
+      <Nav />
     </>
   );
 }
