@@ -9,7 +9,7 @@ interface IItemProps {
 function Item({ post, category }: IItemProps) {
   return (
     <li className="border-b-2 border-gray last:border-0 flex justify-between items-start pb-2 px-2">
-      <Link to={`${category}/${post._id}`}>
+      <Link className="w-full" to={`${category}/${post._id}`}>
         <span className="w-full text-lg">{post.title}</span>
       </Link>
       <div className="flex justify-end w-full space-x-1 text-sm">

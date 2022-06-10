@@ -34,13 +34,13 @@ const user = createSlice({
     edit: (state, action) => {
       state.loggedInUser = { ...(state.loggedInUser || {}), ...action.payload };
     },
-    bookmark: (state, action) => {
+    bookmarks: (state, action) => {
       state.loggedInUser = { ...(state.loggedInUser || {}), ...action.payload };
     },
   },
 });
 
-export const { login, logout, edit, bookmark } = user.actions;
+export const { login, logout, edit, bookmarks } = user.actions;
 export const loggedInUser = (state: IUserState) => {
   return state.user.loggedInUser;
 };

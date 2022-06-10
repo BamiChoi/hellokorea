@@ -10,7 +10,7 @@ function Nav() {
   return (
     <>
       <nav className="fixed bottom-0 bg-main w-full p-2 justify-center">
-        <ul className="flex text-white justify-between space-x-2">
+        <ul className="flex text-white justify-center w-full">
           <Menu text="All board" onClick={onClickAllBoard} />
           <Menu url="" text="Messages" />
           <Menu url="/user" text="My page" />

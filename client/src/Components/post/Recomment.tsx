@@ -4,6 +4,8 @@ import { IRecomment } from "Routes/Post/Post";
 import DeleteModal from "../recomment/DeleteModal";
 import EditForm from "../recomment/EditForm";
 import { format, parseISO } from "date-fns";
+import user, { loggedInUser } from "reducers/user";
+import { useSelector } from "react-redux";
 
 interface IRecommentProps {
   recomment: IRecomment;
@@ -21,6 +23,7 @@ export interface IOnEditRecommentState {
 }
 
 function Recomment({ recomment, postId }: IRecommentProps) {
+  const user = useSelector(loggedInUser);
   const [onDeleteRecomment, setOnDeleteRecomment] =
     useState<IOnDeleteRecommentState>({
       onDelete: false,
@@ -39,7 +42,8 @@ function Recomment({ recomment, postId }: IRecommentProps) {
   const parsedTimeStamp = parseISO(recomment.createdAt);
   return (
     <li className="bg-cream p-4 rounded-md ml-24">
-      <div className="flex justify-between">
+      <header className="flex justify-between">
+        {/* Comment.tsx와 중복되는 부분 분리하기 */}
         <div className="disply flex">
           <img
             alt="owner_avatar"
@@ -49,19 +53,23 @@ function Recomment({ recomment, postId }: IRecommentProps) {
           <span>{recomment.nickname}</span>
         </div>
         <div className="space-x-2">
-          <Button
-            onClick={() => onClickEditRecomment(recomment._id)}
-            text="edit"
-            customClassName=" "
-          ></Button>
-          <span>|</span>
-          <Button
-            onClick={() => onClickDeleteRecomment(recomment._id)}
-            text="delete"
-            customClassName=" "
-          ></Button>
+          {user && user.id === recomment.owner._id ? (
+            <>
+              <Button
+                onClick={() => onClickEditRecomment(recomment._id)}
+                text="edit"
+                customClassName=" "
+              />
+              <span>|</span>
+              <Button
+                onClick={() => onClickDeleteRecomment(recomment._id)}
+                text="delete"
+                customClassName=" "
+              />
+            </>
+          ) : null}
         </div>
-      </div>
+      </header>
       {onEditRecomment.onEdit &&
       recomment._id === onEditRecomment.recommentId ? (
         <EditForm

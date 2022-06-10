@@ -86,11 +86,11 @@ function Comment({ comment, postId }: ICommentProps) {
   return (
     <>
       <li className="bg-cream p-4 rounded-md">
-        <div className="flex justify-between">
+        <header className="flex justify-between">
           <div className="disply flex">
             <img
               alt="owner_avatar"
-              src={"/" + comment.avatar}
+              src={"/" + comment.owner.avatar}
               className="bg-white w-8 h-8 rounded-full mr-2"
             />
             <span>{comment.nickname}</span>
@@ -117,7 +117,7 @@ function Comment({ comment, postId }: ICommentProps) {
                 />
               </>
             ) : null}
-            {user && user.id === comment.owner ? (
+            {user && user.id === comment.owner._id ? (
               <>
                 <span>|</span>
                 <Button
@@ -134,7 +134,7 @@ function Comment({ comment, postId }: ICommentProps) {
               </>
             ) : null}
           </div>
-        </div>
+        </header>
         {onEditComment.onEdit && comment._id === onEditComment.commentId ? (
           <EditForm
             postId={postId}
@@ -143,14 +143,16 @@ function Comment({ comment, postId }: ICommentProps) {
             setOnEditComment={setOnEditComment}
           />
         ) : (
-          <span>{comment.text}</span>
+          <article>
+            <span>{comment.text}</span>
+          </article>
         )}
         <div className="flex justify-between mt-2">
           <div className="space-x-2">
             <span>{comment.meta.upvotes.length} upvotes</span>
             <span>{comment.meta.downvotes.length} downvotes</span>
           </div>
-          <span>{format(parsedTimeStamp, "yyyy-MM-dd-hh:mm")}</span>
+          <time>{format(parsedTimeStamp, "yyyy-MM-dd-hh:mm")}</time>
         </div>
         {onDeleteComment.onDelete ? (
           <DeleteModal
@@ -160,6 +162,7 @@ function Comment({ comment, postId }: ICommentProps) {
           />
         ) : null}
       </li>
+
       {onCreateRecomment.onCreate ? (
         <CreateForm
           postId={postId!}

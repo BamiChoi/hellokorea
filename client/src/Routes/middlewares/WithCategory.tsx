@@ -3,7 +3,7 @@ import { IMiddlewareProps } from "./LogoutOnly";
 
 function WithCategory({ children }: IMiddlewareProps) {
   const { category } = useParams();
-  const categoryList = ["notice", "beauty"];
+  const categoryList = ["notice", "beauty", "k-pop", "trip", "school", "work"];
   return categoryList.includes(category!) ? (
     <>{children}</>
   ) : (

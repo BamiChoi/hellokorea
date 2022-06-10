@@ -44,9 +44,15 @@ export const getPost = async (req, res) => {
       .populate("owner")
       .populate({
         path: "comments",
-        populate: {
-          path: "recomments",
-        },
+        populate: [
+          {
+            path: "recomments",
+            populate: { path: "owner" },
+          },
+          {
+            path: "owner",
+          },
+        ],
       });
     if (post) {
       if (req.session.user) {

@@ -24,20 +24,20 @@ function Header() {
       <Link to="/">
         <h1 className="text-white text-2xl">HELLO KOREA</h1>
       </Link>
-      <nav>
+      <nav className="flex space-x-4 items-center">
         {user ? (
-          <ul className="list-none flex space-x-4 items-center">
-            <li>
-              <span className="text-white">Hello, {user.firstname}</span>
-            </li>
+          <span className="text-white">Hello, {user.firstname}</span>
+        ) : null}
+        <ul className="flex space-x-4">
+          {user ? (
             <Menu onClick={onClickLogout} text="logout" />
-          </ul>
-        ) : (
-          <ul className="list-none flex space-x-2 items-center">
-            <Menu url="/signup" text="Sign up" />
-            <Menu url="/login" text="Login" />
-          </ul>
-        )}
+          ) : (
+            <>
+              <Menu url="/signup" text="Sign up" />
+              <Menu url="/login" text="Login" />
+            </>
+          )}
+        </ul>
       </nav>
     </header>
   );

@@ -6,17 +6,20 @@ import User from "../models/User";
 export const createComment = async (req, res) => {
   const {
     session: {
-      user: { _id, nickname, avatar },
+      user: { _id },
     },
     body: { text, postId },
   } = req;
+  const user = await User.findById(_id);
+  console.log(user);
+  if (!user) {
+    return res.status(400).send({ state: "failed", message: "Not found user" });
+  }
   try {
     const newComment = await Comment.create({
       target: postId,
       text,
       owner: _id,
-      avatar,
-      nickname,
     });
     const user = await User.findById(_id);
     const post = await Post.findById(postId);

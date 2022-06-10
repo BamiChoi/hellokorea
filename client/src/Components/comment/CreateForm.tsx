@@ -47,8 +47,6 @@ function CreateForm({ postId }: ICreateFormProps) {
     }
   );
   const isValid = async (data: ICreateCommentForm) => {
-    console.log(isLoading);
-    console.log("submit");
     mutate(data);
   };
   setValue("postId", postId!);

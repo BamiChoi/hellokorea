@@ -8,11 +8,11 @@ interface IBoardItemProps {
 
 function BoardItem({ onClick, url, text }: IBoardItemProps) {
   return (
-    <li>
-      <Link to={url}>
+    <div className="w-fit">
+      <Link className="hover:text-main" to={url}>
         <div onClick={onClick}>{text}</div>
       </Link>
-    </li>
+    </div>
   );
 }
 

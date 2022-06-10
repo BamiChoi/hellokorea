@@ -10,9 +10,17 @@ function Menu({ onClick, text, url }: IMenuProps) {
   return (
     <li
       onClick={onClick}
-      className="p-5 w-full text-center border-r-2 last:border-0"
+      className="text-center w-full border-r-2 flex justify-center pl-2 pr-2 last:border-0 last:pr-0 first:pl-0"
     >
-      <Link to={url ? url : ""}>{text}</Link>
+      {url ? (
+        <Link className="hover:bg-powermain p-3 w-full rounded-md" to={url}>
+          {text}
+        </Link>
+      ) : (
+        <span className="hover:bg-powermain p-3 w-full rounded-md cursor-pointer">
+          {text}
+        </span>
+      )}
     </li>
   );
 }

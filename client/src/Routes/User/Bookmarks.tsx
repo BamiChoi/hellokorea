@@ -8,7 +8,6 @@ import { loggedInUser } from "reducers/user";
 function Bookmarks() {
   const user = useSelector(loggedInUser);
   const { isLoading, data, errorMessage } = useBookmarks(user.id);
-  console.log(data);
   return (
     <Wrapper>
       <main className="w-full flex flex-col justify-center px-10">

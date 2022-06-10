@@ -4,7 +4,6 @@ import { useMutation } from "react-query";
 import { countView, countVote } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
-import Comment from "Components/post/Comment";
 import CreateForm from "Components/comment/CreateForm";
 import { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
@@ -16,12 +15,14 @@ import OwnerOnly from "Components/post/OwnerOnly";
 import { usePost } from "libs/usePost";
 import ErrorMsg from "Components/ErrorMsg";
 import { addViewHistory } from "libs/utils";
+import Comments from "Components/post/Comments";
 
 export interface IRecomment {
   _id: string;
   text: string;
   nickname: string;
   avatar: string;
+  owner: IOwner;
   createdAt: string;
   modifiedAt: string;
 }
@@ -31,7 +32,7 @@ export interface IComment {
   _id: string;
   text: string;
   nickname: string;
-  owner: string;
+  owner: IOwner;
   avatar: string;
   meta: {
     upvotes: string[];
@@ -118,7 +119,7 @@ function Post() {
   return (
     <Wrapper>
       <main className="w-full px-10">
-        <nav className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full">
           <Title text={category!}></Title>
           <Link to={`/${category}/write`}>
             <Button
@@ -126,30 +127,18 @@ function Post() {
               customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md "
             />
           </Link>
-        </nav>
+        </div>
         {post ? (
           <>
-            <section>
-              <Content post={post} />
-              <div className="flex w-full space-x-2 justify-end">
-                {user ? (
-                  <Reaction votedState={votedState} onClickVote={onClickVote} />
-                ) : null}
-                {user && user.id === post.owner._id ? <OwnerOnly /> : null}
-              </div>
-            </section>
-            <section>
-              <CreateForm postId={postId!} />
-              <ul className="mt-10 space-y-4">
-                {post.comments?.map((comment) => (
-                  <Comment
-                    key={comment._id}
-                    comment={comment}
-                    postId={postId!}
-                  ></Comment>
-                ))}
-              </ul>
-            </section>
+            <Content post={post} />
+            <div className="flex w-full space-x-2 justify-end">
+              {user ? (
+                <Reaction votedState={votedState} onClickVote={onClickVote} />
+              ) : null}
+              {user && user.id === post.owner._id ? <OwnerOnly /> : null}
+            </div>
+            <CreateForm postId={postId!} />
+            <Comments post={post} />
           </>
         ) : errorMessage ? (
           <ErrorMsg text={errorMessage} />
