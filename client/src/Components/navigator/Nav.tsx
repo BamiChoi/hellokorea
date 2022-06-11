@@ -9,12 +9,12 @@ function Nav() {
   };
   return (
     <>
-      <nav className="fixed bottom-0 bg-main w-full p-2 justify-center">
-        <ul className="flex text-white justify-center w-full">
+      <nav className="fixed bottom-0 nav-bottom w-full p-2 justify-center">
+        <ul className="flex text-black justify-center w-full">
           <Menu text="All board" onClick={onClickAllBoard} />
-          <Menu url="" text="Messages" />
+          <Menu url="" text="Messagges" />
           <Menu url="/user" text="My page" />
-          <Menu url="" text="Service" />
+          <Menu url="/service" text="Service" />
         </ul>
       </nav>
       {showAllBoard ? <AllBoard toggle={onClickAllBoard} /> : null}

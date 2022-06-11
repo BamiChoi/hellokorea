@@ -28,4 +28,8 @@
     @apply text-sm;
     @apply font-semibold;
   }
+  .nav-bottom {
+    background: rgb(164,164,164);
+    background: linear-gradient(180deg, rgba(164,164,164,1) 0%, rgba(221,221,221,1) 50%, rgba(164,164,164,1) 100%);
+  }
 }

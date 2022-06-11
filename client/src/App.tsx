@@ -17,6 +17,7 @@ import Delete from "Routes/Post/Delete";
 import WithCategory from "Routes/middlewares/WithCategory";
 import Bookmarks from "Routes/User/Bookmarks";
 import Nav from "Components/navigator/Nav";
+import Service from "Routes/Service/Service";
 
 function App() {
   return (
@@ -58,7 +59,7 @@ function App() {
                 <Bookmarks />
               </LoggedInOnly>
             }
-          ></Route>
+          />
           <Route
             path="edit"
             element={
@@ -101,7 +102,7 @@ function App() {
                   <Delete />
                 </LoggedInOnly>
               }
-            ></Route>
+            />
           </Route>
           <Route
             path=":postId/edit"
@@ -110,7 +111,17 @@ function App() {
                 <PostEdit />
               </LoggedInOnly>
             }
-          ></Route>
+          />
+        </Route>
+        <Route path="service">
+          <Route
+            index
+            element={
+              <LoggedInOnly>
+                <Service />
+              </LoggedInOnly>
+            }
+          />
         </Route>
       </Routes>
       <Nav />

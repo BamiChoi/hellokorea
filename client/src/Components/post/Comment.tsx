@@ -93,7 +93,7 @@ function Comment({ comment, postId }: ICommentProps) {
               src={"/" + comment.owner.avatar}
               className="bg-white w-8 h-8 rounded-full mr-2"
             />
-            <span>{comment.nickname}</span>
+            <span>{comment.owner.nickname}</span>
           </div>
           <div className="space-x-2">
             {user ? (

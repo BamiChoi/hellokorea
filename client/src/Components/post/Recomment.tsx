@@ -47,10 +47,10 @@ function Recomment({ recomment, postId }: IRecommentProps) {
         <div className="disply flex">
           <img
             alt="owner_avatar"
-            src={"/" + recomment.avatar}
+            src={"/" + recomment.owner.avatar}
             className="bg-white w-8 h-8 rounded-full mr-2"
           />
-          <span>{recomment.nickname}</span>
+          <span>{recomment.owner.nickname}</span>
         </div>
         <div className="space-x-2">
           {user && user.id === recomment.owner._id ? (
