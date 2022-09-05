@@ -57,7 +57,7 @@ function CreateForm({ postId }: ICreateFormProps) {
         className="flex space-x-2 mt-10 items-end"
       >
         <Input
-          label="Write your comment"
+          label="댓글 작성하기"
           id="text"
           type="text"
           errors={errors?.text?.message}
@@ -68,8 +68,8 @@ function CreateForm({ postId }: ICreateFormProps) {
           })}
         />
         <Button
-          text="submit"
-          customClassName="border-main border-2 rounded-md p-2 h-10 flex items-center"
+          text="제출"
+          customClassName="border-main border-2 rounded-md p-2 h-10 flex w-32 justify-center items-center hover:bg-main hover:text-white"
           errors={errors.serverError?.message}
         />
       </form>

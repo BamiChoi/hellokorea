@@ -13,10 +13,11 @@ export interface IPostsResponse {
 }
 
 export const usePosts = (category: string, sort: Sort, offset: number) => {
+  const [page, setPage] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string>();
   const { isLoading, data } = useQuery<IPostsResponse>(
-    [category, "getPosts"],
-    () => getPosts(category, sort, offset),
+    [category, "getPosts", page],
+    () => getPosts(category, sort, page, offset),
     {
       retry: false,
       onError: (error) => {

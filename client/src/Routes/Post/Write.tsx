@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "react-query";
+import { createPost } from "api/postApi";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import TextEditor from "Components/post/TextEditor";
 import Wrapper from "Components/Wrapper";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import Input from "Components/Input";
-import TextEditor from "Components/post/TextEditor";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation } from "react-query";
-import { createPost } from "api/postApi";
 
 export interface IWritePostForm {
   category: string;

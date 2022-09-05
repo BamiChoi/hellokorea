@@ -1,7 +1,7 @@
 import { queryClient } from "index";
 import Input from "Components/Input";
 import { useForm } from "react-hook-form";
-import { IOnEditCommentState } from "../post/Comment";
+import { IOnEditCommentState } from "./Comment";
 import Button from "Components/Button";
 import { editComment } from "api/commentApi";
 import { ICommentFormError } from "./CreateForm";

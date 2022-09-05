@@ -6,7 +6,7 @@ function Service() {
   return (
     <Wrapper>
       <main className="w-full flex flex-col items-center justify-center px-10">
-        <Title text="Service" />
+        <Title text="서비스" />
         <div className="grid grid-cols-3 gap-4">
           <Item
             text="USIM"
@@ -28,7 +28,7 @@ function Service() {
             }
           />
           <Item
-            text="HOUSE"
+            text="집"
             icon={
               <svg
                 className="w-8 h-8"
@@ -41,7 +41,7 @@ function Service() {
             }
           />
           <Item
-            text="SCHOOL"
+            text="학교"
             icon={
               <svg
                 className="w-6 h-6"
@@ -54,7 +54,7 @@ function Service() {
             }
           />
           <Item
-            text="WORK"
+            text="일자리"
             icon={
               <svg
                 className="w-6 h-6"

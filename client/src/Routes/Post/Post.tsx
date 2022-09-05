@@ -123,7 +123,7 @@ function Post() {
           <Title text={category!}></Title>
           <Link to={`/${category}/write`}>
             <Button
-              text="Write"
+              text="글쓰기"
               customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md "
             />
           </Link>

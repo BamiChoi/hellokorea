@@ -4,7 +4,7 @@ import Overlay from "Components/Overlay";
 import { queryClient } from "index";
 import { useState } from "react";
 import { useMutation } from "react-query";
-import { IOnDeleteCommentState } from "../post/Comment";
+import { IOnDeleteCommentState } from "./Comment";
 
 interface IDeleteModalProps {
   postId: string;

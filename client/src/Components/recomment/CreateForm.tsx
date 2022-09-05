@@ -5,7 +5,7 @@ import { queryClient } from "index";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { IOnCreateRecommentState } from "../post/Comment";
+import { IOnCreateRecommentState } from "../comment/Comment";
 import { ICommentFormError } from "../comment/CreateForm";
 
 interface ICreateFormProps {

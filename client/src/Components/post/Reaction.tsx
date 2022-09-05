@@ -12,7 +12,7 @@ function Reaction({ votedState, onClickVote }: IReactionProps) {
     <>
       <Button
         onClick={() => onClickVote("up")}
-        text="up"
+        text="추천"
         customClassName={addClassnames(
           "w-20 border-2 border-main px-3 py-2 rounded-md",
           votedState.voted && votedState.type === "up"
@@ -22,7 +22,7 @@ function Reaction({ votedState, onClickVote }: IReactionProps) {
       />
       <Button
         onClick={() => onClickVote("down")}
-        text="down"
+        text="비추천"
         customClassName={addClassnames(
           "w-20 border-2 border-main px-3 py-2 rounded-md",
           votedState.voted && votedState.type === "down"

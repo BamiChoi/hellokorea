@@ -11,9 +11,12 @@ export const getPost = async (postId: string) => {
 export const getPosts = async (
   category: string,
   sort: Sort,
+  page: number,
   offset?: number
 ) => {
-  return await axios.get(`/api/posts`, { params: { category, sort, offset } });
+  return await axios.get(`/api/posts?page=${page}`, {
+    params: { category, sort, offset },
+  });
 };
 
 export const countVote = async (data: VoteToPost) => {

@@ -1,5 +1,5 @@
 import { IPost } from "Routes/Post/Post";
-import Comment from "./Comment";
+import Comment from "../comment/Comment";
 
 interface ICommentsProps {
   post: IPost;

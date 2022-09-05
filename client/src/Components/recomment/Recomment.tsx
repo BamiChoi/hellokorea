@@ -1,8 +1,8 @@
 import Button from "Components/Button";
 import { useState } from "react";
 import { IRecomment } from "Routes/Post/Post";
-import DeleteModal from "../recomment/DeleteModal";
-import EditForm from "../recomment/EditForm";
+import DeleteModal from "./DeleteModal";
+import EditForm from "./EditForm";
 import { format, parseISO } from "date-fns";
 import user, { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
@@ -57,13 +57,13 @@ function Recomment({ recomment, postId }: IRecommentProps) {
             <>
               <Button
                 onClick={() => onClickEditRecomment(recomment._id)}
-                text="edit"
+                text="수정"
                 customClassName=" "
               />
               <span>|</span>
               <Button
                 onClick={() => onClickDeleteRecomment(recomment._id)}
-                text="delete"
+                text="삭제"
                 customClassName=" "
               />
             </>

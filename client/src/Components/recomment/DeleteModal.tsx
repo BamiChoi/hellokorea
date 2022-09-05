@@ -4,7 +4,7 @@ import Overlay from "Components/Overlay";
 import { queryClient } from "index";
 import { useState } from "react";
 import { useMutation } from "react-query";
-import { IOnDeleteRecommentState } from "../post/Recomment";
+import { IOnDeleteRecommentState } from "./Recomment";
 
 interface IDeleteModalProps {
   postId: string;

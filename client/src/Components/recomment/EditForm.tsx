@@ -5,7 +5,7 @@ import { queryClient } from "index";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { ICommentFormError } from "../comment/CreateForm";
-import { IOnEditRecommentState } from "../post/Recomment";
+import { IOnEditRecommentState } from "./Recomment";
 
 interface IEditRecommentProps {
   postId: string;

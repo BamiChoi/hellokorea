@@ -6,13 +6,13 @@ function OwnerOnly() {
     <div className="space-x-2">
       <Link to="edit">
         <Button
-          text="Edit"
+          text="수정"
           customClassName="w-20 hover:bg-powermain bg-main px-3 py-2  text-white rounded-md"
         />
       </Link>
       <Link to="delete">
         <Button
-          text="Delete"
+          text="삭제"
           customClassName="w-20 hover:bg-powermain bg-main px-3 py-2 text-white rounded-md"
         />
       </Link>

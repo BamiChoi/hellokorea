@@ -11,10 +11,10 @@ function Nav() {
     <>
       <nav className="fixed bottom-0 nav-bottom w-full p-2 justify-center">
         <ul className="flex text-black justify-center w-full">
-          <Menu text="All board" onClick={onClickAllBoard} />
-          <Menu url="" text="Messagges" />
-          <Menu url="/user" text="My page" />
-          <Menu url="/service" text="Service" />
+          <Menu text="전체 게시판" onClick={onClickAllBoard} />
+          <Menu url="" text="메세지" />
+          <Menu url="/user" text="내 프로필" />
+          <Menu url="/service" text="서비스" />
         </ul>
       </nav>
       {showAllBoard ? <AllBoard toggle={onClickAllBoard} /> : null}

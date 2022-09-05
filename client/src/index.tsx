@@ -22,7 +22,7 @@ ReactDOM.render(
               <App />
             </CheckAuth>
           </Router>
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </PersistGate>
     </Provider>

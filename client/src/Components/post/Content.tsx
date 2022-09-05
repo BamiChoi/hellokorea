@@ -72,9 +72,9 @@ function Content({ post }: IContentProps) {
                 <span>{post.owner.nickname}</span>
               </div>
               <div className="space-x-1">
-                <span>{post.meta.views} views</span>
-                <span>{post.meta.upvotes.length} up</span>
-                <span>{post.meta.downvotes.length} down</span>
+                <span>조회 {post.meta.views} </span>
+                <span>추천 {post.meta.upvotes.length}</span>
+                <span>비추 {post.meta.downvotes.length}</span>
               </div>
             </div>
             <time>{format(parsedTimeStamp, "yyyy-MM-dd-hh:mm")}</time>

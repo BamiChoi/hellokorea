@@ -26,15 +26,15 @@ function Header() {
       </Link>
       <nav className="flex space-x-4 items-center">
         {user ? (
-          <span className="text-white">Hello, {user.firstname}</span>
+          <span className="text-white">안녕하세요, {user.nickname} 님!</span>
         ) : null}
         <ul className="flex space-x-4">
           {user ? (
-            <Menu onClick={onClickLogout} text="logout" />
+            <Menu onClick={onClickLogout} text="로그아웃" />
           ) : (
             <>
-              <Menu url="/signup" text="Sign up" />
-              <Menu url="/login" text="Login" />
+              <Menu url="/signup" text="회원가입" />
+              <Menu url="/login" text="로그인" />
             </>
           )}
         </ul>
