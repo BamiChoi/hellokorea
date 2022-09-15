@@ -12,7 +12,7 @@ interface IListProps {
 }
 
 function List({ title, category, sort }: IListProps) {
-  const { isLoading, data, errorMessage } = usePosts(category, sort, 5);
+  const { isLoading, data, errorMessage } = usePosts(category, sort, 5, 0); // 페이지네이션 필요없음
   return (
     <div>
       <Link to={category}>
@@ -20,7 +20,7 @@ function List({ title, category, sort }: IListProps) {
       </Link>
       <ul className="border-y-2 border-main py-2 space-y-2">
         {data ? (
-          data.data.posts?.map((post) => (
+          data.data.currentPosts?.map((post) => (
             <Item key={post._id} post={post} category={category} />
           ))
         ) : errorMessage ? (

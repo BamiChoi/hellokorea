@@ -79,30 +79,42 @@ export const getPost = async (req, res) => {
 // ToDo: sort 로직을 따로 빼고, 완전히 구현하기.
 // 정렬을 프론트에서 하는 것과 비교해서 무엇이 더 좋을까요?
 export const getPosts = async (req, res) => {
-  const { category, sort, offset } = req.query;
+  let hasMore;
+  const { category, sort } = req.query;
+  const offset = parseInt(req.query.offset); // offset을 굳이 front에서 넘길 필요가 없는 것 같습니다.
+  const currentIdx = parseInt(req.query.currentIdx);
+  const startIdx = offset * currentIdx;
+  const endIdx = startIdx + offset;
+  // 정렬 시 예시(미구현)
   if (sort === "upvote") {
-    try {
-      const posts = await Post.find({ category }).sort({
-        meta: { upvotes: "desc" },
-      });
-      const sortedPosts = posts.slice(0, offset);
-      return res.status(200).send({ state: "success", sortedPosts });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).send({
-        state: "failed",
-        messasge: "serverError",
-      });
-    }
+    // try {
+    //   const posts = await Post.find({ category }).sort({
+    //     meta: { upvotes: "desc" },
+    //   });
+    //   const currentPosts = posts.slice(startIdx, endIdx);
+    //   return res.status(200).send({ state: "success", currentPosts });
+    // } catch (error) {
+    //   console.log(error);
+    //   return res.status(400).send({
+    //     state: "failed",
+    //     messasge: "serverError",
+    //     hasMore: true,
+    //   });
+    // }
   } else {
     try {
       let posts = await Post.find({ category })
         .sort({ createdAt: "desc" })
         .populate("owner");
-      if (offset) {
-        posts = posts.slice(0, offset);
-      }
-      return res.status(200).send({ state: "success", posts });
+      const length = posts.length;
+      const maxIdx = Math.ceil(length / offset);
+      const currentPosts = posts.slice(startIdx, endIdx);
+      return res.status(200).send({
+        state: "success",
+        currentPosts,
+        hasMore: length > endIdx,
+        maxIdx,
+      });
     } catch (error) {
       console.log(error);
       return res.status(400).send({

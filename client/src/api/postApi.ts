@@ -11,10 +11,10 @@ export const getPost = async (postId: string) => {
 export const getPosts = async (
   category: string,
   sort: Sort,
-  page: number,
+  currentIdx: number,
   offset?: number
 ) => {
-  return await axios.get(`/api/posts?page=${page}`, {
+  return await axios.get(`/api/posts?currentIdx=${currentIdx}`, {
     params: { category, sort, offset },
   });
 };

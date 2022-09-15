@@ -120,7 +120,7 @@ function Post() {
     <Wrapper>
       <main className="w-full px-10">
         <div className="flex items-center justify-between w-full">
-          <Title text={category!}></Title>
+          <Title text={category!} link={category}></Title>
           <Link to={`/${category}/write`}>
             <Button
               text="글쓰기"
