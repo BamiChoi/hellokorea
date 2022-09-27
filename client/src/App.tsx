@@ -18,6 +18,7 @@ import WithCategory from "Routes/middlewares/WithCategory";
 import Bookmarks from "Routes/User/Bookmarks";
 import Nav from "Components/navigator/Nav";
 import Service from "Routes/Service/Service";
+import SearchResult from "Routes/Post/SearchResult";
 
 function App() {
   return (
@@ -110,6 +111,14 @@ function App() {
               <LoggedInOnly>
                 <PostEdit />
               </LoggedInOnly>
+            }
+          />
+          <Route
+            path="search"
+            element={
+              <WithCategory>
+                <SearchResult />
+              </WithCategory>
             }
           />
         </Route>

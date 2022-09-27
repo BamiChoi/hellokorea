@@ -42,3 +42,13 @@ export const getIsUserVoted = (post, userId) => {
 
   return { isUpvoted, isDownvoted };
 };
+
+export const paginatePosts = (posts, offset, currentIdx, length) => {
+  let hasMore;
+  const startIdx = offset * currentIdx;
+  const endIdx = startIdx + offset;
+  const maxIdx = Math.ceil(length / offset);
+  const currentPosts = posts.slice(startIdx, endIdx);
+  console.log(currentPosts);
+  return { currentPosts, maxIdx, hasMore: length > endIdx };
+};

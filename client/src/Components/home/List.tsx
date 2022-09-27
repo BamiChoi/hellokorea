@@ -3,16 +3,13 @@ import { usePosts } from "libs/usePosts";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 
-export type Sort = "new" | "votes" | "views";
-
 interface IListProps {
   title: string;
   category: string;
-  sort: Sort;
 }
 
-function List({ title, category, sort }: IListProps) {
-  const { isLoading, data, errorMessage } = usePosts(category, sort, 5, 0); // 페이지네이션 필요없음
+function List({ title, category }: IListProps) {
+  const { isLoading, data, errorMessage } = usePosts(category, 5, 0);
   return (
     <div>
       <Link to={category}>

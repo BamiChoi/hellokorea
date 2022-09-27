@@ -1,29 +1,33 @@
-import { getPosts } from "api/postApi";
+import { getPosts, getSearchResult } from "api/postApi";
 import { queryClient } from "index";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { IPost } from "Routes/Post/Post";
 import { handleErrorResponse } from "./handleError";
 
-export interface IPostsResponse {
+export interface ISearchResponse {
   data: {
     status: string;
     currentPosts: IPost[];
     hasMore: boolean;
     maxIdx: number;
+    keyword: string;
+    target: string;
   };
 }
 
-export const usePosts = (
+export const useSearch = (
   category: string,
   offset: number,
-  currentIdx: number
+  currentIdx: number,
+  keyword: string,
+  target: string
 ) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const { isLoading, data, isFetching, isPreviousData } =
-    useQuery<IPostsResponse>(
-      [category, "getPosts", currentIdx],
-      () => getPosts(category, currentIdx, offset),
+    useQuery<ISearchResponse>(
+      [category, "getSearchResult", currentIdx],
+      () => getSearchResult(category, currentIdx, keyword, target, offset),
       {
         keepPreviousData: true,
         staleTime: 5000,
@@ -36,9 +40,10 @@ export const usePosts = (
     );
   useEffect(() => {
     if (data?.data.hasMore) {
-      queryClient.prefetchQuery([category, "getPosts", currentIdx + 1], () =>
-        getPosts(category, currentIdx + 1, offset)
-      ); // Prefetch next currentIdx
+      queryClient.prefetchQuery(
+        [category, "getSearchResult", currentIdx + 1],
+        () => getPosts(category, currentIdx + 1, offset)
+      );
     }
   }, [data, currentIdx, category, offset]);
   return { isLoading, data, errorMessage, isFetching, isPreviousData };

@@ -7,7 +7,10 @@ interface IPaginatorProps {
   currentPage: number;
   isPreviousData: boolean;
   offset: number;
+  isSearcing: boolean;
   data?: IPostsResponse;
+  keyword?: string;
+  target?: string;
 }
 
 function Paginator({
@@ -15,7 +18,10 @@ function Paginator({
   currentPage,
   isPreviousData,
   offset,
+  isSearcing,
   data,
+  keyword,
+  target,
 }: IPaginatorProps) {
   const navigate = useNavigate();
   const lastPage = data?.data.maxIdx!;
@@ -25,46 +31,27 @@ function Paginator({
   const onClickPrev = () => {
     if (startPage !== 1) {
       const prevEndPage = startPage - 1;
-      navigate(`/notice?page=${prevEndPage}`);
+      isSearcing
+        ? navigate(`?keyword=${keyword}&target=${target}&page=${prevEndPage}`)
+        : navigate(`?page=${prevEndPage}`);
     }
   };
   const onClickNext = () => {
     if (endPage < lastPage) {
       const nextStartPage = endPage + 1;
-      navigate(`/notice?page=${nextStartPage}`);
+      navigate(`?page=${nextStartPage}`);
+      isSearcing
+        ? navigate(`?keyword=${keyword}&target=${target}&page=${nextStartPage}`)
+        : navigate(`?page=${nextStartPage}`);
     }
   };
   const onClickPage = (page: number) => {
-    navigate(`/notice?page=${page}`);
+    isSearcing
+      ? navigate(`?keyword=${keyword}&target=${target}&page=${page}`)
+      : navigate(`?page=${page}`);
   };
-  // const onClickJump = (type: "-" | "+") => {
-  //   let targetPage;
-  //   if (type === "-") {
-  //     targetPage = currentPage - offset;
-  //     if (targetPage > 0) {
-  //       navigate(`/notice?page=${targetPage}`);
-  //     } else {
-  //       navigate(`/notice?page=1`);
-  //     }
-  //   } else {
-  //     targetPage = currentPage + offset;
-  //     if (targetPage <= lastPage!) {
-  //       navigate(`/notice?page=${targetPage}`);
-  //     } else {
-  //       navigate(`/notice?page=${lastPage}`);
-  //     }
-  //   }
-  // };
   return (
     <div className="flex justify-center items-center px-2 py-4 w-full space-x-4">
-      {/* <button
-        className="border-main border-2 px-3 py-1 rounded-full"
-        onClick={() => onClickJump("-")}
-        disabled={currentIdx === 0}
-      >
-        -{offset}
-      </button> */}{" "}
-      {/* 점프버튼이 굳이 필요한지에 대해 생각해보기. */}
       <button
         className="border-main border-2 px-2 py-1 rounded-full hover:bg-main hover:text-white"
         onClick={onClickPrev}
@@ -95,13 +82,6 @@ function Paginator({
       >
         다음
       </button>
-      {/* <button
-        className="border-main border-2 px-3 py-1 rounded-full"
-        onClick={() => onClickJump("+")}
-        disabled={isPreviousData || !data?.data.hasMore}
-      >
-        +{offset}
-      </button> */}
     </div>
   );
 }
