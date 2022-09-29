@@ -61,10 +61,7 @@ export const getPost = async (req, res) => {
             user: { _id },
           },
         } = req;
-        const { isUpvoted, isDownvoted } = getIsUserVoted(post, _id);
-        return res
-          .status(200)
-          .send({ state: "success", post, isUpvoted, isDownvoted });
+        return res.status(200).send({ state: "success", post });
       }
       return res.status(200).send({ state: "success", post });
     } else {

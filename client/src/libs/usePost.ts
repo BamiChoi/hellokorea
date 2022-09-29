@@ -8,8 +8,6 @@ interface IPostResponse {
   data: {
     state: string;
     post: IPost;
-    isUpvoted: boolean;
-    isDownvoted: boolean;
     message?: string;
   };
 }

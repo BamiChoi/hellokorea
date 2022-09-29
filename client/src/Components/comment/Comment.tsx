@@ -7,7 +7,7 @@ import Button from "Components/Button";
 import EditForm from "./EditForm";
 import CreateForm from "../recomment/CreateForm";
 import DeleteBtn from "Components/comment/DeleteBtn";
-import VoteBtn from "Components/comment/VoteBtn";
+import Reaction from "Components/comment/Reaction";
 import Recomments from "./Recomments";
 
 export interface ICommentProps {
@@ -64,22 +64,7 @@ function Comment({ comment, postId }: ICommentProps) {
             {user ? (
               <>
                 {/* ToDo : 추천, 비추천 상태 표시 */}
-                <VoteBtn
-                  comment={comment}
-                  user={user}
-                  postId={postId}
-                  type="up"
-                  text="추천"
-                />
-                <span> | </span>
-                <VoteBtn
-                  comment={comment}
-                  user={user}
-                  postId={postId}
-                  type="down"
-                  text="비추천"
-                />
-                <span> | </span>
+                <Reaction comment={comment} user={user} postId={postId} />
                 <Button
                   onClick={() => onClickCreateRecomment(comment._id)}
                   text="댓글"

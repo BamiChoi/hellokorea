@@ -2,6 +2,7 @@ import { countVote } from "api/commentApi";
 import Button from "Components/Button";
 import { VoteToComment } from "Components/comment/Comment";
 import { queryClient } from "index";
+import { addClassnames } from "libs/utils";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { IUser } from "reducers/user";
@@ -11,11 +12,9 @@ interface IVoteProps {
   comment: IComment;
   user: IUser;
   postId: string;
-  type: action;
-  text: string;
 }
 
-function VoteBtn({ comment, user, postId, type, text }: IVoteProps) {
+function Reaction({ comment, user, postId }: IVoteProps) {
   const [votedState, setVotedState] = useState<IVoteState>({
     voted: false,
   });
@@ -30,10 +29,10 @@ function VoteBtn({ comment, user, postId, type, text }: IVoteProps) {
   };
   useEffect(() => {
     if (user) {
-      const upvotedUser = comment.meta.upvotes.indexOf(user.id);
-      const downvotedUser = comment.meta.downvotes.indexOf(user.id);
-      const isUpvoted = upvotedUser === -1 ? false : true;
-      const isDownvoted = downvotedUser === -1 ? false : true;
+      const isUpvoted =
+        comment.meta.upvotes.indexOf(user.id) === -1 ? false : true;
+      const isDownvoted =
+        comment.meta.downvotes.indexOf(user.id) === -1 ? false : true;
       if (isUpvoted) {
         setVotedState({ voted: true, type: "up" });
       } else if (isDownvoted) {
@@ -44,8 +43,27 @@ function VoteBtn({ comment, user, postId, type, text }: IVoteProps) {
     }
   }, [user, user?.id, comment.meta.upvotes, comment.meta.downvotes]);
   return (
-    <Button onClick={() => onClickVote(type)} text={text} customClassName=" " />
+    <>
+      <Button
+        onClick={() => onClickVote("up")}
+        text="추천"
+        customClassName={addClassnames(
+          "",
+          votedState.voted && votedState.type === "up" ? "text-main" : ""
+        )}
+      />
+      <span> | </span>
+      <Button
+        onClick={() => onClickVote("down")}
+        text="비추천"
+        customClassName={addClassnames(
+          "",
+          votedState.voted && votedState.type === "down" ? "text-main" : ""
+        )}
+      />
+      <span> | </span>
+    </>
   );
 }
 
-export default VoteBtn;
+export default Reaction;

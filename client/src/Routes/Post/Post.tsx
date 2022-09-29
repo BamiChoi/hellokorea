@@ -1,14 +1,13 @@
 import Wrapper from "Components/Wrapper";
 import { Link, Outlet, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
-import { countView, countVote } from "api/postApi";
+import { countView } from "api/postApi";
 import Title from "Components/Title";
 import Button from "Components/Button";
 import CreateForm from "Components/comment/CreateForm";
 import { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { queryClient } from "index";
+import { useEffect } from "react";
 import Content from "Components/post/Content";
 import Reaction from "Components/post/Reaction";
 import OwnerOnly from "Components/post/OwnerOnly";
@@ -83,16 +82,6 @@ export type VoteToPost = Pick<IVoteRequest, "postId" | "votedState">;
 function Post() {
   const user = useSelector(loggedInUser);
   const { postId, category } = useParams();
-  const [votedState, setVotedState] = useState<IVoteState>({ voted: false });
-  const { mutate } = useMutation((data: VoteToPost) => countVote(data), {
-    onSuccess: () => {
-      queryClient.invalidateQueries([postId, "getPost"]);
-    },
-  });
-  const onClickVote = (action: action) => {
-    const data = { postId: postId!, votedState, action };
-    mutate(data);
-  };
   const { mutate: mutateView } = useMutation(
     (postId: string) => countView(postId),
     {
@@ -101,17 +90,6 @@ function Post() {
   );
   const { isLoading, data, errorMessage } = usePost(postId!);
   const post = data?.data.post;
-  const isUpvoted = data?.data.isUpvoted;
-  const isDownvoted = data?.data.isDownvoted;
-  useEffect(() => {
-    if (isUpvoted) {
-      setVotedState({ voted: true, type: "up" });
-    } else if (isDownvoted) {
-      setVotedState({ voted: true, type: "down" });
-    } else if (!isUpvoted && !isDownvoted) {
-      setVotedState({ voted: false });
-    }
-  }, [isUpvoted, isDownvoted]);
   useEffect(() => {
     const viewsHistory = localStorage.getItem("views_history");
     const added = addViewHistory(postId!, viewsHistory);
@@ -133,9 +111,7 @@ function Post() {
           <>
             <Content post={post} />
             <div className="flex w-full space-x-2 justify-end">
-              {user ? (
-                <Reaction votedState={votedState} onClickVote={onClickVote} />
-              ) : null}
+              {user ? <Reaction post={post} user={user} /> : null}
               {user && user.id === post.owner._id ? <OwnerOnly /> : null}
             </div>
             {user ? <CreateForm postId={postId!} /> : <LoginReq />}
