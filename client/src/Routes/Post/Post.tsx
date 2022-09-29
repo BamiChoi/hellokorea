@@ -16,6 +16,7 @@ import { usePost } from "libs/usePost";
 import ErrorMsg from "Components/ErrorMsg";
 import { addViewHistory } from "libs/utils";
 import Comments from "Components/post/Comments";
+import LoginReq from "./LoginReq";
 
 export interface IRecomment {
   _id: string;
@@ -137,7 +138,7 @@ function Post() {
               ) : null}
               {user && user.id === post.owner._id ? <OwnerOnly /> : null}
             </div>
-            <CreateForm postId={postId!} />
+            {user ? <CreateForm postId={postId!} /> : <LoginReq />}
             <Comments post={post} />
           </>
         ) : errorMessage ? (
