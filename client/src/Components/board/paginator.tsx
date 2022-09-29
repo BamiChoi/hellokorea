@@ -8,6 +8,7 @@ interface IPaginatorProps {
   isPreviousData: boolean;
   offset: number;
   isSearcing: boolean;
+  sort?: string;
   data?: IPostsResponse;
   keyword?: string;
   target?: string;
@@ -19,6 +20,7 @@ function Paginator({
   isPreviousData,
   offset,
   isSearcing,
+  sort,
   data,
   keyword,
   target,
@@ -32,8 +34,10 @@ function Paginator({
     if (startPage !== 1) {
       const prevEndPage = startPage - 1;
       isSearcing
-        ? navigate(`?keyword=${keyword}&target=${target}&page=${prevEndPage}`)
-        : navigate(`?page=${prevEndPage}`);
+        ? navigate(
+            `?keyword=${keyword}&target=${target}&page=${prevEndPage}&sort=$`
+          )
+        : navigate(`?page=${prevEndPage}&sort=${sort}`);
     }
   };
   const onClickNext = () => {
@@ -42,13 +46,13 @@ function Paginator({
       navigate(`?page=${nextStartPage}`);
       isSearcing
         ? navigate(`?keyword=${keyword}&target=${target}&page=${nextStartPage}`)
-        : navigate(`?page=${nextStartPage}`);
+        : navigate(`?page=${nextStartPage}&sort=${sort}`);
     }
   };
   const onClickPage = (page: number) => {
     isSearcing
       ? navigate(`?keyword=${keyword}&target=${target}&page=${page}`)
-      : navigate(`?page=${page}`);
+      : navigate(`?page=${page}&sort=${sort}`);
   };
   return (
     <div className="flex justify-center items-center px-2 py-4 w-full space-x-4">

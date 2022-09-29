@@ -7,19 +7,24 @@ import List from "Components/board/List";
 import { useEffect, useState } from "react";
 import Paginator from "Components/board/paginator";
 import SearchForm from "Components/board/searchForm";
+import Sort from "./Sort";
 
 function Board() {
-  const offset = 5;
-  const { category } = useParams();
   const [searchParams] = useSearchParams();
+  const { category } = useParams();
   const page = searchParams.get("page");
+  const sort = searchParams.get("sort");
   const currentPage = page ? parseInt(page) : 1;
+  const currentSort = sort ? sort : "new";
+  const offset = 5;
+  const [sortOption, setSortOption] = useState<string>(currentSort);
   const [currentIdx, setCurrentIdx] = useState(0);
   const { isLoading, data, errorMessage, isFetching, isPreviousData } =
-    usePosts(category!, offset, currentIdx);
+    usePosts(category!, offset, currentIdx, sortOption);
   useEffect(() => {
     setCurrentIdx(currentPage - 1);
-  }, [currentPage]);
+    setSortOption(currentSort);
+  }, [currentPage, currentSort]);
   return (
     <Wrapper>
       <main className="w-full flex flex-col justify-center px-10">
@@ -33,6 +38,7 @@ function Board() {
             />
           </Link>
         </div>
+        <Sort sort={sortOption} setSort={setSortOption} />
         <List data={data} errorMessage={errorMessage} />
         <Paginator
           currentIdx={currentIdx}
@@ -40,6 +46,7 @@ function Board() {
           isPreviousData={isPreviousData}
           offset={offset}
           data={data}
+          sort={sortOption}
           isSearcing={false}
         />
       </main>

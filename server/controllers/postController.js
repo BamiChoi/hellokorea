@@ -80,11 +80,22 @@ export const getPosts = async (req, res) => {
   const { category, sort } = req.query;
   const offset = parseInt(req.query.offset);
   const currentIdx = parseInt(req.query.currentIdx);
-  console.log(req.query, req.params);
+  let posts;
   try {
-    let posts = await Post.find({ category })
-      .sort({ createdAt: "desc" })
-      .populate("owner");
+    if (sort === "new") {
+      posts = await Post.find({ category })
+        .sort({ createdAt: "desc" })
+        .populate("owner");
+    } else if (sort === "vote") {
+      console.log("vote");
+      posts = await Post.find({ category })
+        .sort({ "meta.upvotes": "desc" })
+        .populate("owner");
+    } else if (sort === "view") {
+      posts = await Post.find({ category })
+        .sort({ "meta.views": "desc" })
+        .populate("owner");
+    }
     const length = posts.length;
     const { currentPosts, maxIdx, hasMore } = paginatePosts(
       posts,

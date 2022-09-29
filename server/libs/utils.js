@@ -49,6 +49,5 @@ export const paginatePosts = (posts, offset, currentIdx, length) => {
   const endIdx = startIdx + offset;
   const maxIdx = Math.ceil(length / offset);
   const currentPosts = posts.slice(startIdx, endIdx);
-  console.log(currentPosts);
   return { currentPosts, maxIdx, hasMore: length > endIdx };
 };

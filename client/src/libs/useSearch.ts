@@ -42,9 +42,9 @@ export const useSearch = (
     if (data?.data.hasMore) {
       queryClient.prefetchQuery(
         [category, "getSearchResult", currentIdx + 1],
-        () => getPosts(category, currentIdx + 1, offset)
+        () => getSearchResult(category, currentIdx + 1, keyword, target, offset)
       );
     }
-  }, [data, currentIdx, category, offset]);
+  }, [data, currentIdx, category, keyword, target, offset]);
   return { isLoading, data, errorMessage, isFetching, isPreviousData };
 };
