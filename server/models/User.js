@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   birthdate: { type: String, required: true },
   joinedAt: { type: Date, required: true, default: Date.now },
   verified: { type: Boolean, required: true, default: false },
-  avatar: { type: String, default: "" },
+  avatar: { type: String, default: "uploads/avatars/default/default_avatar" },
   statusMessage: { type: String, default: "" },
   posts: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Post" },
