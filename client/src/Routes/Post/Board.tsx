@@ -20,7 +20,12 @@ function Board() {
   const [sortOption, setSortOption] = useState<string>(currentSort);
   const [currentIdx, setCurrentIdx] = useState(0);
   const { isLoading, data, errorMessage, isFetching, isPreviousData } =
-    usePosts(category!, offset, currentIdx, sortOption);
+    usePosts({
+      category,
+      offset,
+      currentIdx,
+      sortOption,
+    });
   useEffect(() => {
     setCurrentIdx(currentPage - 1);
     setSortOption(currentSort);

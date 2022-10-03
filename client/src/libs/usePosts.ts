@@ -14,17 +14,24 @@ export interface IPostsResponse {
   };
 }
 
-export const usePosts = (
-  category: string,
-  offset: number,
-  currentIdx: number,
-  sort: string
-) => {
+interface IUsePostsProps {
+  category?: string;
+  offset: number;
+  currentIdx: number;
+  sortOption?: string;
+}
+
+export const usePosts = ({
+  category,
+  offset,
+  currentIdx,
+  sortOption,
+}: IUsePostsProps) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const { isLoading, data, isFetching, isPreviousData } =
     useQuery<IPostsResponse>(
-      [category, "getPosts", currentIdx, sort],
-      () => getPosts(category, currentIdx, sort, offset),
+      [category, "getPosts", currentIdx, sortOption],
+      () => getPosts(category!, currentIdx, sortOption!, offset),
       {
         keepPreviousData: true,
         staleTime: 5000,
@@ -38,10 +45,10 @@ export const usePosts = (
   useEffect(() => {
     if (data?.data.hasMore) {
       queryClient.prefetchQuery(
-        [category, "getPosts", currentIdx + 1, sort],
-        () => getPosts(category, currentIdx + 1, sort, offset)
-      ); // Prefetch next currentIdx
+        [category, "getPosts", currentIdx + 1, sortOption],
+        () => getPosts(category!, currentIdx + 1, sortOption!, offset)
+      );
     }
-  }, [data, currentIdx, category, sort, offset]);
+  }, [data, currentIdx, category, sortOption, offset]);
   return { isLoading, data, errorMessage, isFetching, isPreviousData };
 };

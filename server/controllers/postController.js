@@ -74,21 +74,21 @@ export const getPost = async (req, res) => {
 };
 
 export const getPosts = async (req, res) => {
-  const { category, sort } = req.query;
+  const { category, sortOption } = req.query;
   const offset = parseInt(req.query.offset);
   const currentIdx = parseInt(req.query.currentIdx);
   let posts;
   try {
-    if (sort === "new") {
+    if (sortOption === "new") {
       posts = await Post.find({ category })
         .sort({ createdAt: "desc" })
         .populate("owner");
-    } else if (sort === "vote") {
+    } else if (sortOption === "vote") {
       console.log("vote");
       posts = await Post.find({ category })
         .sort({ "meta.upvotes": "desc" })
         .populate("owner");
-    } else if (sort === "view") {
+    } else if (sortOption === "view") {
       posts = await Post.find({ category })
         .sort({ "meta.views": "desc" })
         .populate("owner");

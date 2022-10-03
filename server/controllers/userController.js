@@ -1,7 +1,7 @@
 import User from "../models/User";
 import Post from "../models/Post";
 import bcrypt from "bcrypt";
-import { deleteEl } from "../libs/utils";
+import { deleteEl, paginatePosts } from "../libs/utils";
 
 export const signup = async (req, res) => {
   const {
@@ -211,6 +211,8 @@ export const toggleBookmark = async (req, res) => {
 };
 
 export const getBookmarks = async (req, res) => {
+  const offset = parseInt(req.query.offset);
+  const currentIdx = parseInt(req.query.currentIdx);
   const {
     user: { _id },
   } = req.session;
@@ -225,7 +227,16 @@ export const getBookmarks = async (req, res) => {
       return post;
     });
     const posts = await Promise.all(bookmarkedPosts);
-    return res.status(200).send({ state: "success", posts });
+    const length = posts.length;
+    const { currentPosts, maxIdx, hasMore } = paginatePosts(
+      posts,
+      offset,
+      currentIdx,
+      length
+    );
+    return res
+      .status(200)
+      .send({ state: "success", currentPosts, maxIdx, hasMore });
   } catch (error) {
     console.log(error);
     return res.status(400).send({

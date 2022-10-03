@@ -9,7 +9,12 @@ interface IListProps {
 }
 
 function List({ title, category }: IListProps) {
-  const { isLoading, data, errorMessage } = usePosts(category, 5, 0, "new");
+  const { isLoading, data, errorMessage } = usePosts({
+    category,
+    offset: 5,
+    currentIdx: 0,
+    sortOption: "new",
+  });
   return (
     <div>
       <Link to={category}>

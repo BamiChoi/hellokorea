@@ -29,7 +29,7 @@ function List({ type, recentActivity, nickname }: IList) {
       </h3>
       <ul className="space-y-2">
         {recentActivity.length !== 0 ? (
-          recentActivity.map((item) => <Item item={item} />)
+          recentActivity.map((item) => <Item key={item._id} item={item} />)
         ) : (
           <li className="flex justify-center py-16">
             아직 작성한 글이 없습니다.
