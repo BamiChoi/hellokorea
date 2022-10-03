@@ -42,7 +42,7 @@ export interface IComment {
   recomments: IRecomment[];
 }
 
-interface IOwner {
+export interface IOwner {
   nickname: string;
   _id: string;
   avatar: string;

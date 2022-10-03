@@ -19,6 +19,7 @@ import Bookmarks from "Routes/User/Bookmarks";
 import Nav from "Components/navigator/Nav";
 import Service from "Routes/Service/Service";
 import SearchResult from "Routes/Post/SearchResult";
+import User from "Routes/User/User";
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
               </LoggedInOnly>
             }
           />
+          <Route path=":userId" element={<User />} />
         </Route>
         <Route path=":category">
           <Route

@@ -9,6 +9,7 @@ import CreateForm from "../recomment/CreateForm";
 import DeleteBtn from "Components/comment/DeleteBtn";
 import Reaction from "Components/comment/Reaction";
 import Recomments from "./Recomments";
+import Username from "Components/board/username";
 
 export interface ICommentProps {
   comment: IComment;
@@ -52,14 +53,7 @@ function Comment({ comment, postId }: ICommentProps) {
     <>
       <li className="bg-cream p-4 rounded-md">
         <div className="flex justify-between">
-          <div className="disply flex">
-            <img
-              alt="owner_avatar"
-              src={"/" + comment.owner.avatar}
-              className="bg-white w-8 h-8 rounded-full mr-2"
-            />
-            <span>{comment.owner.nickname}</span>
-          </div>
+          <Username user={comment.owner} size="sm" />
           <div className="">
             {user ? (
               <>

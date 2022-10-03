@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bookmarks } from "reducers/user";
 import { loggedInUser } from "reducers/user";
 import { addClassnames } from "libs/utils";
+import Username from "Components/board/username";
 
 interface IContentProps {
   post: IPost;
@@ -60,17 +61,10 @@ function Content({ post }: IContentProps) {
             </button>
           ) : null}
         </div>
-        <div className="mb-1 flex items-center space-x-4 justify-between px-2">
-          <div className="flex justify-between w-full">
-            <div className="display flex space-x-4">
-              <div className="disply flex">
-                <img
-                  alt="owner_avatar"
-                  src={"/" + post.owner.avatar}
-                  className="bg-white w-8 h-8 rounded-full mr-2"
-                />
-                <span>{post.owner.nickname}</span>
-              </div>
+        <div className="mb-1 flex space-x-4 justify-between items-center px-2">
+          <div className="flex justify-between items-center w-full">
+            <div className="display flex space-x-4 items-center">
+              <Username user={post.owner} size="md" />
               <div className="space-x-1">
                 <span>조회 {post.meta.views} </span>
                 <span>추천 {post.meta.upvotes.length}</span>

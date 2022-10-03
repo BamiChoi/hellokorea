@@ -6,6 +6,7 @@ import EditForm from "./EditForm";
 import { format, parseISO } from "date-fns";
 import user, { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
+import Username from "Components/board/username";
 
 interface IRecommentProps {
   recomment: IRecomment;
@@ -44,14 +45,7 @@ function Recomment({ recomment, postId }: IRecommentProps) {
     <li className="bg-cream p-4 rounded-md ml-24">
       <header className="flex justify-between">
         {/* Comment.tsx와 중복되는 부분 분리하기 */}
-        <div className="disply flex">
-          <img
-            alt="owner_avatar"
-            src={"/" + recomment.owner.avatar}
-            className="bg-white w-8 h-8 rounded-full mr-2"
-          />
-          <span>{recomment.owner.nickname}</span>
-        </div>
+        <Username user={recomment.owner} size="sm" />
         <div className="space-x-2">
           {user && user.id === recomment.owner._id ? (
             <>
