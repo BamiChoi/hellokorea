@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { loggedInUser } from "reducers/user";
 import { IOwner } from "Routes/Post/Post";
 
 interface IUsernameProps {
@@ -20,8 +22,11 @@ function Username({ user, size }: IUsernameProps) {
   }
   const avatarSize = sizeStyle.avatar;
   const textSize = sizeStyle.name;
+  const authenticatedUser = useSelector(loggedInUser);
   return (
-    <Link to={`/user/${user._id}`}>
+    <Link
+      to={user._id === authenticatedUser._id ? `/user` : `/user/${user._id}`}
+    >
       <div className="flex overflow-hidden items-center">
         <img
           alt="owner_avatar"
