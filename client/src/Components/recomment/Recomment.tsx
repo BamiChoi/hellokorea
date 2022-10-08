@@ -4,7 +4,7 @@ import { IRecomment } from "Routes/Post/Post";
 import DeleteModal from "./DeleteModal";
 import EditForm from "./EditForm";
 import { format, parseISO } from "date-fns";
-import user, { loggedInUser } from "reducers/user";
+import { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
 import Username from "Components/board/username";
 
@@ -47,7 +47,7 @@ function Recomment({ recomment, postId }: IRecommentProps) {
         {/* Comment.tsx와 중복되는 부분 분리하기 */}
         <Username user={recomment.owner} size="sm" />
         <div className="space-x-2">
-          {user && user.id === recomment.owner._id ? (
+          {user && user._id === recomment.owner._id ? (
             <>
               <Button
                 onClick={() => onClickEditRecomment(recomment._id)}

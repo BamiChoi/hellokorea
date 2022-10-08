@@ -32,7 +32,7 @@ function Content({ post }: IContentProps) {
     }
   );
   const onClickBookmark = () => {
-    mutate({ userId: user.id, postId: post._id });
+    mutate({ userId: user._id, postId: post._id });
   };
   const parsedTimeStamp = parseISO(post.createdAt);
   return (

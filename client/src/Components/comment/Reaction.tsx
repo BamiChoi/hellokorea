@@ -30,9 +30,9 @@ function Reaction({ comment, user, postId }: IVoteProps) {
   useEffect(() => {
     if (user) {
       const isUpvoted =
-        comment.meta.upvotes.indexOf(user.id) === -1 ? false : true;
+        comment.meta.upvotes.indexOf(user._id) === -1 ? false : true;
       const isDownvoted =
-        comment.meta.downvotes.indexOf(user.id) === -1 ? false : true;
+        comment.meta.downvotes.indexOf(user._id) === -1 ? false : true;
       if (isUpvoted) {
         setVotedState({ voted: true, type: "up" });
       } else if (isDownvoted) {
@@ -41,7 +41,7 @@ function Reaction({ comment, user, postId }: IVoteProps) {
         setVotedState({ voted: false });
       }
     }
-  }, [user, user?.id, comment.meta.upvotes, comment.meta.downvotes]);
+  }, [user, user?._id, comment.meta.upvotes, comment.meta.downvotes]);
   return (
     <>
       <Button

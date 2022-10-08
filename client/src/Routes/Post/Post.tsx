@@ -112,7 +112,7 @@ function Post() {
             <Content post={post} />
             <div className="flex w-full space-x-2 justify-end">
               {user ? <Reaction post={post} user={user} /> : null}
-              {user && user.id === post.owner._id ? <OwnerOnly /> : null}
+              {user && user._id === post.owner._id ? <OwnerOnly /> : null}
             </div>
             {user ? <CreateForm postId={postId!} /> : <LoginReq />}
             <Comments post={post} />

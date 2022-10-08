@@ -49,12 +49,12 @@ function Edit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(loggedInUser);
-  const { isLoading, data, errorMessage } = useUser(user.id);
+  const { isLoading, data, errorMessage } = useUser(user._id);
   const { isLoading: isEditLoading, mutate } = useMutation(
     ({ id, formData }: IEditProfileMutation) => editProfile(id, formData),
     {
       onSuccess: (data: IEditProfileResponse) => {
-        queryClient.invalidateQueries([user.id, "getProfile"]);
+        queryClient.invalidateQueries([user._id, "getProfile"]);
         dispatch(edit({ ...data.data.updatedUser }));
         navigate("/user");
       },
@@ -82,7 +82,7 @@ function Edit() {
     }
   }, [avatar]);
   const isValid = async (data: IEditProfileForm) => {
-    const id = user.id;
+    const id = user._id;
     let formData = new FormData();
     formData.append("avatar", data.avatar[0]);
     formData.append("nickname", data.nickname);

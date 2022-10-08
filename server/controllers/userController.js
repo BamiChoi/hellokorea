@@ -59,10 +59,11 @@ export const signup = async (req, res) => {
 };
 
 export const getProfile = async (req, res) => {
-  const { _id } = req.session.user;
+  const userId = req.params.id;
   const offset = 5;
   try {
-    const user = await User.findById(_id)
+    const user = await User.findById(userId)
+      .select("-password")
       .populate("posts")
       .populate({ path: "comments", populate: { path: "target" } });
     if (!user) {

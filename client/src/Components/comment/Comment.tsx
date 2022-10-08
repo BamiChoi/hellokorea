@@ -66,7 +66,7 @@ function Comment({ comment, postId }: ICommentProps) {
                 />
               </>
             ) : null}
-            {user && user.id === comment.owner._id ? (
+            {user && user._id === comment.owner._id ? (
               <>
                 <span> | </span>
                 <Button

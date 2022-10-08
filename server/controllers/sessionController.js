@@ -24,9 +24,9 @@ export const login = async (req, res) => {
     const {
       loggedIn,
       user: {
-        _id: id,
+        _id,
         nickname,
-        email: userEmail,
+        email,
         statusMessage,
         firstname,
         lastname,
@@ -36,10 +36,11 @@ export const login = async (req, res) => {
         bookmarks,
       },
     } = req.session;
+    console.log(req.session.user);
     const loggedInUser = {
-      id,
+      _id,
       nickname,
-      email: userEmail,
+      email,
       statusMessage,
       firstname,
       lastname,

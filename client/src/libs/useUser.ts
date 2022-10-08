@@ -2,7 +2,7 @@ import { getProfile } from "api/userApi";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { IUser } from "reducers/user";
-import { IActivities } from "Routes/User/Profile";
+import { IActivities } from "Routes/User/MyProfile";
 import { handleErrorResponse } from "./handleError";
 
 interface IProfileResponse {

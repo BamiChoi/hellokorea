@@ -58,7 +58,7 @@ function Password() {
     }
   );
   const isValid = async (data: IPasswordChangeForm) => {
-    const id = user.id;
+    const id = user._id;
     mutate({ id, data });
   };
   return (

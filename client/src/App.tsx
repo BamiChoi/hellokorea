@@ -3,7 +3,6 @@ import Header from "Components/header/Header";
 import Home from "Routes/Home";
 import Signup from "Routes/Signup";
 import Login from "Routes/Login";
-import Profile from "Routes/User/Profile";
 import Password from "Routes/User/Password";
 import Board from "Routes/Post/Board";
 import Write from "Routes/Post/Write";
@@ -13,13 +12,13 @@ import Post from "Routes/Post/Post";
 import ProfileEdit from "Routes/User/Edit";
 import PostEdit from "Routes/Post/Edit";
 import Delete from "Routes/Post/Delete";
-
 import WithCategory from "Routes/middlewares/WithCategory";
 import Bookmarks from "Routes/User/Bookmarks";
 import Nav from "Components/navigator/Nav";
 import Service from "Routes/Service/Service";
 import SearchResult from "Routes/Post/SearchResult";
-import User from "Routes/User/User";
+import MyProfile from "Routes/User/MyProfile";
+import UserProfile from "Routes/User/UserProfile";
 
 function App() {
   return (
@@ -50,7 +49,7 @@ function App() {
             index
             element={
               <LoggedInOnly>
-                <Profile />
+                <MyProfile />
               </LoggedInOnly>
             }
           />
@@ -78,7 +77,14 @@ function App() {
               </LoggedInOnly>
             }
           />
-          <Route path=":userId" element={<User />} />
+          <Route
+            path=":userId"
+            element={
+              <LoggedInOnly>
+                <UserProfile />
+              </LoggedInOnly>
+            }
+          />
         </Route>
         <Route path=":category">
           <Route

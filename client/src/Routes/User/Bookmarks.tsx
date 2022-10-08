@@ -16,7 +16,7 @@ function Bookmarks() {
   const offset = 5;
   const [currentIdx, setCurrentIdx] = useState(0);
   const { isLoading, data, errorMessage, isPreviousData } = useBookmarks({
-    userId: user.id,
+    userId: user._id,
     offset,
     currentIdx,
   });

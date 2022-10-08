@@ -1,4 +1,4 @@
-import { IActivities } from "Routes/User/Profile";
+import { IActivities } from "Routes/User/MyProfile";
 import List from "./List";
 
 interface IRecentActivityProps {
