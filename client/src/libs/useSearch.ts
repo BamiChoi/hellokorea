@@ -1,4 +1,4 @@
-import { getPosts, getSearchResult } from "api/postApi";
+import { getSearchResult } from "api/postApi";
 import { queryClient } from "index";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";

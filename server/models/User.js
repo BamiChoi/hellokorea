@@ -27,6 +27,9 @@ const userSchema = new mongoose.Schema({
   bookmarks: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Post" },
   ],
+  chats: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Chat" },
+  ],
 });
 
 userSchema.pre("save", async function () {

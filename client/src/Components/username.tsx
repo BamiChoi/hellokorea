@@ -27,7 +27,7 @@ function Username({ user, size }: IUsernameProps) {
     <Link
       to={user._id === authenticatedUser._id ? `/user` : `/user/${user._id}`}
     >
-      <div className="flex overflow-hidden items-center">
+      <div className="flex overflow-hidden items-center bg-white">
         <img
           alt="owner_avatar"
           src={"/" + user.avatar}

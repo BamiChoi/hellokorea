@@ -4,6 +4,8 @@ import "./models/User";
 import "./models/Post";
 import "./models/Comment";
 import "./models/Recomment";
+import "./models/Message";
+import "./models/Chat";
 import app from "./server";
 
 const PORT = 4000;

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bookmarks } from "reducers/user";
 import { loggedInUser } from "reducers/user";
 import { addClassnames } from "libs/utils";
-import Username from "Components/board/username";
+import Username from "Components/username";
 
 interface IContentProps {
   post: IPost;

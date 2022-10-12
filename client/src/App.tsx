@@ -19,6 +19,8 @@ import Service from "Routes/Service/Service";
 import SearchResult from "Routes/Post/SearchResult";
 import MyProfile from "Routes/User/MyProfile";
 import UserProfile from "Routes/User/UserProfile";
+import Message from "Routes/Message/Message";
+import Chatroom from "Routes/Message/Chatroom";
 
 function App() {
   return (
@@ -136,6 +138,24 @@ function App() {
             element={
               <LoggedInOnly>
                 <Service />
+              </LoggedInOnly>
+            }
+          />
+        </Route>
+        <Route path="message">
+          <Route
+            index
+            element={
+              <LoggedInOnly>
+                <Message />
+              </LoggedInOnly>
+            }
+          />
+          <Route
+            path=":chatRoomId"
+            element={
+              <LoggedInOnly>
+                <Chatroom />
               </LoggedInOnly>
             }
           />

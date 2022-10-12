@@ -7,7 +7,7 @@ import { handleErrorResponse } from "./handleError";
 
 export interface IPostsResponse {
   data: {
-    status: string;
+    state: string;
     currentPosts: IPost[];
     hasMore: boolean;
     maxIdx: number;

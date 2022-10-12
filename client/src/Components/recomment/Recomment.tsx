@@ -6,7 +6,7 @@ import EditForm from "./EditForm";
 import { format, parseISO } from "date-fns";
 import { loggedInUser } from "reducers/user";
 import { useSelector } from "react-redux";
-import Username from "Components/board/username";
+import Username from "Components/username";
 
 interface IRecommentProps {
   recomment: IRecomment;

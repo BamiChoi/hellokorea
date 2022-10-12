@@ -1,6 +1,7 @@
 import { IPostsResponse } from "libs/usePosts";
 import { useNavigate } from "react-router-dom";
 import { addClassnames } from "libs/utils";
+import { ISearchResponse } from "libs/useSearch";
 
 interface IPaginatorProps {
   currentIdx: number;
@@ -9,7 +10,7 @@ interface IPaginatorProps {
   offset: number;
   isSearcing: boolean;
   sort?: string;
-  data?: IPostsResponse;
+  data?: IPostsResponse | ISearchResponse;
   keyword?: string;
   target?: string;
 }

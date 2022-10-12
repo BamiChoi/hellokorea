@@ -9,7 +9,7 @@ import CreateForm from "../recomment/CreateForm";
 import DeleteBtn from "Components/comment/DeleteBtn";
 import Reaction from "Components/comment/Reaction";
 import Recomments from "./Recomments";
-import Username from "Components/board/username";
+import Username from "Components/username";
 
 export interface ICommentProps {
   comment: IComment;

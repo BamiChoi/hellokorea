@@ -1,7 +1,7 @@
 import Post from "../models/Post";
 import User from "../models/User";
 import bcrypt from "bcrypt";
-import { getIsUserVoted, mutateVote, paginatePosts } from "../libs/utils";
+import { mutateVote, paginatePosts } from "../libs/utils";
 
 export const createPost = async (req, res) => {
   const {

@@ -7,6 +7,7 @@ import postRouter from "./routers/postRouter";
 import sessionRouter from "./routers/sessionRouter";
 import commentRouter from "./routers/commentRouter";
 import recommentRouter from "./routers/recommentRouter";
+import chatRouter from "./routers/chatRouter";
 import cookieParser from "cookie-parser";
 import { viewMiddleware } from "./middlewares";
 
@@ -38,5 +39,6 @@ app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/recomments", recommentRouter);
+app.use("/api/chats", chatRouter);
 
 export default app;

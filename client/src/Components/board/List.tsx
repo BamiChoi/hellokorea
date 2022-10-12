@@ -1,9 +1,10 @@
 import { IPostsResponse } from "libs/usePosts";
 import ErrorMsg from "Components/ErrorMsg";
 import Item from "./Item";
+import { ISearchResponse } from "libs/useSearch";
 
 interface IListProps {
-  data?: IPostsResponse;
+  data?: IPostsResponse | ISearchResponse;
   errorMessage?: string;
 }
 

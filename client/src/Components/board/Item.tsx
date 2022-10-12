@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { IPost } from "Routes/Post/Post";
 import { format, parseISO } from "date-fns";
-import Username from "./username";
+import Username from "../username";
 
 interface IItemProps {
   post: IPost;
