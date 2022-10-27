@@ -39,6 +39,14 @@ userSchema.pre("save", async function () {
   }
 });
 
+// userSchema.pre("remove", function() {
+//   posts.remove({ owner: this._id}.exec())
+//   comments.remove({ owner: this._id}.exec())
+//   recomments.remove({ owner: this._id}.exec())
+// })
+
+
+
 const User = mongoose.model("User", userSchema);
 
 export default User;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ISendMessageForm } from "Routes/Message/Chatroom";
+import { ISendMessageForm } from "Routes/Chat/Chatroom";
 
 export const getChats = async () => {
   return await axios.get(`/api/chats`);

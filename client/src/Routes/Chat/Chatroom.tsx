@@ -4,12 +4,14 @@ import Username from "Components/username";
 import Wrapper from "Components/Wrapper";
 import { queryClient } from "index";
 import { useMessages } from "libs/useMessages";
-import { useEffect } from "react";
+import { addClassnames } from "libs/utils";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { useLocation, useParams } from "react-router-dom";
 import { IUser } from "reducers/user";
 import { IOwner } from "Routes/Post/Post";
+import { io } from "socket.io-client";
 
 export interface ISendMessageForm {
   chatRoomId: string;
@@ -21,7 +23,7 @@ export interface ISendMessageForm {
 export interface IMessage {
   from: IOwner;
   to: string;
-  message: string;
+  text: string;
   createdAt: Date;
   _id: string;
 }
@@ -44,7 +46,10 @@ interface ISendMessageError {
   };
 }
 
+const socket = io("http://localhost:4000");
+
 function Chatroom() {
+  const [isNewChat, setIsNewChat] = useState<boolean>(true)
   const toUser = useLocation().state as IUser;
   const { chatRoomId } = useParams();
   const {
@@ -61,8 +66,9 @@ function Chatroom() {
     (data: ISendMessageForm) => sendMessage(data),
     {
       onSuccess: (data: ISendMessageResponse) => {
-        const message = data.data.message.message; // To Do: text가 더 적합, 이후 네이밍 점검시 참고
+        const message = data.data.message.text; // To Do: text가 더 적합, 이후 네이밍 점검시 참고
         const createdAt = data.data.message.createdAt;
+        socket.emit("chat:send", message, chatRoomId);
         queryClient.invalidateQueries([chatRoomId, "getMessasges"]);
       },
       onError: (error: ISendMessageError) => {
@@ -73,12 +79,25 @@ function Chatroom() {
   );
   const isValid = async (data: ISendMessageForm) => {
     mutate(data);
-    reset();
+    reset({ text: "", to: toUser._id, chatRoomId });
   };
+  socket.on("chat:receive", (message) => {
+    queryClient.invalidateQueries([chatRoomId, "getMessasges"]);
+  });
+  useEffect(() => {
+    socket.emit("room:enter", chatRoomId);
+    socket.on("chat:notification", ()=> {
+      console.log("messaage e' arrivato")
+    })
+  }, [chatRoomId]);
   useEffect(() => {
     setValue("to", toUser._id);
     setValue("chatRoomId", chatRoomId!);
+    setValue("text", "");
   }, [toUser._id, chatRoomId, setValue]);
+  useEffect(()=> {
+    
+  })
   return (
     <Wrapper>
       <main className="w-full flex flex-col items-center justify-center px-10">
@@ -86,13 +105,29 @@ function Chatroom() {
         <div className="bg-main flex justify-center w-full p-4 rounded-3xl shadow-lg">
           <Username user={toUser} size="md" />
         </div>
-        <ul>
+        <ul
+          className="w-full mb-20
+      "
+        >
           {messages?.map((message) => (
-            <li>
-              <span>
-                {message.from.nickname} : {message.message}
-              </span>
+            // message.tsx
+            <li
+              key={message._id}
+              className={addClassnames(
+                "w-flex flex",
+                message.from._id !== toUser._id
+                  ? "justify-end"
+                  : "justify-start"
+              )}
+            >
+              <div className="mb-3">
+                {message.from.nickname}
+                <div className="p-2 border-main border-2 rounded-md">
+                  {message.text}
+                </div>
+              </div>
             </li>
+            //
           ))}
         </ul>
         <form

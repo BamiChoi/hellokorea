@@ -1,4 +1,4 @@
-import { IMessage } from "Routes/Message/Chatroom";
+import { IMessage } from "Routes/Chat/Chatroom";
 import { IOwner } from "Routes/Post/Post";
 
 interface IChatProps {

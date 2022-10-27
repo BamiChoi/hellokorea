@@ -6,18 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { loggedInUser } from "reducers/user";
 import { IOwner } from "Routes/Post/Post";
 
-function Message() {
+
+function Chats() {
   const navigate = useNavigate();
   const userId = useSelector(loggedInUser)._id;
   const { isLoading, data } = useChats(userId);
   const chats = data?.data.chats;
-  console.log(chats);
-  const getToUser = (speakers: IOwner[]) => {
-    const toUserArray = speakers.filter((speaker) => speaker._id !== userId);
+  const getToUser = (users: IOwner[]) => {
+    const toUserArray = users.filter((user) => user._id !== userId);
     return toUserArray.pop();
   };
   const onClickChat = (chat: any) => {
-    navigate(`/message/${chat._id}`, { state: getToUser(chat.speakers) });
+    navigate(`/chat/${chat._id}`, { state: getToUser(chat.users) });
   };
   return (
     <Wrapper>
@@ -34,7 +34,7 @@ function Message() {
                   <div className="w-full">
                     <div className="bg-main border-main flex justify-between p-2">
                       <div className="bg-white px-2 rounded-lg">
-                        {getToUser(chat.speakers)?.nickname}
+                        {getToUser(chat.users)?.nickname}
                       </div>
                       <div className="bg-white px-2 rounded-lg space-x-2">
                         <button>삭제</button>
@@ -56,4 +56,4 @@ function Message() {
   );
 }
 
-export default Message;
+export default Chats;

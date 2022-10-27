@@ -24,7 +24,7 @@ function UserProfile() {
     {
       onSuccess: (data: ICreateChatResponse) => {
         const chatRoomId = data.data.chatRoomId;
-        navigate(`/message/${chatRoomId}`, { state: user });
+        navigate(`/chat/${chatRoomId}`, { state: user });
       },
     }
   );

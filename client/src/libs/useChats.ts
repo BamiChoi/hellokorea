@@ -1,15 +1,14 @@
 import { getChats } from "api/chatApi";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { IMessage } from "Routes/Message/Chatroom";
+import { IMessage } from "Routes/Chat/Chatroom";
 import { IOwner } from "Routes/Post/Post";
 import { handleErrorResponse } from "./handleError";
 
 export interface IChat {
   _id: string;
   messages: IMessage[];
-  speakers: IOwner[];
-  nickname: string;
+  users: IOwner[];
 }
 
 interface IChatsResponse {

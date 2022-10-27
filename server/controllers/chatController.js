@@ -8,7 +8,7 @@ export const getChats = async (req, res) => {
     const user = await User.findById(userId).populate({
       path: "chats",
       populate: [
-        { path: "speakers", select: ["nickname", "avatar"] },
+        { path: "users", select: ["nickname", "avatar"] },
         { path: "messages" },
       ],
     });
@@ -28,7 +28,7 @@ export const createChat = async (req, res) => {
   try {
     const user = await User.findById(userId);
     const newChat = await Chat.create({
-      speakers: [user._id],
+      users: [user._id],
     });
     const chatRoomId = newChat._id;
     user.chats.push(chatRoomId);
@@ -47,6 +47,7 @@ export const createChat = async (req, res) => {
 export const getMessages = async (req, res) => {
   const chatRoomId = req.params.chatRoomId;
   try {
+    console.log(chatRoomId)
     const chat = await Chat.findById(chatRoomId).populate({
       path: "messages",
       populate: { path: "from" },
@@ -64,7 +65,6 @@ export const getMessages = async (req, res) => {
 };
 
 export const sendMessage = async (req, res) => {
-  console.log(req.session);
   const {
     session: { user: fromUser },
     body: { text, to, chatRoomId },
@@ -75,20 +75,20 @@ export const sendMessage = async (req, res) => {
     const message = await Message.create({
       from: fromUser._id,
       to: toUser._id,
-      message: text,
+      text,
     });
     if (chat.messages.length === 0) {
-      chat.speakers.push(toUser._id);
+      console.log("first message");
+      chat.users.push(toUser._id);
       toUser.chats.push(chat._id);
       toUser.save();
     }
     chat.messages.push(message);
-    console.log(chat);
     chat.save();
     return res.status(200).send({ state: "success", message });
   } catch (error) {
     console.log(error);
-    return res.satus(400).send({
+    return res.status(400).send({
       state: "failed",
       field: "serverError",
       message: "Failed to send a message",

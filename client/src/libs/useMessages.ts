@@ -1,7 +1,7 @@
 import { getMessages } from "api/chatApi";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { IMessage } from "Routes/Message/Chatroom";
+import { IMessage } from "Routes/Chat/Chatroom";
 import { handleErrorResponse } from "./handleError";
 
 interface IUseMessagesProps {
